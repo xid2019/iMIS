@@ -5,5 +5,5 @@ from django.db import models
 
 class Order(models.Model):
     customer_id = models.CharField(max_length=10)
+    customer_PO = models.TextField()
     order_date = models.DateField()
-    description = models.TextField()
