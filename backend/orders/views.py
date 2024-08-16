@@ -4,6 +4,8 @@ from rest_framework import status
 from .serializers import OrderSerializer
 from order_lines.serializers import OrderLineSerializer
 from .models import Order
+from order_lines.models import OrderLine
+from django.db import transaction
 
 
 @api_view(['GET'])
@@ -25,19 +27,37 @@ def get_order(request, pk):
 
 @api_view(['POST'])
 def create_order(request):
-    order_data = dict(
-        customer_id=request.data['customer_id'],
-        customer_PO=request.data['customer_PO'],
-        order_date=request.data['order_date']
-    )
-    orderSerializer = OrderSerializer(data=order_data)
+    # Use a transaction to ensure atomicity
+    with transaction.atomic():
+        order_data = dict(
+            customer_id=request.data['customer_id'],
+            customer_PO=request.data['customer_PO'],
+            order_date=request.data['order_date']
+        )
+        order_serializer = OrderSerializer(data=order_data)
 
-    if orderSerializer.is_valid():
-        orderSerializer.save()
+        if order_serializer.is_valid():
+            # Save the order if the data is valid
+            order = order_serializer.save()
 
-    for order_line_data in request.data['order_lines']:
-        orderLineSerializer = OrderLineSerializer(data=order_line_data)
-        if orderLineSerializer.is_valid():
-            orderLineSerializer.save()
+            # Validate and save each order line
+            order_lines = request.data['order_lines']
+            order_lines_data = []
+            for order_line_data in order_lines:
+                # validate order_line_data
+                order_line_serializer = OrderLineSerializer(
+                    data=order_line_data)
 
-    return Response(orderSerializer.data, status=status.HTTP_201_CREATED)
+                if order_line_serializer.is_valid():
+                    order_line_data['order'] = order
+                    order_lines_data.append(OrderLine(**order_line_data))
+                else:
+                    # If any order line is invalid, return an error response
+                    return Response(order_line_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+            OrderLine.objects.bulk_create(order_lines_data)
+            # Return the order data if everything is successful
+            return Response(order_serializer.data, status=status.HTTP_201_CREATED)
+
+        # If the order data is invalid, return an error response
+        return Response(order_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
