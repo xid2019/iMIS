@@ -2,6 +2,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from .serializers import OrderSerializer
+from order_lines.serializers import OrderLineSerializer
 from .models import Order
 
 
@@ -24,8 +25,19 @@ def get_order(request, pk):
 
 @api_view(['POST'])
 def create_order(request):
-    serializer = OrderSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    order_data = dict(
+        customer_id=request.data['customer_id'],
+        customer_PO=request.data['customer_PO'],
+        order_date=request.data['order_date']
+    )
+    orderSerializer = OrderSerializer(data=order_data)
+
+    if orderSerializer.is_valid():
+        orderSerializer.save()
+
+    for order_line_data in request.data['order_lines']:
+        orderLineSerializer = OrderLineSerializer(data=order_line_data)
+        if orderLineSerializer.is_valid():
+            orderLineSerializer.save()
+
+    return Response(orderSerializer.data, status=status.HTTP_201_CREATED)
