@@ -29,13 +29,15 @@ def get_order(request, pk):
 def create_order(request):
     # Use a transaction to ensure atomicity
     with transaction.atomic():
-        order_data = dict(
-            customer_id=request.data['customer_id'],
-            customer_PO=request.data['customer_PO'],
-            order_date=request.data['order_date']
-        )
+        try:
+            order_data = dict(
+                customer_id=request.data['customer_id'],
+                customer_PO=request.data['customer_PO'],
+                order_date=request.data['order_date']
+            )
+        except:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
         order_serializer = OrderSerializer(data=order_data)
-
         if order_serializer.is_valid():
             # Save the order if the data is valid
             order = order_serializer.save()
@@ -45,14 +47,16 @@ def create_order(request):
             order_lines_data = []
             for order_line_data in order_lines:
                 # validate order_line_data
+                order_line_data['order'] = order.id
                 order_line_serializer = OrderLineSerializer(
                     data=order_line_data)
-
                 if order_line_serializer.is_valid():
                     order_line_data['order'] = order
                     order_lines_data.append(OrderLine(**order_line_data))
+
                 else:
-                    # If any order line is invalid, return an error response
+                    # If any order line is invalid, roll back the inserted order and return an error response
+                    transaction.set_rollback(True)
                     return Response(order_line_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
             OrderLine.objects.bulk_create(order_lines_data)
