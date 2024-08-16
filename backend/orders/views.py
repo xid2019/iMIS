@@ -65,7 +65,7 @@ def get_orders(request):
 
 
 @api_view(['GET'])
-def get_order(request, pk):
+def get_order(request, order_id):
     # Execute raw SQL query
     with connection.cursor() as cursor:
         cursor.execute("""
@@ -89,9 +89,8 @@ def get_order(request, pk):
                 o.id = ol.order_id
             WHERE
                 o.id = %s
-        """, [pk])
+        """, [order_id])
         rows = cursor.fetchall()
-    print('aaaaa', rows)
     # Process the rows into a format suitable for serialization
     orders = {}
     for row in rows:
