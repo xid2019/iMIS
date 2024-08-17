@@ -35,33 +35,49 @@ def get_orders(request):
         """)
         rows = cursor.fetchall()
 
-    # Process the rows into a format suitable for serialization
-    orders = {}
-    for row in rows:
-        order_id = row[0]
-        if order_id not in orders:
-            orders[order_id] = {
-                'id': order_id,
-                'customer_id': row[1],
-                'customer_PO': row[2],
-                'order_date': row[3],
-                'order_lines': []
-            }
-        if row[4]:  # Check if orderline_id is not null
-            orders[order_id]['order_lines'].append({
-                'id': row[4],
-                'line_number': row[5],
-                'part_number': row[6],
-                'quantity': row[7],
-                'ship_via': row[8],
-                'required_date': row[9],
-                'status': row[10]
-            })
+    # # Process the rows into a format suitable for serialization
+    # orders = {}
+    # for row in rows:
+    #     order_id = row[0]
+    #     if order_id not in orders:
+    #         orders[order_id] = {
+    #             'id': order_id,
+    #             'customer_id': row[1],
+    #             'customer_PO': row[2],
+    #             'order_date': row[3],
+    #             'order_lines': []
+    #         }
+    #     if row[4]:  # Check if orderline_id is not null
+    #         orders[order_id]['order_lines'].append({
+    #             'id': row[4],
+    #             'line_number': row[5],
+    #             'part_number': row[6],
+    #             'quantity': row[7],
+    #             'ship_via': row[8],
+    #             'required_date': row[9],
+    #             'status': row[10]
+    #         })
 
-    # Convert the dictionary into a list of orders
-    order_list = list(orders.values())
+    # # Convert the dictionary into a list of orders
+    # order_list = list(orders.values())
 
-    return Response(order_list)
+    # return Response(order_list)
+
+    keys = [
+        "order_id",
+        "customer_id",
+        "customer_PO",
+        "order_date",
+        "orderline_id",
+        "line_number",
+        "part_number",
+        "quantity",
+        "ship_via",
+        "required_date",
+        "status"
+    ]
+    result = [dict(zip(keys, value)) for value in rows]
+    return Response(result)
 
 
 @api_view(['GET'])
