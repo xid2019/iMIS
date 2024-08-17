@@ -2,8 +2,9 @@ import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import PropTypes from 'prop-types';
 import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
 
-const OrderLineEditting = ({ data }) => {
+const OrderLineEditting = ({ data, onSave }) => {
   return (
     <TableRow>
       <TableCell>
@@ -39,6 +40,9 @@ const OrderLineEditting = ({ data }) => {
       <TableCell>
         <TextField value={data.status || ''} variant="outlined" />
       </TableCell>
+      <TableCell>
+        <Button onClick={onSave} variant="text">Save</Button>
+      </TableCell>
     </TableRow>
   );
 };
@@ -57,6 +61,7 @@ OrderLineEditting.propTypes = {
     required_date: PropTypes.string,
     status: PropTypes.string
   }).isRequired,
+  onSave: PropTypes.func.isRequired,
 };
 
 export default OrderLineEditting;

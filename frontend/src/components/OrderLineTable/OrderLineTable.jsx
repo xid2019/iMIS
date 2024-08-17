@@ -13,6 +13,7 @@ import OrderLineEditting from './OrderLineEditting/OrderLineEditting';
 
 const OrderLineTable = () => {
   const [data, setData] = useState([]);
+  const [staticArr, setStaticArr] = useState([]);
 
   useEffect(() => {
     const url = 'http://localhost:8000/orders/'; 
@@ -21,6 +22,8 @@ const OrderLineTable = () => {
       try {
         const response = await axios.get(url);
         setData(response.data);
+        const newStaticArr = new Array(response.data.length).fill(true);
+        setStaticArr(newStaticArr);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -28,6 +31,19 @@ const OrderLineTable = () => {
 
     fetchData(); // Call the function to fetch data when the component mounts
   }, []); 
+
+  const handleEdit = (index) => {
+    const newStaticArr = [...staticArr];
+    newStaticArr[index] = false;
+    setStaticArr(newStaticArr);
+  }
+
+  const handleSave = (index) => {
+    const newStaticArr = [...staticArr];
+    newStaticArr[index] = true;
+    setStaticArr(newStaticArr);
+  }
+
   return (
     <TableContainer component={Paper}>
       <Table>
@@ -44,14 +60,24 @@ const OrderLineTable = () => {
             <TableCell>Ship Via</TableCell>
             <TableCell>Required Date</TableCell>
             <TableCell>Status</TableCell>
+            <TableCell>Action</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.map((row) => (
-            <>
-              <OrderLineStatic key={row.orderline_id || row.order_id} data={row} />
-              <OrderLineEditting key={row.orderline_id || row.order_id} data={row} />
-            </>
+          {data.map((row, index) => (
+              staticArr[index] ? (
+                <OrderLineStatic 
+                  key={index} 
+                  data={row} 
+                  onEdit={() => handleEdit(index)}
+                />
+              ) : (
+                <OrderLineEditting 
+                  key={index} 
+                  data={row} 
+                  onSave={() => handleSave(index)}
+                />
+              )
           ))}
         </TableBody>
       </Table>
