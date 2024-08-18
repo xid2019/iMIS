@@ -9,6 +9,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import OrderLineStatic from './OrderLineStatic/OrderLineStatic';
 import OrderLineEditting from './OrderLineEditting/OrderLineEditting';
+import './styles.css';
 
 
 const OrderLineTable = () => {
@@ -54,8 +55,8 @@ const OrderLineTable = () => {
   }
 
   return (
-    <TableContainer component={Paper}>
-      <Table>
+    <TableContainer component={Paper} className="order-line-table">
+      <Table stickyHeader>
         <TableHead>
           <TableRow>
             <TableCell>Order ID</TableCell>
