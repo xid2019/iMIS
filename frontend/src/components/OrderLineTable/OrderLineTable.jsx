@@ -38,7 +38,16 @@ const OrderLineTable = () => {
     setStaticArr(newStaticArr);
   }
 
-  const handleSave = (index) => {
+  const handleSave = async (index, updatedData) => {
+    try {
+      // Make a PUT request to update the data on the server
+      await axios.put(`http://localhost:8000/order_lines/update/${updatedData.orderline_id}/`, updatedData);
+    } catch (error) {
+      console.error('Error saving data:', error);
+    }
+    const newData = [...data];
+    newData[index] = updatedData;
+    setData(newData);
     const newStaticArr = [...staticArr];
     newStaticArr[index] = true;
     setStaticArr(newStaticArr);
@@ -79,7 +88,7 @@ const OrderLineTable = () => {
                 <OrderLineEditting 
                   key={index} 
                   data={row} 
-                  onSave={() => handleSave(index)}
+                  onSave={(updatedData) => handleSave(index, updatedData)}
                 />
               )
           ))}

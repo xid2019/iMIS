@@ -3,57 +3,148 @@ import TableCell from '@mui/material/TableCell';
 import PropTypes from 'prop-types';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import { useState } from 'react';
 
 const OrderLineEditting = ({ data, onSave }) => {
+  const [formData, setFormData] = useState({ ...data });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  const handleSave = () => {
+    onSave(formData); // Pass the updated data to the parent component
+  };
   return (
     <TableRow>
       <TableCell>
-        <TextField value={data.order_id} variant="outlined" InputProps={{ readOnly: true }} />
+        <TextField 
+          value={formData.order_id} 
+          name="order_id"
+          variant="outlined" 
+          InputProps={{ readOnly: true }} 
+          onChange={handleChange} 
+        />
       </TableCell>
       <TableCell>
-        <TextField value={data.customer_id} variant="outlined" />
+        <TextField 
+          value={formData.customer_id} 
+          name="customer_id"
+          variant="outlined" 
+          onChange={handleChange} 
+        />
       </TableCell>
       <TableCell>
-        <TextField value={data.customer_PO} variant="outlined" />
+        <TextField 
+          value={formData.customer_PO} 
+          name="customer_PO"
+          variant="outlined" 
+          onChange={handleChange} 
+        />
       </TableCell>
       <TableCell>
-        <TextField value={data.order_date} variant="outlined" />
+        <TextField 
+          value={formData.order_date} 
+          name="order_date"
+          variant="outlined" 
+          onChange={handleChange} 
+        />
       </TableCell>
       <TableCell>
-        <TextField value={data.orderline_id} variant="outlined" />
+        <TextField 
+          value={formData.orderline_id} 
+          name="orderline_id"
+          variant="outlined" 
+          onChange={handleChange} 
+        />
       </TableCell>
       <TableCell>
-        <TextField value={data.line_number} variant="outlined" />
+        <TextField 
+          value={formData.line_number} 
+          name="line_number"
+          variant="outlined" 
+          onChange={handleChange} 
+        />
       </TableCell>
       <TableCell>
-        <TextField value={data.part_number} variant="outlined" />
+        <TextField 
+          value={formData.part_number} 
+          name="part_number"
+          variant="outlined" 
+          onChange={handleChange} 
+        />
       </TableCell>
       <TableCell>
-        <TextField value={data.description} variant="outlined" />
+        <TextField 
+          value={formData.description} 
+          name="description"
+          variant="outlined" 
+          onChange={handleChange} 
+        />
       </TableCell>
       <TableCell>
-        <TextField value={data.quantity || ''} type="number" variant="outlined" />
+        <TextField 
+          value={formData.quantity || ''} 
+          name="quantity"
+          type="number" 
+          variant="outlined" 
+          onChange={handleChange} 
+        />
       </TableCell>
       <TableCell>
-        <TextField value={data.ship_via || ''} variant="outlined" />
+        <TextField 
+          value={formData.ship_via || ''} 
+          name="ship_via"
+          variant="outlined" 
+          onChange={handleChange} 
+        />
       </TableCell>
       <TableCell>
-        <TextField value={data.balance || ''} variant="outlined" />
+        <TextField 
+          value={formData.balance || ''} 
+          name="balance"
+          variant="outlined" 
+          onChange={handleChange} 
+        />
       </TableCell>
       <TableCell>
-        <TextField value={data.required_date || ''} variant="outlined" />
+        <TextField 
+          value={formData.required_date || ''} 
+          name="required_date"
+          variant="outlined"
+          onChange={handleChange} 
+        />
       </TableCell>
       <TableCell>
-        <TextField value={data.original_confirm_date || ''} variant="outlined" />
+        <TextField 
+          value={formData.original_confirm_date || ''} 
+          name="original_confirm_date"
+          variant="outlined" 
+          onChange={handleChange} 
+        />
       </TableCell>
       <TableCell>
-        <TextField value={data.updated_confirm_date || ''} variant="outlined" />
+        <TextField 
+          value={formData.updated_confirm_date || ''} 
+          name="updated_confirm_date"
+          variant="outlined" 
+          onChange={handleChange} 
+        />
       </TableCell>
       <TableCell>
-        <TextField value={data.status || ''} variant="outlined" />
+        <TextField 
+          value={formData.status || ''} 
+          name="status"
+          variant="outlined" 
+          onChange={handleChange} 
+        />
       </TableCell>
       <TableCell>
-        <Button onClick={onSave} variant="text">Save</Button>
+        <Button onClick={handleSave} variant="text">Save</Button>
       </TableCell>
     </TableRow>
   );
