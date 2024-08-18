@@ -13,9 +13,13 @@ const OrderLineStatic = ({ data, onEdit }) => {
       <TableCell>{data.orderline_id}</TableCell>
       <TableCell>{data.line_number}</TableCell>
       <TableCell>{data.part_number}</TableCell>
+      <TableCell>{data.description}</TableCell>
       <TableCell>{data.quantity}</TableCell>
       <TableCell>{data.ship_via}</TableCell>
+      <TableCell>{data.balance}</TableCell>
       <TableCell>{data.required_date}</TableCell>
+      <TableCell>{data.original_confirm_date}</TableCell>
+      <TableCell>{data.updated_confirm_date}</TableCell>
       <TableCell>{data.status}</TableCell>
       <TableCell>
         <Button onClick={onEdit} variant="text">Edit</Button>
@@ -34,9 +38,13 @@ OrderLineStatic.propTypes = {
     orderline_id: PropTypes.number,
     line_number: PropTypes.string,
     part_number: PropTypes.string,
+    description: PropTypes.string,
     quantity: PropTypes.number,
     ship_via: PropTypes.string,
+    balance: PropTypes.number,
     required_date: PropTypes.string, 
+    original_confirm_date: PropTypes.string, 
+    updated_confirm_date: PropTypes.string, 
     status: PropTypes.string
   }).isRequired,
   onEdit: PropTypes.func.isRequired,

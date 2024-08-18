@@ -56,9 +56,13 @@ const OrderLineTable = () => {
             <TableCell>Orderline ID</TableCell>
             <TableCell>Line Number</TableCell>
             <TableCell>Part Number</TableCell>
+            <TableCell>Description</TableCell>
             <TableCell>Quantity</TableCell>
             <TableCell>Ship Via</TableCell>
+            <TableCell>Balance</TableCell>
             <TableCell>Required Date</TableCell>
+            <TableCell>Orig CFM Date</TableCell>
+            <TableCell>Updated CFM Date</TableCell>
             <TableCell>Status</TableCell>
             <TableCell>Action</TableCell>
           </TableRow>

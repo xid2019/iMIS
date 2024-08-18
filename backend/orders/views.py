@@ -22,9 +22,13 @@ def get_orders(request):
                 ol.id AS orderline_id,
                 ol.line_number,
                 ol.part_number,
+                ol.description,
                 ol.quantity,
                 ol.ship_via,
+                ol.balance,
                 ol.required_date,
+                ol.original_confirm_date,
+                ol.updated_confirm_date,
                 ol.status
             FROM
                 orders_order AS o
@@ -71,9 +75,13 @@ def get_orders(request):
         "orderline_id",
         "line_number",
         "part_number",
+        "description",
         "quantity",
         "ship_via",
+        "balance",
         "required_date",
+        "original_confirm_date",
+        "updated_confirm_date",
         "status"
     ]
     result = [dict(zip(keys, value)) for value in rows]
@@ -93,6 +101,7 @@ def get_order(request, order_id):
                 ol.id AS orderline_id,
                 ol.line_number,
                 ol.part_number,
+                ol.description,
                 ol.quantity,
                 ol.ship_via,
                 ol.required_date,
@@ -124,10 +133,11 @@ def get_order(request, order_id):
                 'id': row[4],
                 'line_number': row[5],
                 'part_number': row[6],
-                'quantity': row[7],
-                'ship_via': row[8],
-                'required_date': row[9],
-                'status': row[10]
+                'description': row[7],
+                'quantity': row[8],
+                'ship_via': row[9],
+                'required_date': row[10],
+                'status': row[11]
             })
 
     # Convert the dictionary into a list of orders

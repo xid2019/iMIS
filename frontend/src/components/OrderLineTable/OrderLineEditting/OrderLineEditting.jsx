@@ -20,13 +20,16 @@ const OrderLineEditting = ({ data, onSave }) => {
         <TextField value={data.order_date} variant="outlined" />
       </TableCell>
       <TableCell>
-        <TextField value={data.orderline_id || ''} variant="outlined" />
+        <TextField value={data.orderline_id} variant="outlined" />
       </TableCell>
       <TableCell>
-        <TextField value={data.line_number || ''} variant="outlined" />
+        <TextField value={data.line_number} variant="outlined" />
       </TableCell>
       <TableCell>
-        <TextField value={data.part_number || ''} variant="outlined" />
+        <TextField value={data.part_number} variant="outlined" />
+      </TableCell>
+      <TableCell>
+        <TextField value={data.description} variant="outlined" />
       </TableCell>
       <TableCell>
         <TextField value={data.quantity || ''} type="number" variant="outlined" />
@@ -35,7 +38,16 @@ const OrderLineEditting = ({ data, onSave }) => {
         <TextField value={data.ship_via || ''} variant="outlined" />
       </TableCell>
       <TableCell>
+        <TextField value={data.balance || ''} variant="outlined" />
+      </TableCell>
+      <TableCell>
         <TextField value={data.required_date || ''} variant="outlined" />
+      </TableCell>
+      <TableCell>
+        <TextField value={data.original_confirm_date || ''} variant="outlined" />
+      </TableCell>
+      <TableCell>
+        <TextField value={data.updated_confirm_date || ''} variant="outlined" />
       </TableCell>
       <TableCell>
         <TextField value={data.status || ''} variant="outlined" />
@@ -56,9 +68,13 @@ OrderLineEditting.propTypes = {
     orderline_id: PropTypes.number,
     line_number: PropTypes.string,
     part_number: PropTypes.string,
+    description: PropTypes.string,
     quantity: PropTypes.number,
     ship_via: PropTypes.string,
+    balance: PropTypes.number,
     required_date: PropTypes.string,
+    original_confirm_date: PropTypes.string,
+    updated_confirm_date: PropTypes.string,
     status: PropTypes.string
   }).isRequired,
   onSave: PropTypes.func.isRequired,
