@@ -1,9 +1,13 @@
 from rest_framework.decorators import api_view
 from .serializers import OrderLineSerializer
 from .models import OrderLine
+from order_lines.models import Order
 from rest_framework.response import Response
 from rest_framework import status
-# Create your views here.
+from django.db import transaction
+from orders.serializers import OrderSerializer
+from .serializers import OrderLineSerializer
+from datetime import datetime
 
 
 @api_view(['GET'])
@@ -15,13 +19,65 @@ def get_order_lines(request):
 
 @api_view(['POST'])
 def create_order_line(request):
-    serializer = OrderLineSerializer(data=request.data)
+    customer_PO = request.data.get('customer_PO')
 
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    # Check if customer_po exists in the Order table
+    order = Order.objects.filter(customer_PO=customer_PO).first()
+    if order:
+        # If the order exists, create an OrderLine
+        order_line = {
+            "line_number": request.data.get("line_number"),
+            "part_number": request.data.get("part_number"),
+            "description": request.data.get("description"),
+            "quantity": request.data.get("quantity"),
+            "ship_via": request.data.get("ship_via"),
+            "required_date": request.data.get("required_date"),
+            "status": request.data.get("status"),
+            "factory": request.data.get("factory"),
+            "status": 'OPEN',
+            "order": order.id,
+        }
+        order_line_serializer = OrderLineSerializer(data=order_line)
+        if order_line_serializer.is_valid():
+            # Associate the order with the orderline
+            order_line_serializer.save(order=order)
+            return Response(order_line_serializer.data, status=status.HTTP_201_CREATED)
+        return Response(order_line_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        # Use a transaction to ensure atomicity
+        with transaction.atomic():
+            try:
+                order_data = dict(
+                    customer_id=request.data['customer_id'],
+                    customer_PO=request.data['customer_PO'],
+                    order_date=datetime.today().strftime('%Y-%m-%d'),
+                )
+            except:
+                return Response(status=status.HTTP_400_BAD_REQUEST)
+            order_serializer = OrderSerializer(data=order_data)
 
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            if order_serializer.is_valid():
+                order = order_serializer.save()
+            else:
+                return Response(order_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            order_line = {
+                "line_number": request.data.get("line_number"),
+                "part_number": request.data.get("part_number"),
+                "description": request.data.get("description"),
+                "quantity": request.data.get("quantity"),
+                "ship_via": request.data.get("ship_via"),
+                "required_date": request.data.get("required_date"),
+                "status": request.data.get("status"),
+                "factory": request.data.get("factory"),
+                "status": 'OPEN',
+                "order": order.id,
+            }
+            order_line_serializer = OrderLineSerializer(data=order_line)
+            if order_line_serializer.is_valid():
+                order_line = order_line_serializer.save(order=order)
+            else:
+                return Response(order_line_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(order_line_serializer.data, status=status.HTTP_201_CREATED)
 
 
 @api_view(['PUT'])

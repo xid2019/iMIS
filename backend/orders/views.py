@@ -3,7 +3,6 @@ from rest_framework.response import Response
 from rest_framework import status
 from .serializers import OrderSerializer
 from order_lines.serializers import OrderLineSerializer
-from .models import Order
 from order_lines.models import OrderLine
 from django.db import transaction
 from django.db import connection
