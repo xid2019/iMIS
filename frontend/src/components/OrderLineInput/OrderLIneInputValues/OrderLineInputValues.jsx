@@ -13,6 +13,7 @@ import {
 } from '@mui/material';
 import PropTypes from 'prop-types';
 import axios from 'axios';
+import dayjs from 'dayjs';
 
 const OrderLineInputValues = ({ initialData, handleCancel }) => {
   const [formData, setFormData] = useState(initialData || {
@@ -40,10 +41,21 @@ const OrderLineInputValues = ({ initialData, handleCancel }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
+    const updatedFormData = {
       ...formData,
-      [name]: value,
-    });
+      [name]: value
+    };
+
+    if (name === 'due_date' || name === 'schd_days') {
+      const { due_date, schd_days } = updatedFormData;
+
+      if (due_date && schd_days) {
+        const requiredDate = dayjs(due_date).subtract(schd_days, 'day').format('YYYY-MM-DD');
+        updatedFormData.required_date = requiredDate;
+      }
+    }
+
+    setFormData(updatedFormData);
   };
 
   const handleSubmit = async (e) => {
@@ -72,7 +84,7 @@ const OrderLineInputValues = ({ initialData, handleCancel }) => {
           </Grid>
           {/* First Row */}
           <Grid container item spacing={2}>
-            <Grid item xs={4}>
+            <Grid item xs={1}>
               <TextField
                 name="customer_id"
                 label="Customer ID"
@@ -82,7 +94,7 @@ const OrderLineInputValues = ({ initialData, handleCancel }) => {
                 variant="outlined"
               />
             </Grid>
-            <Grid item xs={4}>
+            <Grid item xs={1}>
               <TextField
                 name="customer_po"
                 label="Customer PO"
@@ -92,7 +104,7 @@ const OrderLineInputValues = ({ initialData, handleCancel }) => {
                 variant="outlined"
               />
             </Grid>
-            <Grid item xs={4}>
+            <Grid item xs={1}>
               <TextField
                 name="buyer"
                 label="Buyer"
@@ -102,7 +114,7 @@ const OrderLineInputValues = ({ initialData, handleCancel }) => {
                 variant="outlined"
               />
             </Grid>
-            <Grid item xs={4}>
+            <Grid item xs={1}>
               <TextField
                 name="pay_terms"
                 label="Pay Terms"
@@ -121,7 +133,74 @@ const OrderLineInputValues = ({ initialData, handleCancel }) => {
           </Grid>
           {/* Second Row */}
           <Grid container item spacing={2}>
-            <Grid item xs={4}>
+            <Grid container item spacing={2}>
+              <Grid item xs={1}>
+                <TextField
+                  name="part_number"
+                  label="Part Number"
+                  value={formData.part_number}
+                  onChange={handleChange}
+                  fullWidth
+                  variant="outlined"
+                />
+              </Grid>
+            </Grid>
+            <Grid container item spacing={2}>
+              <Grid item xs={1}>
+                <TextField
+                  name="price"
+                  label="Price"
+                  type="number"
+                  value={formData.price}
+                  onChange={handleChange}
+                  fullWidth
+                  variant="outlined"
+                />
+              </Grid>
+              <Grid item xs={1}>
+                <TextField
+                  name="cost"
+                  label="Cost"
+                  type="number"
+                  value={formData.cost}
+                  onChange={handleChange}
+                  fullWidth
+                  variant="outlined"
+                />
+              </Grid>
+              <Grid item xs={1}>
+                <TextField
+                  name="material"
+                  label="Material"
+                  value={formData.material}
+                  onChange={handleChange}
+                  fullWidth
+                  variant="outlined"
+                />
+              </Grid>
+              <Grid item xs={1}>
+                <TextField
+                  name="weight"
+                  label="Weight(KG)"
+                  type="number"
+                  value={formData.weight}
+                  onChange={handleChange}
+                  fullWidth
+                  variant="outlined"
+                />
+              </Grid>
+              <Grid item xs={1}>
+                <TextField
+                  name="factory"
+                  label="Factory"
+                  value={formData.factory}
+                  onChange={handleChange}
+                  fullWidth
+                  variant="outlined"
+                />
+              </Grid>
+            </Grid>
+            <Grid item xs={1}>
               <TextField
                 name="line_number"
                 label="Line Number"
@@ -131,17 +210,7 @@ const OrderLineInputValues = ({ initialData, handleCancel }) => {
                 variant="outlined"
               />
             </Grid>
-            <Grid item xs={4}>
-              <TextField
-                name="part_number"
-                label="Part Number"
-                value={formData.part_number}
-                onChange={handleChange}
-                fullWidth
-                variant="outlined"
-              />
-            </Grid>
-            <Grid item xs={4}>
+            <Grid item xs={1}>
               <TextField
                 name="print_number"
                 label="Print Number"
@@ -151,11 +220,32 @@ const OrderLineInputValues = ({ initialData, handleCancel }) => {
                 variant="outlined"
               />
             </Grid>
-            <Grid item xs={4}>
+            <Grid item xs={1}>
               <TextField
                 name="revision"
                 label="Revision"
                 value={formData.revision}
+                onChange={handleChange}
+                fullWidth
+                variant="outlined"
+              />
+            </Grid>
+            <Grid item xs={1}>
+              <TextField
+                name="quantity"
+                label="Quantity"
+                type="number"
+                value={formData.quantity}
+                onChange={handleChange}
+                fullWidth
+                variant="outlined"
+              />
+            </Grid>
+            <Grid item xs={1}>
+              <TextField
+                name="unit"
+                label="Unit"
+                value={formData.unit}
                 onChange={handleChange}
                 fullWidth
                 variant="outlined"
@@ -171,80 +261,6 @@ const OrderLineInputValues = ({ initialData, handleCancel }) => {
                 variant="outlined"
               />
             </Grid>
-            <Grid item xs={4}>
-              <TextField
-                name="quantity"
-                label="Quantity"
-                type="number"
-                value={formData.quantity}
-                onChange={handleChange}
-                fullWidth
-                variant="outlined"
-              />
-            </Grid>
-            <Grid item xs={4}>
-              <TextField
-                name="price"
-                label="Price"
-                type="number"
-                value={formData.price}
-                onChange={handleChange}
-                fullWidth
-                variant="outlined"
-              />
-            </Grid>
-            <Grid item xs={4}>
-              <TextField
-                name="cost"
-                label="Cost"
-                type="number"
-                value={formData.cost}
-                onChange={handleChange}
-                fullWidth
-                variant="outlined"
-              />
-            </Grid>
-            <Grid item xs={4}>
-              <TextField
-                name="unit"
-                label="Unit"
-                value={formData.unit}
-                onChange={handleChange}
-                fullWidth
-                variant="outlined"
-              />
-            </Grid>
-            <Grid item xs={4}>
-              <TextField
-                name="material"
-                label="Material"
-                value={formData.material}
-                onChange={handleChange}
-                fullWidth
-                variant="outlined"
-              />
-            </Grid>
-            <Grid item xs={4}>
-              <TextField
-                name="weight"
-                label="Weight(KG)"
-                type="number"
-                value={formData.weight}
-                onChange={handleChange}
-                fullWidth
-                variant="outlined"
-              />
-            </Grid>
-            <Grid item xs={4}>
-              <TextField
-                name="factory"
-                label="Factory"
-                value={formData.factory}
-                onChange={handleChange}
-                fullWidth
-                variant="outlined"
-              />
-            </Grid>
           </Grid>
 
           {/* Title for Third Row */}
@@ -254,65 +270,69 @@ const OrderLineInputValues = ({ initialData, handleCancel }) => {
           </Grid>
           {/* Third Row */}
           <Grid container item spacing={2}>
-          <FormControl variant="outlined">
-            <InputLabel id="ship-via-label">Ship Via</InputLabel>
-            <Select
-              labelId="ship-via-label"
-              name="ship_via"
-              value={formData.ship_via}
-              onChange={handleChange}
-              label="Ship Via"
-            >
-              <MenuItem value="Exp">Exp</MenuItem>
-              <MenuItem value="Air">Air</MenuItem>
-              <MenuItem value="Sea">Sea</MenuItem>
-            </Select>
-          </FormControl>
-            <Grid item xs={4}>
-              <TextField
-                name="required_date"
-                label="Required Date"
-                type="date"
-                value={formData.required_date}
-                onChange={handleChange}
-                fullWidth
-                variant="outlined"
-                InputLabelProps={{ shrink: true }}
-              />
+            <Grid item xs={1}>
+              <FormControl variant="outlined">
+                <InputLabel id="ship-via-label">Ship Via</InputLabel>
+                <Select
+                  labelId="ship-via-label"
+                  name="ship_via"
+                  value={formData.ship_via || "Sea"}
+                  onChange={handleChange}
+                  label="Ship Via"
+                >
+                  <MenuItem value="Exp">Exp</MenuItem>
+                  <MenuItem value="Air">Air</MenuItem>
+                  <MenuItem value="Sea">Sea</MenuItem>
+                </Select>
+              </FormControl>
             </Grid>
-            <Grid item xs={4}>
-              <TextField
-                name="due_date"
-                label="Due Date"
-                type="date"
-                value={formData.due_date}
-                onChange={handleChange}
-                fullWidth
-                variant="outlined"
-                InputLabelProps={{ shrink: true }}
-              />
-            </Grid>
-            <Grid item xs={4}>
-              <TextField
-                name="schd_days"
-                label="Sch'd Days"
-                type="number"
-                value={formData.schd_days}
-                onChange={handleChange}
-                fullWidth
-                variant="outlined"
-              />
+            <Grid container item spacing={2}>
+              <Grid item xs={2}>
+                <TextField
+                  name="due_date"
+                  label="Due Date"
+                  type="date"
+                  value={formData.due_date}
+                  onChange={handleChange}
+                  fullWidth
+                  variant="outlined"
+                  InputLabelProps={{ shrink: true }}
+                />
+              </Grid>
+              <Grid item xs={2}>
+                <TextField
+                  name="schd_days"
+                  label="Sch'd Days"
+                  type="number"
+                  value={formData.schd_days}
+                  onChange={handleChange}
+                  fullWidth
+                  variant="outlined"
+                />
+              </Grid>
+              <Grid item xs={2}>
+                <TextField
+                  name="required_date"
+                  label="Required Date"
+                  type="date"
+                  value={formData.required_date}
+                  onChange={handleChange}
+                  fullWidth
+                  variant="outlined"
+                  InputLabelProps={{ shrink: true }}
+                />
+              </Grid>
             </Grid>
           </Grid>
 
           {/* Submit Button Row */}
-          <Grid container spacing={2}>
-            <Grid item xs={6}>
+          <Grid container spacing={2} sx={{ mt: 2 }}>
+            <Grid item xs={2}>
               <Button type="submit" variant="contained" color="primary" fullWidth>
                 Save
               </Button>
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={2}>
               <Button variant="outlined" color="secondary" fullWidth onClick={handleCancel}>
                 Cancel
               </Button>
