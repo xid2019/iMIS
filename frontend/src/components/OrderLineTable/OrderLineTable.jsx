@@ -71,8 +71,7 @@ const OrderLineTable = () => {
             <TableCell>Ship Via</TableCell>
             <TableCell>Balance</TableCell>
             <TableCell>Required Date</TableCell>
-            <TableCell>Orig CFM Date</TableCell>
-            <TableCell>Updated CFM Date</TableCell>
+            <TableCell>Confirmed Date</TableCell>
             <TableCell>Status</TableCell>
             <TableCell>Action</TableCell>
           </TableRow>

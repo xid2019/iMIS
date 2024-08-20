@@ -1,8 +1,13 @@
-import TableRow from '@mui/material/TableRow';
-import TableCell from '@mui/material/TableCell';
 import PropTypes from 'prop-types';
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
+import { 
+  FormControl,
+  Select,
+  MenuItem,
+  Button,
+  TextField,
+  TableCell,
+  TableRow,
+} from '@mui/material';
 import { useState } from 'react';
 
 const OrderLineEditting = ({ data, onSave }) => {
@@ -21,15 +26,7 @@ const OrderLineEditting = ({ data, onSave }) => {
   };
   return (
     <TableRow>
-      <TableCell>
-        <TextField 
-          value={formData.order_id} 
-          name="order_id"
-          variant="outlined" 
-          InputProps={{ readOnly: true }} 
-          onChange={handleChange} 
-        />
-      </TableCell>
+      <TableCell>{data.order_id}</TableCell>
       <TableCell>
         <TextField 
           value={formData.customer_id} 
@@ -40,28 +37,22 @@ const OrderLineEditting = ({ data, onSave }) => {
       </TableCell>
       <TableCell>
         <TextField 
-          value={formData.customer_PO} 
-          name="customer_PO"
+          value={formData.customer_po} 
+          name="customer_po"
           variant="outlined" 
           onChange={handleChange} 
         />
       </TableCell>
       <TableCell>
-        <TextField 
-          value={formData.order_date} 
+        <TextField
           name="order_date"
-          variant="outlined" 
-          onChange={handleChange} 
+          type="date"
+          value={formData.order_date}
+          onChange={handleChange}
+          variant="outlined"
         />
       </TableCell>
-      <TableCell>
-        <TextField 
-          value={formData.orderline_id} 
-          name="orderline_id"
-          variant="outlined" 
-          onChange={handleChange} 
-        />
-      </TableCell>
+      <TableCell>{data.orderline_id}</TableCell>
       <TableCell>
         <TextField 
           value={formData.line_number} 
@@ -96,52 +87,57 @@ const OrderLineEditting = ({ data, onSave }) => {
         />
       </TableCell>
       <TableCell>
-        <TextField 
-          value={formData.ship_via || ''} 
-          name="ship_via"
-          variant="outlined" 
-          onChange={handleChange} 
-        />
+        <FormControl variant="outlined">
+          <Select
+            name="ship_via"
+            value={formData.ship_via}
+            onChange={handleChange}
+          >
+            <MenuItem value="Exp">Exp</MenuItem>
+            <MenuItem value="Air">Air</MenuItem>
+            <MenuItem value="Sea">Sea</MenuItem>
+          </Select>
+        </FormControl>
       </TableCell>
       <TableCell>
         <TextField 
           value={formData.balance || ''} 
           name="balance"
+          type="number"
           variant="outlined" 
           onChange={handleChange} 
         />
       </TableCell>
       <TableCell>
-        <TextField 
-          value={formData.required_date || ''} 
+        <TextField
           name="required_date"
+          type="date"
+          value={formData.required_date}
+          onChange={handleChange}
           variant="outlined"
-          onChange={handleChange} 
         />
       </TableCell>
       <TableCell>
-        <TextField 
-          value={formData.original_confirm_date || ''} 
-          name="original_confirm_date"
-          variant="outlined" 
-          onChange={handleChange} 
+        <TextField
+          name="confirmed_date"
+          type="date"
+          value={formData.confirmed_date}
+          onChange={handleChange}
+          variant="outlined"
         />
       </TableCell>
       <TableCell>
-        <TextField 
-          value={formData.updated_confirm_date || ''} 
-          name="updated_confirm_date"
-          variant="outlined" 
-          onChange={handleChange} 
-        />
-      </TableCell>
-      <TableCell>
-        <TextField 
-          value={formData.status || ''} 
-          name="status"
-          variant="outlined" 
-          onChange={handleChange} 
-        />
+        <FormControl variant="outlined">
+          <Select
+            name="status"
+            value={formData.status}
+            onChange={handleChange}
+          >
+            <MenuItem value="OPEN">OPEN</MenuItem>
+            <MenuItem value="DELIVERED">DELIVERED</MenuItem>
+            <MenuItem value="SHIPPED">SHIPPED</MenuItem>
+          </Select>
+        </FormControl>
       </TableCell>
       <TableCell>
         <Button onClick={handleSave} variant="text">Save</Button>

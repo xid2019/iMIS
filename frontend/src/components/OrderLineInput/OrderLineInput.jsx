@@ -10,6 +10,10 @@ const OrderLineInput = () => {
     setShowInputFields(true);
   };
 
+  const handleCancel = () => {
+    setShowInputFields(false)
+  }
+
   return (
     <Grid>
       {!showInputFields && (
@@ -23,7 +27,9 @@ const OrderLineInput = () => {
       )}
       
       {showInputFields && (
-        <OrderLineInputValues/>
+        <OrderLineInputValues
+          handleCancel={handleCancel}
+        />
       )}
     </Grid>
     

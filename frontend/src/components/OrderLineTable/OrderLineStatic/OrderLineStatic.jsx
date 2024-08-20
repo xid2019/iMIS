@@ -8,7 +8,7 @@ const OrderLineStatic = ({ data, onEdit }) => {
     <TableRow>
       <TableCell>{data.order_id}</TableCell>
       <TableCell>{data.customer_id}</TableCell>
-      <TableCell>{data.customer_PO}</TableCell>
+      <TableCell>{data.customer_po}</TableCell>
       <TableCell>{data.order_date}</TableCell>
       <TableCell>{data.orderline_id}</TableCell>
       <TableCell>{data.line_number}</TableCell>
@@ -18,8 +18,7 @@ const OrderLineStatic = ({ data, onEdit }) => {
       <TableCell>{data.ship_via}</TableCell>
       <TableCell>{data.balance}</TableCell>
       <TableCell>{data.required_date}</TableCell>
-      <TableCell>{data.original_confirm_date}</TableCell>
-      <TableCell>{data.updated_confirm_date}</TableCell>
+      <TableCell>{data.confirmed_date}</TableCell>
       <TableCell>{data.status}</TableCell>
       <TableCell>
         <Button onClick={onEdit} variant="text">Edit</Button>
@@ -33,7 +32,7 @@ OrderLineStatic.propTypes = {
   data: PropTypes.shape({
     order_id: PropTypes.number.isRequired,
     customer_id: PropTypes.string.isRequired,
-    customer_PO: PropTypes.string.isRequired,
+    customer_po: PropTypes.string.isRequired,
     order_date: PropTypes.string.isRequired,
     orderline_id: PropTypes.number,
     line_number: PropTypes.string,
@@ -43,8 +42,7 @@ OrderLineStatic.propTypes = {
     ship_via: PropTypes.string,
     balance: PropTypes.number,
     required_date: PropTypes.string, 
-    original_confirm_date: PropTypes.string, 
-    updated_confirm_date: PropTypes.string, 
+    confirmed_date: PropTypes.string, 
     status: PropTypes.string
   }).isRequired,
   onEdit: PropTypes.func.isRequired,
