@@ -19,24 +19,25 @@ def get_order_lines(request):
 
 @api_view(['POST'])
 def create_order_line(request):
-    customer_PO = request.data.get('customer_PO')
+    print('aaaa')
+    customer_po = request.data.get('customer_po')
+    order_line = {
+        "line_number": request.data.get("line_number"),
+        "part_number": request.data.get("part_number"),
+        "description": request.data.get("description"),
+        "quantity": request.data.get("quantity"),
+        "ship_via": request.data.get("ship_via"),
+        "required_date": request.data.get("required_date"),
+        "confirmed_date": request.data.get("confirmed_date"),
+        "factory": request.data.get("factory"),
+        "balance": request.data.get("balance"),
+        "status": 'OPEN',
+    }
 
     # Check if customer_po exists in the Order table
-    order = Order.objects.filter(customer_PO=customer_PO).first()
+    order = Order.objects.filter(customer_po=customer_po).first()
     if order:
-        # If the order exists, create an OrderLine
-        order_line = {
-            "line_number": request.data.get("line_number"),
-            "part_number": request.data.get("part_number"),
-            "description": request.data.get("description"),
-            "quantity": request.data.get("quantity"),
-            "ship_via": request.data.get("ship_via"),
-            "required_date": request.data.get("required_date"),
-            "status": request.data.get("status"),
-            "factory": request.data.get("factory"),
-            "status": 'OPEN',
-            "order": order.id,
-        }
+        order_line['order'] = order.id
         order_line_serializer = OrderLineSerializer(data=order_line)
         if order_line_serializer.is_valid():
             # Associate the order with the orderline
@@ -49,7 +50,8 @@ def create_order_line(request):
             try:
                 order_data = dict(
                     customer_id=request.data['customer_id'],
-                    customer_PO=request.data['customer_PO'],
+                    customer_po=request.data['customer_po'],
+                    buyer=request.data['buyer'],
                     order_date=datetime.today().strftime('%Y-%m-%d'),
                 )
             except:
@@ -60,18 +62,7 @@ def create_order_line(request):
                 order = order_serializer.save()
             else:
                 return Response(order_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-            order_line = {
-                "line_number": request.data.get("line_number"),
-                "part_number": request.data.get("part_number"),
-                "description": request.data.get("description"),
-                "quantity": request.data.get("quantity"),
-                "ship_via": request.data.get("ship_via"),
-                "required_date": request.data.get("required_date"),
-                "status": request.data.get("status"),
-                "factory": request.data.get("factory"),
-                "status": 'OPEN',
-                "order": order.id,
-            }
+            order_line['order'] = order.id
             order_line_serializer = OrderLineSerializer(data=order_line)
             if order_line_serializer.is_valid():
                 order_line = order_line_serializer.save(order=order)

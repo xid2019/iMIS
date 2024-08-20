@@ -1,9 +1,9 @@
 from django.db import models
-
-# Create your models here.
+from datetime import date
 
 
 class Order(models.Model):
     customer_id = models.CharField(max_length=10)
-    customer_PO = models.TextField()
-    order_date = models.DateField()
+    customer_po = models.TextField()
+    order_date = models.DateField(date.today())
+    buyer = models.TextField()
