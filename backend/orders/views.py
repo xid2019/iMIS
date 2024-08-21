@@ -14,6 +14,7 @@ def get_orders(request):
     # Extract query parameters
     customer_id = request.GET.get('customer_id')
     customer_po = request.GET.get('customer_po')
+    part_number = request.GET.get('part_number')
     order_date_after = request.GET.get('order_date_after')
     order_date_before = request.GET.get('order_date_before')
     required_date_after = request.GET.get('required_date_after')
@@ -58,6 +59,10 @@ def get_orders(request):
     if customer_po:
         where_clauses.append("o.customer_po = %s")
         query_params.append(customer_po)
+    
+    if part_number:
+        where_clauses.append("ol.part_number = %s")
+        query_params.append(part_number)
 
     if order_date_after:
         where_clauses.append("o.order_date >= %s")

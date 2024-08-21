@@ -33,6 +33,7 @@ const OrderLineTable = ({ data, setData, staticArr, setStaticArr, fetchData }) =
 		const clearedFilters = {
 			customer_id: "",
 			customer_po: "",
+			part_number: "",
 			order_date_after: "",
 			order_date_before: "",
 			required_date_after: "",
@@ -77,6 +78,9 @@ const OrderLineTable = ({ data, setData, staticArr, setStaticArr, fetchData }) =
 				</Grid>
 				<Grid item xs={2}>
 					<TextField name="customer_po" label="Customer PO" value={filters.customer_po} onChange={handleFilterChange} fullWidth variant="outlined" />
+				</Grid>
+				<Grid item xs={2}>
+					<TextField name="part_number" label="Part Number" value={filters.part_number} onChange={handleFilterChange} fullWidth variant="outlined" />
 				</Grid>
 				<Grid item xs={2}>
 					<TextField
