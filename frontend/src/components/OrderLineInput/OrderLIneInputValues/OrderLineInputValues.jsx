@@ -1,5 +1,22 @@
 import { useState } from "react";
-import { TextField, Grid, Paper, Button, Typography, Divider, InputLabel, FormControl, Select, MenuItem } from "@mui/material";
+import {
+	TextField,
+	Grid,
+	TableRow,
+	Table,
+	TableCell,
+	Paper,
+	TableContainer,
+	Button,
+	Typography,
+	Divider,
+	InputLabel,
+	FormControl,
+	Select,
+	TableHead,
+	MenuItem,
+	TableBody,
+} from "@mui/material";
 import PropTypes from "prop-types";
 import axios from "axios";
 import dayjs from "dayjs";
@@ -27,6 +44,7 @@ const OrderLineInputValues = ({ handleCancel, fetchData }) => {
 		factory: "",
 		ship_via: "Sea",
 	});
+	const [searchedParts, setSearchedParts] = useState([]);
 
 	const handleChange = (e) => {
 		const { name, value } = e.target;
@@ -58,6 +76,24 @@ const OrderLineInputValues = ({ handleCancel, fetchData }) => {
 		} catch (error) {
 			console.error("Error:", error);
 			// Optionally, handle errors, e.g., show an error message
+		}
+	};
+
+	const handleSearchPart = async () => {
+		try {
+			// Construct the query parameters from formData
+			const { part_number, dwg_number, revision } = formData;
+			const queryParams = new URLSearchParams({
+				part_number,
+				dwg_number,
+				revision,
+			}).toString();
+
+			const response = await axios.get(`http://localhost:8000/parts/?${queryParams}`);
+
+			setSearchedParts(response.data);
+		} catch (error) {
+			console.error("Error fetching data:", error);
 		}
 	};
 
@@ -103,7 +139,46 @@ const OrderLineInputValues = ({ handleCancel, fetchData }) => {
 							<Grid item xs={2}>
 								<TextField name="revision" label="Revision" value={formData.revision} onChange={handleChange} fullWidth variant="outlined" />
 							</Grid>
+							<Grid item xs={2}>
+								<Button onClick={handleSearchPart} variant="contained" color="primary" fullWidth>
+									Search
+								</Button>
+							</Grid>
 						</Grid>
+						{searchedParts.length > 0 && (
+							<TableContainer component={Paper} style={{ margin: 16 }}>
+								<Table>
+									<TableHead>
+										<TableRow>
+											<TableCell>Part Number</TableCell>
+											<TableCell>DWG Number</TableCell>
+											<TableCell>Revision</TableCell>
+											<TableCell>Description</TableCell>
+											<TableCell>Price</TableCell>
+											<TableCell>Cost</TableCell>
+											<TableCell>Material</TableCell>
+											<TableCell>Weight</TableCell>
+											<TableCell>Order Quantity</TableCell>
+										</TableRow>
+									</TableHead>
+									<TableBody>
+										{searchedParts.map((part, index) => (
+											<TableRow key={index}>
+												<TableCell>{part.part_number}</TableCell>
+												<TableCell>{part.dwg_number}</TableCell>
+												<TableCell>{part.revision}</TableCell>
+												<TableCell>{part.description}</TableCell>
+												<TableCell>{part.price}</TableCell>
+												<TableCell>{part.cost}</TableCell>
+												<TableCell>{part.material}</TableCell>
+												<TableCell>{part.weight}</TableCell>
+												<TableCell>{part.order_quantity}</TableCell>
+											</TableRow>
+										))}
+									</TableBody>
+								</Table>
+							</TableContainer>
+						)}
 						<Grid container item spacing={2}>
 							<Grid item xs={2}>
 								<TextField name="price" label="Price" type="number" value={formData.price} onChange={handleChange} fullWidth variant="outlined" />

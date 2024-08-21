@@ -88,6 +88,8 @@ def get_orders(request):
     if where_clauses:
         sql_query += " WHERE " + " AND ".join(where_clauses)
 
+    sql_query += " ORDER BY o.order_date DESC"
+
     try:
         # Execute the query with parameters
         with connection.cursor() as cursor:
@@ -129,7 +131,7 @@ def get_order(request, order_id):
             SELECT
                 o.id AS order_id,
                 o.customer_id,
-                o.customer_PO,
+                o.customer_po,
                 o.order_date,
                 ol.id AS orderline_id,
                 ol.line_number,
@@ -157,7 +159,7 @@ def get_order(request, order_id):
             orders[order_id] = {
                 'id': order_id,
                 'customer_id': row[1],
-                'customer_PO': row[2],
+                'customer_po': row[2],
                 'order_date': row[3],
                 'order_lines': []
             }
@@ -186,7 +188,7 @@ def create_order(request):
         try:
             order_data = dict(
                 customer_id=request.data['customer_id'],
-                customer_PO=request.data['customer_PO'],
+                customer_po=request.data['customer_po'],
                 order_date=request.data['order_date']
             )
         except:
