@@ -42,7 +42,6 @@ def create_order_line(request):
             # Associate the order with the orderline
             order_line_serializer.save(order=order)
             return Response(order_line_serializer.data, status=status.HTTP_201_CREATED)
-        print('aaaa', order_line_serializer.errors)
         return Response(order_line_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     else:
         # Use a transaction to ensure atomicity

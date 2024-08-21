@@ -40,7 +40,7 @@ def get_orders(request):
             ol.status
         FROM
             orders_order AS o
-        LEFT JOIN
+        JOIN
             order_lines_orderline AS ol
         ON
             o.id = ol.order_id
