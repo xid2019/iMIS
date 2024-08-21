@@ -22,7 +22,7 @@ const OrderLineInputValues = ({ initialData, handleCancel }) => {
     buyer: '',
     line_number: '',
     part_number: '',
-    print_number: '',
+    dwg_number: '',
     revision: '',
     quantity: '',
     description: '',
@@ -144,6 +144,26 @@ const OrderLineInputValues = ({ initialData, handleCancel }) => {
                   variant="outlined"
                 />
               </Grid>
+              <Grid item xs={1}>
+                <TextField
+                  name="dwg_number"
+                  label="DWG Number"
+                  value={formData.dwg_number}
+                  onChange={handleChange}
+                  fullWidth
+                  variant="outlined"
+                />
+              </Grid>
+              <Grid item xs={1}>
+                <TextField
+                  name="revision"
+                  label="Revision"
+                  value={formData.revision}
+                  onChange={handleChange}
+                  fullWidth
+                  variant="outlined"
+                />
+              </Grid>
             </Grid>
             <Grid container item spacing={2}>
               <Grid item xs={1}>
@@ -199,43 +219,22 @@ const OrderLineInputValues = ({ initialData, handleCancel }) => {
                   variant="outlined"
                 />
               </Grid>
+              <Grid item xs={4}>
+                <TextField
+                  name="description"
+                  label="Description"
+                  value={formData.description}
+                  onChange={handleChange}
+                  fullWidth
+                  variant="outlined"
+                />
+              </Grid>
             </Grid>
             <Grid item xs={1}>
               <TextField
                 name="line_number"
                 label="Line Number"
                 value={formData.line_number}
-                onChange={handleChange}
-                fullWidth
-                variant="outlined"
-              />
-            </Grid>
-            <Grid item xs={1}>
-              <TextField
-                name="print_number"
-                label="Print Number"
-                value={formData.print_number}
-                onChange={handleChange}
-                fullWidth
-                variant="outlined"
-              />
-            </Grid>
-            <Grid item xs={1}>
-              <TextField
-                name="revision"
-                label="Revision"
-                value={formData.revision}
-                onChange={handleChange}
-                fullWidth
-                variant="outlined"
-              />
-            </Grid>
-            <Grid item xs={1}>
-              <TextField
-                name="quantity"
-                label="Quantity"
-                type="number"
-                value={formData.quantity}
                 onChange={handleChange}
                 fullWidth
                 variant="outlined"
@@ -251,11 +250,12 @@ const OrderLineInputValues = ({ initialData, handleCancel }) => {
                 variant="outlined"
               />
             </Grid>
-            <Grid item xs={4}>
+            <Grid item xs={1}>
               <TextField
-                name="description"
-                label="Description"
-                value={formData.description}
+                name="quantity"
+                label="Quantity"
+                type="number"
+                value={formData.quantity}
                 onChange={handleChange}
                 fullWidth
                 variant="outlined"

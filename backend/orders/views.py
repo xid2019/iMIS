@@ -6,57 +6,115 @@ from order_lines.serializers import OrderLineSerializer
 from order_lines.models import OrderLine
 from django.db import transaction
 from django.db import connection
+from django.db.utils import OperationalError
 
 
 @api_view(['GET'])
 def get_orders(request):
-    # Execute raw SQL query
-    with connection.cursor() as cursor:
-        cursor.execute("""
-            SELECT
-                o.id AS order_id,
-                o.customer_id,
-                o.customer_po,
-                o.order_date,
-                ol.id AS orderline_id,
-                ol.line_number,
-                ol.part_number,
-                ol.description,
-                ol.quantity,
-                ol.ship_via,
-                ol.balance,
-                ol.required_date,
-                ol.confirmed_date,
-                ol.factory,
-                ol.status
-            FROM
-                orders_order AS o
-            LEFT JOIN
-                order_lines_orderline AS ol
-            ON
-                o.id = ol.order_id
-        """)
-        rows = cursor.fetchall()
+    # Extract query parameters
+    customer_id = request.GET.get('customer_id')
+    customer_po = request.GET.get('customer_po')
+    order_date_after = request.GET.get('order_date_after')
+    order_date_before = request.GET.get('order_date_before')
+    required_date_after = request.GET.get('required_date_after')
+    required_date_before = request.GET.get('required_date_after_date_before')
+    status = request.GET.get('status')
 
-    keys = [
-        "order_id",
-        "customer_id",
-        "customer_po",
-        "order_date",
-        "orderline_id",
-        "line_number",
-        "part_number",
-        "description",
-        "quantity",
-        "ship_via",
-        "balance",
-        "required_date",
-        "confirmed_date",
-        "factory",
-        "status"
-    ]
-    result = [dict(zip(keys, value)) for value in rows]
-    return Response(result)
+    # Base SQL query
+    sql_query = """
+        SELECT
+            o.id AS order_id,
+            o.customer_id,
+            o.customer_po,
+            o.order_date,
+            ol.id AS orderline_id,
+            ol.line_number,
+            ol.part_number,
+            ol.description,
+            ol.quantity,
+            ol.ship_via,
+            ol.balance,
+            ol.required_date,
+            ol.confirmed_date,
+            ol.factory,
+            ol.status
+        FROM
+            orders_order AS o
+        LEFT JOIN
+            order_lines_orderline AS ol
+        ON
+            o.id = ol.order_id
+    """
+
+    # Initialize an empty list to hold WHERE conditions
+    where_clauses = []
+    query_params = []
+
+    # Add WHERE clauses based on available query parameters
+    if customer_id:
+        where_clauses.append("o.customer_id = %s")
+        query_params.append(customer_id)
+
+    if customer_po:
+        where_clauses.append("o.customer_po = %s")
+        query_params.append(customer_po)
+
+    if order_date_after:
+        where_clauses.append("o.order_date >= %s")
+        query_params.append(order_date_after)
+
+    if order_date_before:
+        where_clauses.append("o.order_date <= %s")
+        query_params.append(order_date_after)
+
+    if required_date_after:
+        where_clauses.append("ol.required_date >= %s")
+        query_params.append(required_date_after)
+
+    if required_date_before:
+        where_clauses.append("ol.required_date <= %s")
+        query_params.append(required_date_after)
+
+    if status:
+        where_clauses.append("o.status = %s")
+        query_params.append(status)
+
+    # Combine the WHERE clauses
+    if where_clauses:
+        sql_query += " WHERE " + " AND ".join(where_clauses)
+
+    print('aaaaa', sql_query)
+    try:
+        # Execute the query with parameters
+        with connection.cursor() as cursor:
+            cursor.execute(sql_query, query_params)
+            rows = cursor.fetchall()
+
+        keys = [
+            "order_id",
+            "customer_id",
+            "customer_po",
+            "order_date",
+            "orderline_id",
+            "line_number",
+            "part_number",
+            "description",
+            "quantity",
+            "ship_via",
+            "balance",
+            "required_date",
+            "confirmed_date",
+            "factory",
+            "status"
+        ]
+
+        # Convert the result to a list of dictionaries
+        result = [dict(zip(keys, row)) for row in rows]
+
+        return Response(result)
+
+    except OperationalError as e:
+        return Response({"error": str(e)}, status=500)
 
 
 @api_view(['GET'])
