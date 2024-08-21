@@ -1,11 +1,7 @@
-import OrderLineInput from "./components/OrderLineInput/OrderLineInput"
-import OrderLineTable from "./components/OrderLineTable/OrderLineTable"
+import WindowsTabs from "./components/WindowsTabs/WindowsTabls"
 function App() {
   return (
-    <>
-      <OrderLineTable/>
-      <OrderLineInput/>
-    </>
+    <WindowsTabs/>
   )
 }
 
