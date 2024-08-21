@@ -36,7 +36,7 @@ const OrderLineInputValues = ({ initialData, handleCancel }) => {
     weight: '',
     schd_days: '',
     factory: '',
-    ship_via: '',
+    ship_via: 'Sea',
   });
 
   const handleChange = (e) => {
@@ -84,7 +84,7 @@ const OrderLineInputValues = ({ initialData, handleCancel }) => {
           </Grid>
           {/* First Row */}
           <Grid container item spacing={2}>
-            <Grid item xs={1}>
+            <Grid item xs={2}>
               <TextField
                 name="customer_id"
                 label="Customer ID"
@@ -94,7 +94,7 @@ const OrderLineInputValues = ({ initialData, handleCancel }) => {
                 variant="outlined"
               />
             </Grid>
-            <Grid item xs={1}>
+            <Grid item xs={2}>
               <TextField
                 name="customer_po"
                 label="Customer PO"
@@ -104,7 +104,7 @@ const OrderLineInputValues = ({ initialData, handleCancel }) => {
                 variant="outlined"
               />
             </Grid>
-            <Grid item xs={1}>
+            <Grid item xs={2}>
               <TextField
                 name="buyer"
                 label="Buyer"
@@ -114,7 +114,7 @@ const OrderLineInputValues = ({ initialData, handleCancel }) => {
                 variant="outlined"
               />
             </Grid>
-            <Grid item xs={1}>
+            <Grid item xs={2}>
               <TextField
                 name="pay_terms"
                 label="Pay Terms"
@@ -134,7 +134,7 @@ const OrderLineInputValues = ({ initialData, handleCancel }) => {
           {/* Second Row */}
           <Grid container item spacing={2}>
             <Grid container item spacing={2}>
-              <Grid item xs={1}>
+              <Grid item xs={2}>
                 <TextField
                   name="part_number"
                   label="Part Number"
@@ -144,7 +144,7 @@ const OrderLineInputValues = ({ initialData, handleCancel }) => {
                   variant="outlined"
                 />
               </Grid>
-              <Grid item xs={1}>
+              <Grid item xs={2}>
                 <TextField
                   name="dwg_number"
                   label="DWG Number"
@@ -154,7 +154,7 @@ const OrderLineInputValues = ({ initialData, handleCancel }) => {
                   variant="outlined"
                 />
               </Grid>
-              <Grid item xs={1}>
+              <Grid item xs={2}>
                 <TextField
                   name="revision"
                   label="Revision"
@@ -166,7 +166,7 @@ const OrderLineInputValues = ({ initialData, handleCancel }) => {
               </Grid>
             </Grid>
             <Grid container item spacing={2}>
-              <Grid item xs={1}>
+              <Grid item xs={2}>
                 <TextField
                   name="price"
                   label="Price"
@@ -177,7 +177,7 @@ const OrderLineInputValues = ({ initialData, handleCancel }) => {
                   variant="outlined"
                 />
               </Grid>
-              <Grid item xs={1}>
+              <Grid item xs={2}>
                 <TextField
                   name="cost"
                   label="Cost"
@@ -188,7 +188,7 @@ const OrderLineInputValues = ({ initialData, handleCancel }) => {
                   variant="outlined"
                 />
               </Grid>
-              <Grid item xs={1}>
+              <Grid item xs={2}>
                 <TextField
                   name="material"
                   label="Material"
@@ -198,7 +198,7 @@ const OrderLineInputValues = ({ initialData, handleCancel }) => {
                   variant="outlined"
                 />
               </Grid>
-              <Grid item xs={1}>
+              <Grid item xs={2}>
                 <TextField
                   name="weight"
                   label="Weight(KG)"
@@ -209,7 +209,7 @@ const OrderLineInputValues = ({ initialData, handleCancel }) => {
                   variant="outlined"
                 />
               </Grid>
-              <Grid item xs={1}>
+              <Grid item xs={2}>
                 <TextField
                   name="factory"
                   label="Factory"
@@ -230,7 +230,7 @@ const OrderLineInputValues = ({ initialData, handleCancel }) => {
                 />
               </Grid>
             </Grid>
-            <Grid item xs={1}>
+            <Grid item xs={2}>
               <TextField
                 name="line_number"
                 label="Line Number"
@@ -240,7 +240,7 @@ const OrderLineInputValues = ({ initialData, handleCancel }) => {
                 variant="outlined"
               />
             </Grid>
-            <Grid item xs={1}>
+            <Grid item xs={2}>
               <TextField
                 name="unit"
                 label="Unit"
@@ -250,7 +250,7 @@ const OrderLineInputValues = ({ initialData, handleCancel }) => {
                 variant="outlined"
               />
             </Grid>
-            <Grid item xs={1}>
+            <Grid item xs={2}>
               <TextField
                 name="quantity"
                 label="Quantity"
@@ -270,7 +270,7 @@ const OrderLineInputValues = ({ initialData, handleCancel }) => {
           </Grid>
           {/* Third Row */}
           <Grid container item spacing={2}>
-            <Grid item xs={1}>
+            <Grid item xs={2}>
               <FormControl variant="outlined">
                 <InputLabel id="ship-via-label">Ship Via</InputLabel>
                 <Select

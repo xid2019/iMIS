@@ -26,7 +26,6 @@ const OrderLineEditting = ({ data, onSave }) => {
   };
   return (
     <TableRow>
-      <TableCell>{data.order_id}</TableCell>
       <TableCell>
         <TextField 
           value={formData.customer_id} 
@@ -52,7 +51,6 @@ const OrderLineEditting = ({ data, onSave }) => {
           variant="outlined"
         />
       </TableCell>
-      <TableCell>{data.orderline_id}</TableCell>
       <TableCell>
         <TextField 
           value={formData.line_number} 

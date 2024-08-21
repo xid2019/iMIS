@@ -1,37 +1,77 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import TableContainer from '@mui/material/TableContainer';
-import Paper from '@mui/material/Paper';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
 import OrderLineStatic from './OrderLineStatic/OrderLineStatic';
 import OrderLineEditting from './OrderLineEditting/OrderLineEditting';
+import {
+  TableContainer,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Grid,
+  TextField,
+  Button,
+  Box,
+  Typography
+} from '@mui/material';
 import './styles.css';
 
 
 const OrderLineTable = () => {
   const [data, setData] = useState([]);
   const [staticArr, setStaticArr] = useState([]);
+  const [filters, setFilters] = useState({
+    customer_id: '',
+    customer_po: '',
+    order_date_after: '',
+    order_date_before: '',
+    required_date_after: '',
+    required_date_before: '',
+    status: '',
+  });
 
   useEffect(() => {
-    const url = 'http://localhost:8000/orders/'; 
+    fetchData(filters);
+  }, []);
 
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(url);
-        setData(response.data);
-        const newStaticArr = new Array(response.data.length).fill(true);
-        setStaticArr(newStaticArr);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
+  const fetchData = async (filters) => {
+    const queryParams = new URLSearchParams(filters).toString();
+    console.log('aaaa', queryParams)
+    const url = `http://localhost:8000/orders/?${queryParams}`;
+
+    try {
+      const response = await axios.get(url);
+      setData(response.data);
+      const newStaticArr = new Array(response.data.length).fill(true);
+      setStaticArr(newStaticArr);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
+  const handleFilterChange = (e) => {
+    setFilters({ ...filters, [e.target.name]: e.target.value });
+  };
+
+  const handleFilterSubmit = () => {
+    fetchData(filters);
+  };
+
+  const handleClearFilters = () => {
+    const clearedFilters = {
+      customer_id: '',
+      customer_po: '',
+      order_date_after: '',
+      order_date_before: '',
+      required_date_after: '',
+      required_date_before: '',
+      status: '',
     };
-
-    fetchData(); // Call the function to fetch data when the component mounts
-  }, []); 
+    setFilters(clearedFilters);
+    fetchData(clearedFilters);
+  };
 
   const handleEdit = (index) => {
     const newStaticArr = [...staticArr];
@@ -55,15 +95,111 @@ const OrderLineTable = () => {
   }
 
   return (
+    <Box sx={{ padding: 2 }}>
+      <Grid container spacing={2} alignItems="center">
+      <Grid item xs={12}>
+        <Typography variant="h6" gutterBottom>
+          Filter PO
+        </Typography>
+      </Grid>
+      <Grid item xs={2}>
+        <TextField
+          name="customer_id"
+          label="Customer ID"
+          value={filters.customer_id}
+          onChange={handleFilterChange}
+          fullWidth
+          variant="outlined"
+        />
+      </Grid>
+      <Grid item xs={2}>
+        <TextField
+          name="customer_po"
+          label="Customer PO"
+          value={filters.customer_po}
+          onChange={handleFilterChange}
+          fullWidth
+          variant="outlined"
+        />
+      </Grid>
+      <Grid item xs={2}>
+        <TextField
+          name="order_date_after"
+          label="Order Date After"
+          type="date"
+          value={filters.order_date_after}
+          onChange={handleFilterChange}
+          fullWidth
+          variant="outlined"
+          InputLabelProps={{ shrink: true }}
+        />
+      </Grid>
+      <Grid item xs={2}>
+        <TextField
+          name="order_date_before"
+          label="Order Date Before"
+          type="date"
+          value={filters.order_date_before}
+          onChange={handleFilterChange}
+          fullWidth
+          variant="outlined"
+          InputLabelProps={{ shrink: true }}
+        />
+      </Grid>
+      <Grid item xs={2}>
+        <TextField
+          name="required_date_after"
+          label="Required Date After"
+          type="date"
+          value={filters.required_date_after}
+          onChange={handleFilterChange}
+          fullWidth
+          variant="outlined"
+          InputLabelProps={{ shrink: true }}
+        />
+      </Grid>
+      <Grid item xs={2}>
+        <TextField
+          name="required_date_before"
+          label="Required Date Before"
+          type="date"
+          value={filters.required_date_before}
+          onChange={handleFilterChange}
+          fullWidth
+          variant="outlined"
+          InputLabelProps={{ shrink: true }}
+        />
+      </Grid>
+      <Grid item xs={2}>
+        <TextField
+          name="status"
+          label="Status"
+          value={filters.status}
+          onChange={handleFilterChange}
+          fullWidth
+          variant="outlined"
+        />
+      </Grid>
+      <Grid item xs={12} container spacing={2}>
+        <Grid item xs={2}>
+          <Button variant="contained" color="primary" fullWidth onClick={handleFilterSubmit}>
+            Apply Filters
+          </Button>
+        </Grid>
+        <Grid item xs={2}>
+          <Button variant="outlined" color="secondary" fullWidth onClick={handleClearFilters}>
+            Clear Filters
+          </Button>
+        </Grid>
+      </Grid>
+    </Grid>
     <TableContainer component={Paper} className="order-line-table">
       <Table stickyHeader>
         <TableHead>
           <TableRow>
-            <TableCell>Order ID</TableCell>
             <TableCell>Customer ID</TableCell>
             <TableCell>Customer PO</TableCell>
             <TableCell>Order Date</TableCell>
-            <TableCell>Orderline ID</TableCell>
             <TableCell>Line Number</TableCell>
             <TableCell>Part Number</TableCell>
             <TableCell>Description</TableCell>
@@ -95,6 +231,7 @@ const OrderLineTable = () => {
         </TableBody>
       </Table>
     </TableContainer>
+    </Box>
   );
 };
 

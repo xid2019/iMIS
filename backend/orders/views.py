@@ -76,14 +76,13 @@ def get_orders(request):
         query_params.append(required_date_after)
 
     if status:
-        where_clauses.append("o.status = %s")
+        where_clauses.append("ol.status = %s")
         query_params.append(status)
 
     # Combine the WHERE clauses
     if where_clauses:
         sql_query += " WHERE " + " AND ".join(where_clauses)
 
-    print('aaaaa', sql_query)
     try:
         # Execute the query with parameters
         with connection.cursor() as cursor:

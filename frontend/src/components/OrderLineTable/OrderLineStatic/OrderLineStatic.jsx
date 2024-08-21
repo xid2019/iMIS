@@ -6,11 +6,9 @@ import Button from '@mui/material/Button';
 const OrderLineStatic = ({ data, onEdit }) => {
   return (
     <TableRow>
-      <TableCell>{data.order_id}</TableCell>
       <TableCell>{data.customer_id}</TableCell>
       <TableCell>{data.customer_po}</TableCell>
       <TableCell>{data.order_date}</TableCell>
-      <TableCell>{data.orderline_id}</TableCell>
       <TableCell>{data.line_number}</TableCell>
       <TableCell>{data.part_number}</TableCell>
       <TableCell>{data.description}</TableCell>
