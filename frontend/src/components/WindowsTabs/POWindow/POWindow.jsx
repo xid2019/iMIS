@@ -2,6 +2,7 @@ import OrderLineInput from "../../OrderLineInput/OrderLineInput";
 import OrderLineTable from "../../OrderLineTable/OrderLineTable";
 import { useState } from "react";
 import axios from "axios";
+import { Grid } from "@mui/material";
 
 function POWindow() {
 	const [data, setData] = useState([]);
@@ -21,10 +22,10 @@ function POWindow() {
 		}
 	};
 	return (
-		<>
+		<Grid>
 			<OrderLineTable data={data} setData={setData} fetchData={fetchData} staticArr={staticArr} setStaticArr={setStaticArr} />
 			<OrderLineInput fetchData={fetchData} />
-		</>
+		</Grid>
 	);
 }
 
