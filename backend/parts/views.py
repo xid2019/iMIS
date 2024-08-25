@@ -8,12 +8,15 @@ from rest_framework import status
 
 @api_view(['GET'])
 def get_parts(request):
+    customer_id = request.GET.get('customer_id')
     part_number = request.GET.get('part_number')
     dwg_number = request.GET.get('dwg_number')
     revision = request.GET.get('revision')
 
     filters = Q()
     
+    if customer_id:
+        filters &= Q(customer_id=customer_id)
     if part_number:
         filters &= Q(part_number=part_number)
     if dwg_number:

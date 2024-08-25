@@ -82,8 +82,9 @@ const OrderLineInputValues = ({ handleCancel, fetchData }) => {
 	const handleSearchPart = async () => {
 		try {
 			// Construct the query parameters from formData
-			const { part_number, dwg_number, revision } = formData;
+			const { customer_id, part_number, dwg_number, revision } = formData;
 			const queryParams = new URLSearchParams({
+				customer_id,
 				part_number,
 				dwg_number,
 				revision,
@@ -109,9 +110,6 @@ const OrderLineInputValues = ({ handleCancel, fetchData }) => {
 					{/* First Row */}
 					<Grid container item spacing={2}>
 						<Grid item xs={2}>
-							<TextField name="customer_id" label="Customer ID" value={formData.customer_id} onChange={handleChange} fullWidth variant="outlined" />
-						</Grid>
-						<Grid item xs={2}>
 							<TextField name="customer_po" label="Customer PO" value={formData.customer_PO} onChange={handleChange} fullWidth variant="outlined" />
 						</Grid>
 						<Grid item xs={2}>
@@ -130,6 +128,9 @@ const OrderLineInputValues = ({ handleCancel, fetchData }) => {
 					{/* Second Row */}
 					<Grid container item spacing={2}>
 						<Grid container item spacing={2}>
+							<Grid item xs={2}>
+								<TextField name="customer_id" label="Customer ID" value={formData.customer_id} onChange={handleChange} fullWidth variant="outlined" />
+							</Grid>
 							<Grid item xs={2}>
 								<TextField name="part_number" label="Part Number" value={formData.part_number} onChange={handleChange} fullWidth variant="outlined" />
 							</Grid>
@@ -150,6 +151,7 @@ const OrderLineInputValues = ({ handleCancel, fetchData }) => {
 								<Table>
 									<TableHead>
 										<TableRow>
+											<TableCell>Customer ID</TableCell>
 											<TableCell>Part Number</TableCell>
 											<TableCell>DWG Number</TableCell>
 											<TableCell>Revision</TableCell>
@@ -164,6 +166,7 @@ const OrderLineInputValues = ({ handleCancel, fetchData }) => {
 									<TableBody>
 										{searchedParts.map((part, index) => (
 											<TableRow key={index}>
+												<TableCell>{part.customer_id}</TableCell>
 												<TableCell>{part.part_number}</TableCell>
 												<TableCell>{part.dwg_number}</TableCell>
 												<TableCell>{part.revision}</TableCell>
