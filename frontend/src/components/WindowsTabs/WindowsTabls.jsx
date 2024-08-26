@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Box, Tab, Tabs, AppBar } from "@mui/material";
-import POWindow from "./POWindow/POWindow";
+import POFilterWindow from "./POFilterWindow/POFilterWindow";
+import POEntryWindow from "./POEntryWindow/POEntryWindow";
 import InvoiceWindow from "./InvoiceWindow/InvoiceWindow";
 
 function WindowsTabs() {
@@ -16,6 +17,7 @@ function WindowsTabs() {
 			{/* Fixed Tabs */}
 			<AppBar position="fixed" sx={{ top: 0, zIndex: 1100, backgroundColor: "#F0F8FF" }}>
 				<Tabs value={selectedTab} onChange={handleChange}>
+					<Tab label="PO Filter" />
 					<Tab label="PO Entry" />
 					<Tab label="Invoice" />
 				</Tabs>
@@ -23,8 +25,9 @@ function WindowsTabs() {
 
 			{/* Add padding to content to avoid overlap with fixed tabs */}
 			<Box sx={{ pt: 8 }}>
-				{selectedTab === 0 && <POWindow />}
-				{selectedTab === 1 && <InvoiceWindow />}
+				{selectedTab === 0 && <POFilterWindow />}
+				{selectedTab === 1 && <POEntryWindow />}
+				{selectedTab === 2 && <InvoiceWindow />}
 			</Box>
 		</Box>
 	);

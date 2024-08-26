@@ -21,7 +21,7 @@ import PropTypes from "prop-types";
 import axios from "axios";
 import dayjs from "dayjs";
 
-const OrderLineInputValues = ({ handleCancel, fetchData }) => {
+const OrderLineInputValues = ({ handleCancel, data, setData, staticArr, setStaticArr }) => {
 	const [formData, setFormData] = useState({
 		customer_id: "",
 		customer_po: "",
@@ -67,16 +67,8 @@ const OrderLineInputValues = ({ handleCancel, fetchData }) => {
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		try {
-			const response = await axios.post("http://localhost:8000/order_lines/create/", formData);
-			fetchData();
-			console.log("Success:", response.data);
-
-			// Optionally, handle success, e.g., show a message or reset the form
-		} catch (error) {
-			console.error("Error:", error);
-			// Optionally, handle errors, e.g., show an error message
-		}
+		setData([...data, formData]);
+		setStaticArr([...staticArr, true]);
 	};
 
 	const handleSearchPart = async () => {
@@ -289,7 +281,7 @@ const OrderLineInputValues = ({ handleCancel, fetchData }) => {
 					<Grid container spacing={2} sx={{ mt: 2 }}>
 						<Grid item xs={2}>
 							<Button type="submit" variant="contained" color="primary" fullWidth>
-								Save
+								Add
 							</Button>
 						</Grid>
 						<Grid item xs={2}>
@@ -305,25 +297,34 @@ const OrderLineInputValues = ({ handleCancel, fetchData }) => {
 };
 
 OrderLineInputValues.propTypes = {
-	initialData: PropTypes.shape({
-		order_id: PropTypes.string,
-		customer_id: PropTypes.string,
-		customer_PO: PropTypes.string,
-		order_date: PropTypes.string,
-		orderline_id: PropTypes.string,
-		line_number: PropTypes.string,
-		part_number: PropTypes.string,
-		description: PropTypes.string,
-		quantity: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-		ship_via: PropTypes.string,
-		balance: PropTypes.string,
-		required_date: PropTypes.string,
-		original_confirm_date: PropTypes.string,
-		updated_confirm_date: PropTypes.string,
-		status: PropTypes.string,
-	}),
+	data: PropTypes.arrayOf(
+		PropTypes.shape({
+			customer_id: PropTypes.string,
+			customer_po: PropTypes.string,
+			buyer: PropTypes.string,
+			line_number: PropTypes.string,
+			part_number: PropTypes.string,
+			dwg_number: PropTypes.string,
+			revision: PropTypes.string,
+			quantity: PropTypes.string,
+			description: PropTypes.string,
+			price: PropTypes.string,
+			cost: PropTypes.string,
+			unit: PropTypes.string,
+			pay_terms: PropTypes.string,
+			required_date: PropTypes.string,
+			due_date: PropTypes.string,
+			material: PropTypes.string,
+			weight: PropTypes.string,
+			schd_days: PropTypes.string,
+			factory: PropTypes.string,
+			ship_via: PropTypes.string,
+		})
+	).isRequired,
+	staticArr: PropTypes.arrayOf(PropTypes.bool),
+	setStaticArr: PropTypes.func.isRequired,
 	handleCancel: PropTypes.func.isRequired,
-	fetchData: PropTypes.func.isRequired,
+	setData: PropTypes.func.isRequired,
 };
 
 export default OrderLineInputValues;
