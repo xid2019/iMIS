@@ -141,7 +141,7 @@ const OrderLineInputValues = ({ handleCancel, data, setData, staticArr, setStati
 							</Grid>
 						</Grid>
 						{searchedParts.length > 0 && (
-							<TableContainer component={Paper} style={{ margin: 16 }}>
+							<TableContainer component={Paper} sx={{ margin: "16px", maxHeight: "400px", minWidth: "1000px", maxWidth: "100%", overflowX: "auto" }}>
 								<Table>
 									<TableHead>
 										<TableRow>

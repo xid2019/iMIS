@@ -1,4 +1,4 @@
-import OrderLineInput from "../../OrderLineInput/OrderLineInput";
+import OrderLineInput from "./OrderLineInput/OrderLineInput";
 import OrderLineEntries from "./OrderLineTable/OrderLineEntries";
 import { useState } from "react";
 import { Grid, Button } from "@mui/material";

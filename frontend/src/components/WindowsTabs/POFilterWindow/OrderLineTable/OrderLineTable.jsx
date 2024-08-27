@@ -3,7 +3,6 @@ import axios from "axios";
 import OrderLineStatic from "./OrderLineStatic/OrderLineStatic";
 import OrderLineEditting from "./OrderLineEditting/OrderLineEditting";
 import { TableContainer, Paper, Table, TableBody, TableCell, TableHead, TableRow, Grid, TextField, Button, Box, Typography } from "@mui/material";
-import "./styles.css";
 import PropTypes from "prop-types";
 
 const OrderLineTable = ({ data, setData, staticArr, setStaticArr, fetchData }) => {
@@ -146,7 +145,7 @@ const OrderLineTable = ({ data, setData, staticArr, setStaticArr, fetchData }) =
 					</Grid>
 				</Grid>
 			</Grid>
-			<TableContainer component={Paper} className="order-line-table">
+			<TableContainer component={Paper} sx={{ maxHeight: "500px", minWidth: "1000px", maxWidth: "100%", overflowX: "auto" }}>
 				<Table stickyHeader>
 					<TableHead>
 						<TableRow>

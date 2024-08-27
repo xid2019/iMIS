@@ -1,13 +1,12 @@
 import OrderLineStatic from "./OrderLineStatic/OrderLineStatic";
 import OrderLineEditting from "./OrderLineEditting/OrderLineEditting";
 import { TableContainer, Paper, Table, TableBody, TableCell, TableHead, TableRow, Box } from "@mui/material";
-import "./styles.css";
 import PropTypes from "prop-types";
 
 const OrderLineEntries = ({ data, setData, staticArr, setStaticArr }) => {
 	return (
 		<Box sx={{ padding: 2 }}>
-			<TableContainer component={Paper} className="order-line-table">
+			<TableContainer component={Paper} sx={{ maxHeight: "500px", minWidth: "1000px", maxWidth: "100%", overflowX: "auto" }}>
 				<Table stickyHeader>
 					<TableHead>
 						<TableRow>
