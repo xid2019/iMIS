@@ -21,6 +21,11 @@ const OrderLineEntries = ({ data, setData, staticArr, setStaticArr }) => {
 							<TableCell>Balance</TableCell>
 							<TableCell>Required Date</TableCell>
 							<TableCell>Confirmed Date</TableCell>
+							<TableCell>DWG Number</TableCell>
+							<TableCell>Revision</TableCell>
+							<TableCell>Unit Price</TableCell>
+							<TableCell>Material</TableCell>
+							<TableCell>Unit Weight(KG)</TableCell>
 							<TableCell>Status</TableCell>
 							<TableCell>Action</TableCell>
 						</TableRow>

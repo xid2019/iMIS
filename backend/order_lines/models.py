@@ -1,6 +1,6 @@
 from django.db import models
 from orders.models import Order
-from datetime import date
+from parts.models import Part
 
 
 # Create your models here.
@@ -19,3 +19,8 @@ class OrderLine(models.Model):
     factory = models.TextField(null=True, blank=True)
     balance = models.IntegerField(null=True, blank=True)
     status = models.CharField(max_length=10, null=True, blank=True)
+    dwg_number = models.TextField(null=True, blank=True)
+    revision = models.TextField(null=True, blank=True)
+    price = models.FloatField(null=True, blank=True)
+    material = models.TextField(null=True, blank=True)
+    weight = models.FloatField(null=True, blank=True)

@@ -58,6 +58,21 @@ const OrderLineEditting = ({ data, setData, index, staticArr, setStaticArr }) =>
 				<TextField name="confirmed_date" type="date" value={formData.confirmed_date} onChange={handleChange} variant="outlined" />
 			</TableCell>
 			<TableCell>
+				<TextField name="dwg_number" value={formData.dwg_number} onChange={handleChange} variant="outlined" />
+			</TableCell>
+			<TableCell>
+				<TextField name="revision" value={formData.revision} onChange={handleChange} variant="outlined" />
+			</TableCell>
+			<TableCell>
+				<TextField value={formData.price} name="price" type="number" variant="outlined" onChange={handleChange} />
+			</TableCell>
+			<TableCell>
+				<TextField name="material" value={formData.material} onChange={handleChange} variant="outlined" />
+			</TableCell>
+			<TableCell>
+				<TextField value={formData.weight} name="weight" type="number" variant="outlined" onChange={handleChange} />
+			</TableCell>
+			<TableCell>
 				<FormControl variant="outlined">
 					<Select name="status" value={formData.status} onChange={handleChange}>
 						<MenuItem value="OPEN">OPEN</MenuItem>

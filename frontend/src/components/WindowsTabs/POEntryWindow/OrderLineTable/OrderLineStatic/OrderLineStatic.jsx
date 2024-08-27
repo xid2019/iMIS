@@ -26,6 +26,11 @@ const OrderLineStatic = ({ data, setData, index, staticArr, setStaticArr }) => {
 				<TableCell>{data[index].balance}</TableCell>
 				<TableCell>{data[index].required_date}</TableCell>
 				<TableCell>{data[index].confirmed_date}</TableCell>
+				<TableCell>{data[index].dwg_number}</TableCell>
+				<TableCell>{data[index].revision}</TableCell>
+				<TableCell>{data[index].price}</TableCell>
+				<TableCell>{data[index].material}</TableCell>
+				<TableCell>{data[index].weight}</TableCell>
 				<TableCell>{data[index].status}</TableCell>
 				<TableCell>
 					<Box display="flex" justifyContent="flex-start" alignItems="center">
@@ -63,6 +68,11 @@ OrderLineStatic.propTypes = {
 			required_date: PropTypes.string.isRequired,
 			confirmed_date: PropTypes.string,
 			status: PropTypes.string.isRequired,
+			dwg_number: PropTypes.string.isRequired,
+			revision: PropTypes.string.isRequired,
+			price: PropTypes.number.isRequired,
+			material: PropTypes.string.isRequired,
+			weight: PropTypes.string.isRequired,
 		})
 	).isRequired,
 	setData: PropTypes.func.isRequired,
