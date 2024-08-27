@@ -16,6 +16,6 @@ class OrderLine(models.Model):
     ship_via = models.CharField(max_length=5)
     required_date = models.DateField()
     confirmed_date = models.DateField(null=True, blank=True)
-    factory = models.TextField()
+    factory = models.TextField(null=True, blank=True)
     balance = models.IntegerField(null=True, blank=True)
-    status = models.CharField(max_length=10)
+    status = models.CharField(max_length=10, null=True, blank=True)

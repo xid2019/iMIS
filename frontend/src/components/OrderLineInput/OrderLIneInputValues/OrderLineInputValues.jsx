@@ -26,6 +26,7 @@ const OrderLineInputValues = ({ handleCancel, data, setData, staticArr, setStati
 		customer_id: "",
 		customer_po: "",
 		buyer: "",
+		order_date: new Date().toISOString().split("T")[0],
 		line_number: "",
 		part_number: "",
 		dwg_number: "",
@@ -43,6 +44,7 @@ const OrderLineInputValues = ({ handleCancel, data, setData, staticArr, setStati
 		schd_days: "",
 		factory: "",
 		ship_via: "Sea",
+		status: "OPEN",
 	});
 	const [searchedParts, setSearchedParts] = useState([]);
 

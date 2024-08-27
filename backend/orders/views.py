@@ -4,9 +4,11 @@ from rest_framework import status
 from .serializers import OrderSerializer
 from order_lines.serializers import OrderLineSerializer
 from order_lines.models import OrderLine
-from django.db import transaction
+from django.db import transaction, IntegrityError
 from django.db import connection
 from django.db.utils import OperationalError
+from orders.models import Order
+from datetime import date
 
 
 @api_view(['GET'])
@@ -183,41 +185,42 @@ def get_order(request, order_id):
 
 @api_view(['POST'])
 def create_order(request):
-    # Use a transaction to ensure atomicity
     with transaction.atomic():
         try:
-            order_data = dict(
-                customer_id=request.data['customer_id'],
-                customer_po=request.data['customer_po'],
-                order_date=request.data['order_date']
-            )
-        except:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-        order_serializer = OrderSerializer(data=order_data)
-        if order_serializer.is_valid():
-            # Save the order if the data is valid
-            order = order_serializer.save()
+            customer_po = request.data[0]['customer_po']
+        except KeyError:
+            return Response({"detail": "Missing Customer PO"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        try:
+            order = Order.objects.get(customer_po=customer_po)
+        except Order.DoesNotExist:
+            order_data = {
+                'customer_id': request.data[0]['customer_id'],
+                'customer_po': customer_po,
+                'order_date': request.data[0]['order_date'],
+                'buyer': request.data[0]['buyer']
+            }
+            order_serializer = OrderSerializer(data=order_data)
+            if order_serializer.is_valid():
+                order = order_serializer.save()
+            else:
+                return Response(order_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            
+        order_lines = []
+        for order_line in request.data:
+            order_line['order'] = order.id  # Set the order foreign key
+            order_line_serializer = OrderLineSerializer(data=order_line)
+            if order_line_serializer.is_valid():
+                order_line_instance = OrderLine(**order_line_serializer.validated_data)
+                order_lines.append(order_line_instance)
+            else:
+                transaction.set_rollback(True)
+                return Response(order_line_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+        try:
+            OrderLine.objects.bulk_create(order_lines)
+        except Exception as e:
+            transaction.set_rollback(True)
+            return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-            # Validate and save each order line
-            order_lines = request.data['order_lines']
-            order_lines_data = []
-            for order_line_data in order_lines:
-                # validate order_line_data
-                order_line_data['order'] = order.id
-                order_line_serializer = OrderLineSerializer(
-                    data=order_line_data)
-                if order_line_serializer.is_valid():
-                    order_line_data['order'] = order
-                    order_lines_data.append(OrderLine(**order_line_data))
-
-                else:
-                    # If any order line is invalid, roll back the inserted order and return an error response
-                    transaction.set_rollback(True)
-                    return Response(order_line_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-            OrderLine.objects.bulk_create(order_lines_data)
-            # Return the order data if everything is successful
-            return Response(order_serializer.data, status=status.HTTP_201_CREATED)
-
-        # If the order data is invalid, return an error response
-        return Response(order_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(status=status.HTTP_201_CREATED)

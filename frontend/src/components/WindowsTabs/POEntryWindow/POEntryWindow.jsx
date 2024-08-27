@@ -26,7 +26,7 @@ function POEntryWindow() {
 			{data.length > 0 && (
 				<Grid item>
 					<Button variant="contained" color="primary" onClick={handleSave}>
-						Save
+						Save and generate PO
 					</Button>
 				</Grid>
 			)}
