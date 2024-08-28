@@ -44,6 +44,10 @@ const OrderLineInput = ({ data, setData, staticArr, setStaticArr }) => {
 		schd_days: "",
 		factory: "",
 		ship_via: "Sea",
+		shipping_address1: "",
+		shipping_address2: "",
+		shipping_address3: "",
+		shipping_address4: "",
 		status: "OPEN",
 	});
 	const [searchedParts, setSearchedParts] = useState([]);
@@ -87,6 +91,27 @@ const OrderLineInput = ({ data, setData, staticArr, setStaticArr }) => {
 			const response = await axios.get(`http://localhost:8000/parts/?${queryParams}`);
 
 			setSearchedParts(response.data);
+		} catch (error) {
+			console.error("Error fetching data:", error);
+		}
+	};
+
+	const handleSearchAddress = async () => {
+		try {
+			// Construct the query parameters from formData
+			const { customer_id } = formData;
+
+			const response = await axios.get(`http://localhost:8000/companies/${customer_id}/`);
+
+			const updatedFormData = {
+				...formData,
+				shipping_address1: response.data.ship_to_address_line1,
+				shipping_address2: response.data.ship_to_address_line2,
+				shipping_address3: response.data.ship_to_address_line3,
+				shipping_address4: response.data.ship_to_address_line4,
+			};
+
+			setFormData(updatedFormData);
 		} catch (error) {
 			console.error("Error fetching data:", error);
 		}
@@ -229,6 +254,53 @@ const OrderLineInput = ({ data, setData, staticArr, setStaticArr }) => {
 						<Divider />
 					</Grid>
 					{/* Third Row */}
+					<Grid container item xs={12} spacing={2}>
+						<Grid container item direction="column" xs={4} spacing={2}>
+							<Button onClick={handleSearchAddress} variant="contained" color="primary" fullWidth sx={{ margin: "16px" }}>
+								Auto fill shipping address by customer id
+							</Button>
+							<Grid item>
+								<TextField
+									name="shipping_address1"
+									label="Shipping Address Line 1"
+									value={formData.shipping_address1}
+									onChange={handleChange}
+									fullWidth
+									variant="outlined"
+								/>
+							</Grid>
+							<Grid item>
+								<TextField
+									name="shipping_address2"
+									label="Shipping Address Line 2"
+									value={formData.shipping_address2}
+									onChange={handleChange}
+									fullWidth
+									variant="outlined"
+								/>
+							</Grid>
+							<Grid item>
+								<TextField
+									name="shipping_address3"
+									label="Shipping Address Line 3"
+									value={formData.shipping_address3}
+									onChange={handleChange}
+									fullWidth
+									variant="outlined"
+								/>
+							</Grid>
+							<Grid item>
+								<TextField
+									name="shipping_address4"
+									label="Shipping Address Line 4"
+									value={formData.shipping_address4}
+									onChange={handleChange}
+									fullWidth
+									variant="outlined"
+								/>
+							</Grid>
+						</Grid>
+					</Grid>
 					<Grid container item spacing={2}>
 						<Grid item xs={2}>
 							<FormControl variant="outlined">

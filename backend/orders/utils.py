@@ -20,19 +20,6 @@ def create_po_excel(data):
     wb = openpyxl.load_workbook(destination_path)
     sheet = wb['Sheet1']
     
-    # add order number
-    cell = sheet.cell(row=2, column=18)
-    cell.value = data[0][2]
-
-    # Define the border style
-    border_style = Side(border_style="thin", color="000000")
-
-    # Create a border object with the defined style
-    border = Border(left=border_style, right=border_style, top=border_style, bottom=border_style)
-    left_border = Border(left=Side(border_style="medium"), right=border_style, top=border_style, bottom=border_style)
-    right_border = Border(left=border_style, right=Side(border_style="medium"), top=border_style, bottom=border_style)
-    bottom_border = Border(left=border_style, right=border_style, top=border_style, bottom=Side(border_style="medium"))
-    
     # Define the starting row (where you want to start inserting new rows)
     start_row = 17
     start_col = 2
@@ -50,6 +37,7 @@ def create_po_excel(data):
         18:11,
         19:15
     }
+    total = 0
     # Iterate over the 2D data array
     for row_index, row_data in enumerate(data):
         # Insert a new row at the correct position
@@ -64,8 +52,30 @@ def create_po_excel(data):
                 cell.alignment = Alignment(horizontal='center', vertical='center')
         cell = sheet.cell(row=row_to_insert, column=19)
         cell.value = float(sheet.cell(row=row_to_insert, column=3).value) * float(sheet.cell(row=row_to_insert, column=17).value)  
+        total += cell.value
         cell.alignment = Alignment(horizontal='center', vertical='center')   
 
+    # add order number
+    cell = sheet.cell(row=2, column=18)
+    cell.value = data[0][2]
+
+    # add total
+    cell = sheet.cell(row=start_row + len(data) + 2, column=18)
+    cell.value = total
+
+    # add order date
+    cell = sheet.cell(row=start_row + len(data) + 8, column=18)
+    cell.value = data[0][3]
+
+    # Define the border style
+    border_style = Side(border_style="thin", color="000000")
+
+    # Create a border object with the defined style
+    border = Border(left=border_style, right=border_style, top=border_style, bottom=border_style)
+    left_border = Border(left=Side(border_style="medium"), right=border_style, top=border_style, bottom=border_style)
+    right_border = Border(left=border_style, right=Side(border_style="medium"), top=border_style, bottom=border_style)
+    bottom_border = Border(left=border_style, right=border_style, top=border_style, bottom=Side(border_style="medium"))
+    
     # add borders
     end_row = start_row + len(data)-1
     end_col = start_col + 17
