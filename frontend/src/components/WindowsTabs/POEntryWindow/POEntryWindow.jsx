@@ -1,7 +1,7 @@
 import OrderLineInput from "./OrderLineInput/OrderLineInput";
 import OrderLineEntries from "./OrderLineTable/OrderLineEntries";
 import { useState } from "react";
-import { Grid, Button } from "@mui/material";
+import { Grid, Button, Paper } from "@mui/material";
 import axios from "axios";
 
 function POEntryWindow() {
@@ -20,7 +20,7 @@ function POEntryWindow() {
 	};
 
 	return (
-		<Grid>
+		<Paper>
 			<OrderLineInput data={data} setData={setData} staticArr={staticArr} setStaticArr={setStaticArr} />
 			<OrderLineEntries data={data} setData={setData} staticArr={staticArr} setStaticArr={setStaticArr} />
 			{data.length > 0 && (
@@ -30,7 +30,7 @@ function POEntryWindow() {
 					</Button>
 				</Grid>
 			)}
-		</Grid>
+		</Paper>
 	);
 }
 
