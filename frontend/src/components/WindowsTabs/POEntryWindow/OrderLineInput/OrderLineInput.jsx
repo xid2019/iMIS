@@ -282,7 +282,7 @@ const OrderLineInput = ({ data, setData, staticArr, setStaticArr }) => {
 					{/* Submit Button Row */}
 					<Grid container spacing={2} sx={{ mt: 2 }}>
 						<Grid item xs={2}>
-							<Button type="submit" variant="contained" color="primary" fullWidth>
+							<Button type="submit" variant="contained" color="primary" fullWidth sx={{ margin: "16px" }}>
 								Add
 							</Button>
 						</Grid>

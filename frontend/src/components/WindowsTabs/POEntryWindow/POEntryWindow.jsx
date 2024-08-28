@@ -25,7 +25,7 @@ function POEntryWindow() {
 			<OrderLineEntries data={data} setData={setData} staticArr={staticArr} setStaticArr={setStaticArr} />
 			{data.length > 0 && (
 				<Grid item>
-					<Button variant="contained" color="primary" onClick={handleSave}>
+					<Button variant="contained" color="primary" onClick={handleSave} sx={{ margin: "16px" }}>
 						Save and generate PO
 					</Button>
 				</Grid>

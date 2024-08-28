@@ -65,117 +65,140 @@ const OrderLineTable = ({ data, setData, staticArr, setStaticArr, fetchData }) =
 	};
 
 	return (
-		<Box sx={{ padding: 2 }}>
-			<Grid container spacing={2} alignItems="center">
-				<Grid item xs={12}>
-					<Typography variant="h6" gutterBottom>
-						Filter PO
-					</Typography>
-				</Grid>
-				<Grid item xs={2}>
-					<TextField name="customer_id" label="Customer ID" value={filters.customer_id} onChange={handleFilterChange} fullWidth variant="outlined" />
-				</Grid>
-				<Grid item xs={2}>
-					<TextField name="customer_po" label="Customer PO" value={filters.customer_po} onChange={handleFilterChange} fullWidth variant="outlined" />
-				</Grid>
-				<Grid item xs={2}>
-					<TextField name="part_number" label="Part Number" value={filters.part_number} onChange={handleFilterChange} fullWidth variant="outlined" />
-				</Grid>
-				<Grid item xs={2}>
-					<TextField
-						name="order_date_after"
-						label="Order Date After"
-						type="date"
-						value={filters.order_date_after}
-						onChange={handleFilterChange}
-						fullWidth
-						variant="outlined"
-						InputLabelProps={{ shrink: true }}
-					/>
-				</Grid>
-				<Grid item xs={2}>
-					<TextField
-						name="order_date_before"
-						label="Order Date Before"
-						type="date"
-						value={filters.order_date_before}
-						onChange={handleFilterChange}
-						fullWidth
-						variant="outlined"
-						InputLabelProps={{ shrink: true }}
-					/>
-				</Grid>
-				<Grid item xs={2}>
-					<TextField
-						name="required_date_after"
-						label="Required Date After"
-						type="date"
-						value={filters.required_date_after}
-						onChange={handleFilterChange}
-						fullWidth
-						variant="outlined"
-						InputLabelProps={{ shrink: true }}
-					/>
-				</Grid>
-				<Grid item xs={2}>
-					<TextField
-						name="required_date_before"
-						label="Required Date Before"
-						type="date"
-						value={filters.required_date_before}
-						onChange={handleFilterChange}
-						fullWidth
-						variant="outlined"
-						InputLabelProps={{ shrink: true }}
-					/>
-				</Grid>
-				<Grid item xs={2}>
-					<TextField name="status" label="Status" value={filters.status} onChange={handleFilterChange} fullWidth variant="outlined" />
-				</Grid>
-				<Grid item xs={12} container spacing={2}>
-					<Grid item xs={2}>
-						<Button variant="contained" color="primary" fullWidth onClick={handleFilterSubmit}>
-							Apply Filters
-						</Button>
+		<Paper>
+			<Box sx={{ padding: 2 }}>
+				<Grid container spacing={2} alignItems="center">
+					<Grid item xs={12}>
+						<Typography variant="h6" gutterBottom>
+							Filter PO
+						</Typography>
 					</Grid>
 					<Grid item xs={2}>
-						<Button variant="outlined" color="secondary" fullWidth onClick={handleClearFilters}>
-							Clear Filters
-						</Button>
+						<TextField
+							name="customer_id"
+							label="Customer ID"
+							value={filters.customer_id}
+							onChange={handleFilterChange}
+							fullWidth
+							variant="outlined"
+						/>
+					</Grid>
+					<Grid item xs={2}>
+						<TextField
+							name="customer_po"
+							label="Customer PO"
+							value={filters.customer_po}
+							onChange={handleFilterChange}
+							fullWidth
+							variant="outlined"
+						/>
+					</Grid>
+					<Grid item xs={2}>
+						<TextField
+							name="part_number"
+							label="Part Number"
+							value={filters.part_number}
+							onChange={handleFilterChange}
+							fullWidth
+							variant="outlined"
+						/>
+					</Grid>
+					<Grid item xs={2}>
+						<TextField
+							name="order_date_after"
+							label="Order Date After"
+							type="date"
+							value={filters.order_date_after}
+							onChange={handleFilterChange}
+							fullWidth
+							variant="outlined"
+							InputLabelProps={{ shrink: true }}
+						/>
+					</Grid>
+					<Grid item xs={2}>
+						<TextField
+							name="order_date_before"
+							label="Order Date Before"
+							type="date"
+							value={filters.order_date_before}
+							onChange={handleFilterChange}
+							fullWidth
+							variant="outlined"
+							InputLabelProps={{ shrink: true }}
+						/>
+					</Grid>
+					<Grid item xs={2}>
+						<TextField
+							name="required_date_after"
+							label="Required Date After"
+							type="date"
+							value={filters.required_date_after}
+							onChange={handleFilterChange}
+							fullWidth
+							variant="outlined"
+							InputLabelProps={{ shrink: true }}
+						/>
+					</Grid>
+					<Grid item xs={2}>
+						<TextField
+							name="required_date_before"
+							label="Required Date Before"
+							type="date"
+							value={filters.required_date_before}
+							onChange={handleFilterChange}
+							fullWidth
+							variant="outlined"
+							InputLabelProps={{ shrink: true }}
+						/>
+					</Grid>
+					<Grid item xs={2}>
+						<TextField name="status" label="Status" value={filters.status} onChange={handleFilterChange} fullWidth variant="outlined" />
+					</Grid>
+					<Grid item xs={12} container spacing={2}>
+						<Grid item xs={2}>
+							<Button variant="contained" color="primary" fullWidth onClick={handleFilterSubmit}>
+								Apply Filters
+							</Button>
+						</Grid>
+						<Grid item xs={2}>
+							<Button variant="outlined" color="secondary" fullWidth onClick={handleClearFilters}>
+								Clear Filters
+							</Button>
+						</Grid>
 					</Grid>
 				</Grid>
-			</Grid>
-			<TableContainer component={Paper} sx={{ maxHeight: "500px", minWidth: "1000px", maxWidth: "100%", overflowX: "auto" }}>
-				<Table stickyHeader>
-					<TableHead>
-						<TableRow>
-							<TableCell>Customer ID</TableCell>
-							<TableCell>Customer PO</TableCell>
-							<TableCell>Order Date</TableCell>
-							<TableCell>Line Number</TableCell>
-							<TableCell>Part Number</TableCell>
-							<TableCell>Description</TableCell>
-							<TableCell>Quantity</TableCell>
-							<TableCell>Ship Via</TableCell>
-							<TableCell>Balance</TableCell>
-							<TableCell>Required Date</TableCell>
-							<TableCell>Confirmed Date</TableCell>
-							<TableCell>Status</TableCell>
-							<TableCell>Action</TableCell>
-						</TableRow>
-					</TableHead>
-					<TableBody>
-						{data.map((row, index) =>
-							staticArr[index] ? (
-								<OrderLineStatic fetchData={fetchData} key={index} data={row} onEdit={() => handleEdit(index)} />
-							) : (
-								<OrderLineEditting key={index} data={row} onSave={(updatedData) => handleSave(index, updatedData)} />
-							)
-						)}
-					</TableBody>
-				</Table>
-			</TableContainer>
-		</Box>
+				<TableContainer component={Paper} sx={{ maxHeight: "500px", minWidth: "1000px", maxWidth: "100%", overflowX: "auto" }}>
+					<Table stickyHeader>
+						<TableHead>
+							<TableRow>
+								<TableCell>Customer ID</TableCell>
+								<TableCell>Customer PO</TableCell>
+								<TableCell>Order Date</TableCell>
+								<TableCell>Line Number</TableCell>
+								<TableCell>Part Number</TableCell>
+								<TableCell>Description</TableCell>
+								<TableCell>Quantity</TableCell>
+								<TableCell>Ship Via</TableCell>
+								<TableCell>Balance</TableCell>
+								<TableCell>Required Date</TableCell>
+								<TableCell>Confirmed Date</TableCell>
+								<TableCell>Status</TableCell>
+								<TableCell>Action</TableCell>
+							</TableRow>
+						</TableHead>
+						<TableBody>
+							{data.map((row, index) =>
+								staticArr[index] ? (
+									<OrderLineStatic fetchData={fetchData} key={index} data={row} onEdit={() => handleEdit(index)} />
+								) : (
+									<OrderLineEditting key={index} data={row} onSave={(updatedData) => handleSave(index, updatedData)} />
+								)
+							)}
+						</TableBody>
+					</Table>
+				</TableContainer>
+			</Box>
+		</Paper>
 	);
 };
 
