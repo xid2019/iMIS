@@ -109,6 +109,7 @@ const OrderLineInput = ({ data, setData, staticArr, setStaticArr }) => {
 					material: selectedPart.material || "",
 					weight: selectedPart.weight || "",
 					factory: selectedPart.factory || "",
+					description: selectedPart.description || "",
 				};
 				setFormData(updatedFormData);
 			}
