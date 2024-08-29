@@ -199,7 +199,7 @@ const OrderLineInput = ({ data, setData, staticArr, setStaticArr }) => {
 						</Grid>
 						{searchedParts.length > 0 && (
 							<TableContainer component={Paper} sx={{ margin: "16px", maxHeight: "400px", minWidth: "1000px", maxWidth: "100%", overflowX: "auto" }}>
-								<Table>
+								<Table stickyHeader>
 									<TableHead>
 										<TableRow>
 											<TableCell>Customer ID</TableCell>
