@@ -3,7 +3,21 @@ import openpyxl
 import os
 from openpyxl.styles import Border, Side, Alignment
 
+def delete_old_files(directory):
+    # Delete all .xlsx files in the given directory that start with 'PO_'.
+    for filename in os.listdir(directory):
+        if filename.startswith('PO_') and filename.endswith('.xlsx'):
+            file_path = os.path.join(directory, filename)
+            os.remove(file_path)
+            print(f"Deleted: {file_path}")
+
 def create_po_excel(data, shipping_address):
+    
+    source_path = "./static/PO TemplateLT.xlsx"
+    destination_directory = "../results"
+    # Delete old files before creating new ones
+    delete_old_files(destination_directory)
+    
     # split the data by factories
     factory_map_to_data = {}
     for order_line in data:
@@ -15,10 +29,7 @@ def create_po_excel(data, shipping_address):
     for factory in factory_map_to_data:
         data = factory_map_to_data[factory]    
         # Step 1: Copy the Excel file to a new directory
-        source_path = "./static/PO TemplateLT.xlsx"
-        destination_directory = "../results"
         destination_path = os.path.join(destination_directory, "PO_" + factory+ ".xlsx")
-
         # Ensure the destination directory exists
         os.makedirs(destination_directory, exist_ok=True)
 
@@ -81,7 +92,16 @@ def create_po_excel(data, shipping_address):
         for i in range(9, 13):
             cell = sheet.cell(row=i, column=16)
             cell.value = shipping_address[i-9]
-
+        
+        # add supplier info
+        sheet.cell(row=9, column=2).value = data[0][20]
+        sheet.cell(row=10, column=2).value = data[0][21]
+        if data[0][24]:
+            sheet.cell(row=11, column=2).value = data[0][22] + ', ' + str(int(float(data[0][24])))
+        else:
+            sheet.cell(row=11, column=2).value = data[0][22]
+        sheet.cell(row=12, column=2).value = data[0][23]
+        
         # Define the border style
         border_style = Side(border_style="thin", color="000000")
 

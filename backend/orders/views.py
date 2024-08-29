@@ -248,13 +248,22 @@ def create_order(request):
                 ol.revision,
                 ol.price,
                 ol.material,
-                ol.weight
+                ol.weight,
+                s.address_line1,
+                s.address_line2,
+                s.address_line3,
+                s.address_line4,
+                s.zip
             FROM
                 orders_order AS o
             JOIN
                 order_lines_orderline AS ol
             ON
                 o.id = ol.order_id
+            JOIN 
+                suppliers_supplier as s
+            ON 
+                ol.factory = s.name
             WHERE
                 o.customer_po = %s
         """, [customer_po])
