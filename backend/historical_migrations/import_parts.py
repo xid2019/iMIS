@@ -32,7 +32,7 @@ dfs = pd.read_excel(
   sheet_name=None,
   skiprows=2, 
   header=None, 
-  usecols="A, B, C, D, E, F, H, K, L, M",
+  usecols="A, B, C, D, E, F, H, K, L, M, P",
 )
 
 error_rows = []
@@ -52,7 +52,8 @@ for sheet_name, df in dfs.items():
                 cost=row[6] if not pd.isna(row[6]) else None,
                 material=row[7] if not pd.isna(row[7]) else None,
                 weight=row[8] if not pd.isna(row[8]) else None,
-                order_quantity=row[9] if not pd.isna(row[9]) else None
+                order_quantity=row[9] if not pd.isna(row[9]) else None,
+                factory=row[10] if not pd.isna(row[10]) else None
             )
             part.save()
         except Exception as e:
@@ -69,6 +70,7 @@ for sheet_name, df in dfs.items():
                 'material':row[7],
                 'weight':row[8],
                 'order_quantity':row[9],
+                'factory': row[10],
                 'error': e
             })
 print(len(error_rows))

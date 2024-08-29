@@ -73,6 +73,9 @@ const OrderLineEditting = ({ data, setData, index, staticArr, setStaticArr }) =>
 				<TextField value={formData.weight} name="weight" type="number" variant="outlined" onChange={handleChange} />
 			</TableCell>
 			<TableCell>
+				<TextField value={formData.factory} name="factory" variant="outlined" onChange={handleChange} />
+			</TableCell>
+			<TableCell>
 				<FormControl variant="outlined">
 					<Select name="status" value={formData.status} onChange={handleChange}>
 						<MenuItem value="OPEN">OPEN</MenuItem>

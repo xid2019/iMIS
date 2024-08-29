@@ -12,3 +12,4 @@ class Part(models.Model):
     material = models.TextField(null=True, blank=True)
     weight = models.FloatField(null=True, blank=True)
     order_quantity = models.IntegerField(null=True, blank=True)
+    factory = models.TextField(null=True, blank=True)

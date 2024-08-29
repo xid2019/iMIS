@@ -193,7 +193,7 @@ const OrderLineInput = ({ data, setData, staticArr, setStaticArr }) => {
 							</Grid>
 							<Grid item xs={2}>
 								<Button onClick={handleSearchPart} variant="contained" color="primary" fullWidth>
-									Search
+									Search and auto fill part info
 								</Button>
 							</Grid>
 						</Grid>

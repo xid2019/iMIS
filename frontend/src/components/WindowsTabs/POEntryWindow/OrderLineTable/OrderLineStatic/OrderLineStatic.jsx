@@ -31,6 +31,7 @@ const OrderLineStatic = ({ data, setData, index, staticArr, setStaticArr }) => {
 				<TableCell>{data[index].price}</TableCell>
 				<TableCell>{data[index].material}</TableCell>
 				<TableCell>{data[index].weight}</TableCell>
+				<TableCell>{data[index].factory}</TableCell>
 				<TableCell>{data[index].status}</TableCell>
 				<TableCell>
 					<Box display="flex" justifyContent="flex-start" alignItems="center">
@@ -73,6 +74,7 @@ OrderLineStatic.propTypes = {
 			price: PropTypes.number.isRequired,
 			material: PropTypes.string.isRequired,
 			weight: PropTypes.string.isRequired,
+			factory: PropTypes.string.isRequired,
 		})
 	).isRequired,
 	setData: PropTypes.func.isRequired,
