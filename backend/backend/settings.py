@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'orders',
     'order_lines',
     'parts',
-    'companies',
+    'customers',
     'corsheaders',
     'rest_framework',
 ]

@@ -122,7 +122,7 @@ const OrderLineInput = ({ data, setData, staticArr, setStaticArr }) => {
 			// Construct the query parameters from formData
 			const { customer_id } = formData;
 
-			const response = await axios.get(`http://localhost:8000/companies/${customer_id}/`);
+			const response = await axios.get(`http://localhost:8000/customers/${customer_id}/`);
 
 			const updatedFormData = {
 				...formData,

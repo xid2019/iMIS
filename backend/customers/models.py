@@ -1,7 +1,7 @@
 from django.db import models
 
 # Create your models here.
-class Company(models.Model):
+class Customer(models.Model):
     name = models.CharField(max_length=10)
     sold_to_address_line1 = models.TextField(null=True, blank=True)
     sold_to_address_line2 = models.TextField(null=True, blank=True)

@@ -38,7 +38,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')
 # Initialize Django (only once)
 django.setup()
 
-from companies.models import Company
+from customers.models import Customer
 
 df = pd.read_excel(
   'ComInfo.xlsx', 
@@ -51,8 +51,8 @@ df = pd.read_excel(
 error_rows = []
 for i, row in df.iterrows():
     try:
-        # Create and save the Company instance
-        company = Company(
+        # Create and save the Customer instance
+        customer = Customer(
             name=row[0] if not pd.isna(row[0]) else None,
             sold_to_address_line1=row[4] if not pd.isna(row[4]) else None,
             sold_to_address_line2=row[5] if not pd.isna(row[5]) else None,
@@ -77,7 +77,7 @@ for i, row in df.iterrows():
             dispatch_email=row[24] if not pd.isna(row[24]) else None,
             plant_id=row[25] if not pd.isna(row[25]) else None
         )
-        company.save()
+        customer.save()
     except Exception as e:
         # Print the error message and continue with the next row
         error_rows.append({
