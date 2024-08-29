@@ -259,7 +259,8 @@ def create_order(request):
                 o.customer_po = %s
         """, [customer_po])
         rows = cursor.fetchall()
-        create_po_excel(rows)
+        shipping_address = [request.data[0]['shipping_address1'],request.data[0]['shipping_address2'],request.data[0]['shipping_address3'],request.data[0]['shipping_address4']]
+        create_po_excel(rows, shipping_address)
     return Response(status=status.HTTP_201_CREATED)
 
 

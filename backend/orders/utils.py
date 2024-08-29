@@ -3,7 +3,7 @@ import openpyxl
 import os
 from openpyxl.styles import Border, Side, Alignment
 
-def create_po_excel(data):
+def create_po_excel(data, shipping_address):
     # split the data by factories
     factory_map_to_data = {}
     for order_line in data:
@@ -76,6 +76,11 @@ def create_po_excel(data):
         # add order date
         cell = sheet.cell(row=start_row + len(data) + 8, column=18)
         cell.value = data[0][3]
+
+        # add air shipping address
+        for i in range(9, 13):
+            cell = sheet.cell(row=i, column=16)
+            cell.value = shipping_address[i-9]
 
         # Define the border style
         border_style = Side(border_style="thin", color="000000")
