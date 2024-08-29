@@ -11,4 +11,4 @@
    cd into iMIS folder
    run ./start-app-mac.sh
 
-   on windoes:
+   on windows:

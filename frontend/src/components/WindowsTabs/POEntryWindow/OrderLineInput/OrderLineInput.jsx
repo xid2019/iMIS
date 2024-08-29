@@ -91,6 +91,27 @@ const OrderLineInput = ({ data, setData, staticArr, setStaticArr }) => {
 			const response = await axios.get(`http://localhost:8000/parts/?${queryParams}`);
 
 			setSearchedParts(response.data);
+			let selectedPart;
+			if (formData.part_number !== null || formData.dwg_number !== null) {
+				let currentQuantity = 0;
+				for (let partData of response.data) {
+					if (partData.order_quantity <= formData.quantity && partData.order_quantity > currentQuantity) {
+						currentQuantity = partData.order_quantity;
+						selectedPart = partData;
+					}
+				}
+			}
+			if (selectedPart) {
+				let updatedFormData = {
+					...formData,
+					price: selectedPart.price || "",
+					cost: selectedPart.cost || "",
+					material: selectedPart.material || "",
+					weight: selectedPart.weight || "",
+					factory: selectedPart.factory || "",
+				};
+				setFormData(updatedFormData);
+			}
 		} catch (error) {
 			console.error("Error fetching data:", error);
 		}
@@ -158,6 +179,17 @@ const OrderLineInput = ({ data, setData, staticArr, setStaticArr }) => {
 							</Grid>
 							<Grid item xs={2}>
 								<TextField name="revision" label="Revision" value={formData.revision} onChange={handleChange} fullWidth variant="outlined" />
+							</Grid>
+							<Grid item xs={2}>
+								<TextField
+									name="quantity"
+									label="Quantity"
+									type="number"
+									value={formData.quantity}
+									onChange={handleChange}
+									fullWidth
+									variant="outlined"
+								/>
 							</Grid>
 							<Grid item xs={2}>
 								<Button onClick={handleSearchPart} variant="contained" color="primary" fullWidth>
@@ -234,17 +266,6 @@ const OrderLineInput = ({ data, setData, staticArr, setStaticArr }) => {
 						</Grid>
 						<Grid item xs={2}>
 							<TextField name="unit" label="Unit" value={formData.unit} onChange={handleChange} fullWidth variant="outlined" />
-						</Grid>
-						<Grid item xs={2}>
-							<TextField
-								name="quantity"
-								label="Quantity"
-								type="number"
-								value={formData.quantity}
-								onChange={handleChange}
-								fullWidth
-								variant="outlined"
-							/>
 						</Grid>
 					</Grid>
 
@@ -392,7 +413,6 @@ OrderLineInput.propTypes = {
 	).isRequired,
 	staticArr: PropTypes.arrayOf(PropTypes.bool),
 	setStaticArr: PropTypes.func.isRequired,
-	handleCancel: PropTypes.func.isRequired,
 	setData: PropTypes.func.isRequired,
 };
 
