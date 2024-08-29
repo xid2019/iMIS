@@ -39,7 +39,9 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend.settings')
 django.setup()
 
 from customers.models import Customer
+from suppliers.models import Supplier
 
+# import customers data
 df = pd.read_excel(
   'ComInfo.xlsx', 
   sheet_name='Customer',
@@ -105,6 +107,51 @@ for i, row in df.iterrows():
             'dispatch_phone': row[23],
             'dispatch_email': row[24],
             'plant_id': row[25],
+            'error': e
+        })
+print(len(error_rows))
+
+# import suppliers data
+df = pd.read_excel(
+  'ComInfo.xlsx', 
+  sheet_name='Supplier',
+  skiprows=2, 
+  header=None, 
+  usecols="A, E, F, G, H, I, J, K, L",
+)
+
+error_rows = []
+for i, row in df.iterrows():
+    try:
+        # Create and save the Supplier instance
+        phones = []
+        if not pd.isna(row[9]):
+            phones.append(row[9])
+        if not pd.isna(row[10]):
+            phones.append(row[10])
+        supplier = Supplier(
+            name=row[0] if not pd.isna(row[0]) else None,
+            address_line1=row[4] if not pd.isna(row[4]) else None,
+            address_line2=row[5] if not pd.isna(row[5]) else None,
+            address_line3=row[6] if not pd.isna(row[6]) else None,
+            address_line4=row[7] if not pd.isna(row[7]) else None,
+            contact_person=row[8] if not pd.isna(row[8]) else None,
+            phone=phones,
+            zip=row[11] if not pd.isna(row[11]) else None,
+        )
+        supplier.save()
+    except Exception as e:
+        # Print the error message and continue with the next row
+        error_rows.append({
+            'row_num': i,
+            'name': row[0], 
+            'address_line1': row[4], 
+            'address_line2': row[5],
+            'address_line3': row[6],
+            'address_line4': row[7],
+            'contact_person': row[8],
+            'phone': phones,
+            'zip': row[11],
             'error': e
         })
 print(len(error_rows))
