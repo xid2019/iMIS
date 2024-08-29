@@ -40,6 +40,11 @@ def get_orders(request):
             ol.required_date,
             ol.confirmed_date,
             ol.factory,
+            ol.dwg_number,
+            ol.material,
+            ol.price,
+            ol.revision,
+            ol.weight,
             ol.status
         FROM
             orders_order AS o
@@ -113,6 +118,11 @@ def get_orders(request):
             "required_date",
             "confirmed_date",
             "factory",
+            "dwg_number",
+            "material",
+            "price",
+            "revision",
+            "weight",
             "status"
         ]
 

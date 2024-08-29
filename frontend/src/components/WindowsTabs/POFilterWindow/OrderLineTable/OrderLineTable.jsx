@@ -182,6 +182,12 @@ const OrderLineTable = ({ data, setData, staticArr, setStaticArr, fetchData }) =
 								<TableCell>Balance</TableCell>
 								<TableCell>Required Date</TableCell>
 								<TableCell>Confirmed Date</TableCell>
+								<TableCell>DWG Number</TableCell>
+								<TableCell>Revision</TableCell>
+								<TableCell>Unit Price</TableCell>
+								<TableCell>Material</TableCell>
+								<TableCell>Unit Weight(KG)</TableCell>
+								<TableCell>Factory</TableCell>
 								<TableCell>Status</TableCell>
 								<TableCell>Action</TableCell>
 							</TableRow>

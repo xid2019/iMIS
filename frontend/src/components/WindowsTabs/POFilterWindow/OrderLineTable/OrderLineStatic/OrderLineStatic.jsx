@@ -30,6 +30,12 @@ const OrderLineStatic = ({ data, onEdit, fetchData }) => {
 				<TableCell>{data.balance}</TableCell>
 				<TableCell>{data.required_date}</TableCell>
 				<TableCell>{data.confirmed_date}</TableCell>
+				<TableCell>{data.dwg_number}</TableCell>
+				<TableCell>{data.revision}</TableCell>
+				<TableCell>{data.price}</TableCell>
+				<TableCell>{data.material}</TableCell>
+				<TableCell>{data.weight}</TableCell>
+				<TableCell>{data.factory}</TableCell>
 				<TableCell>{data.status}</TableCell>
 				<TableCell>
 					<Box display="flex" justifyContent="flex-start" alignItems="center">
@@ -80,6 +86,12 @@ OrderLineStatic.propTypes = {
 		balance: PropTypes.number,
 		required_date: PropTypes.string,
 		confirmed_date: PropTypes.string,
+		dwg_number: PropTypes.string,
+		revision: PropTypes.string,
+		price: PropTypes.number,
+		material: PropTypes.string,
+		weight: PropTypes.number,
+		factory: PropTypes.string,
 		status: PropTypes.string,
 	}).isRequired,
 	onEdit: PropTypes.func.isRequired,

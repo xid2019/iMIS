@@ -52,6 +52,24 @@ const OrderLineEditting = ({ data, onSave }) => {
 				<TextField name="confirmed_date" type="date" value={formData.confirmed_date} onChange={handleChange} variant="outlined" />
 			</TableCell>
 			<TableCell>
+				<TextField value={formData.dwg_number} name="dwg_number" variant="outlined" onChange={handleChange} />
+			</TableCell>
+			<TableCell>
+				<TextField value={formData.revision} name="revision" variant="outlined" onChange={handleChange} />
+			</TableCell>
+			<TableCell>
+				<TextField value={formData.unit_price} name="dwg_number" type="number" variant="outlined" onChange={handleChange} />
+			</TableCell>
+			<TableCell>
+				<TextField value={formData.material} name="material" variant="outlined" onChange={handleChange} />
+			</TableCell>
+			<TableCell>
+				<TextField value={formData.weight} name="weight" type="number" variant="outlined" onChange={handleChange} />
+			</TableCell>
+			<TableCell>
+				<TextField value={formData.factory} name="factory" variant="outlined" onChange={handleChange} />
+			</TableCell>
+			<TableCell>
 				<FormControl variant="outlined">
 					<Select name="status" value={formData.status} onChange={handleChange}>
 						<MenuItem value="OPEN">OPEN</MenuItem>

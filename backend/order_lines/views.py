@@ -80,7 +80,10 @@ def update_order_line(request, order_line_id):
 
     # Update the OrderLine with the data provided in the request
     serializer = OrderLineSerializer(
-        order_line, data=request.data, partial=True)
+        order_line, 
+        data=request.data, 
+        partial=True
+    )
 
     if serializer.is_valid():
         serializer.save()
