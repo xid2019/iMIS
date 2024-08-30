@@ -1,44 +1,58 @@
 # iMIS
 
-Installation and setup
+## Installation and Setup
 
-1. install git
-   https://git-scm.com/download/win
-   64-bit Git for Windows Setup
+1. **Install Git**  
+   Download Git from [https://git-scm.com/download/win](https://git-scm.com/download/win)  
+   Choose the 64-bit Git for Windows Setup.
 
-2. download postgreSQL and pgadmin
-   https://www.postgresql.org/download/windows/
-   click the Download the Installer
+2. **Download PostgreSQL and pgAdmin**  
+   Visit [https://www.postgresql.org/download/windows/](https://www.postgresql.org/download/windows/)  
+   Click "Download the Installer."
 
-3. download python
-   https://www.python.org/downloads/
-   check admin previliges when installing py.exe
-   check add python.exe to path
-   click customized installation
-   check Install python for all users
+3. **Download Python**  
+   Get Python from [https://www.python.org/downloads/](https://www.python.org/downloads/)
 
-4. download node.js
-   https://nodejs.org/en/download/prebuilt-installer
-   Download the LTS version
+   - Check "Admin privileges" when installing `py.exe`.
+   - Check "Add python.exe to PATH."
+   - Click "Customized installation."
+   - Check "Install Python for all users."
 
-5. download dependencies for frontend
-   cd into frontend folder
-   run command: npm i
+4. **Download Node.js**  
+   Visit [https://nodejs.org/en/download/prebuilt-installer](https://nodejs.org/en/download/prebuilt-installer)  
+   Download the LTS version.
 
-6. download dependencies for backend
-   cd into backend folder
-   run command: pip install -r .\requirements.txt
+5. **Download dependencies for frontend**
 
-7. run historical migrations scritps
-   cd into historical_migrations folder
-   then run command: python import_parts.py 6. running the app
-   on mac:
-   cd into iMIS folder
-   run ./start-app-mac.sh
+   - Navigate to the `frontend` folder.
+   - Run the command: `npm i`
 
-on windows:
+6. **Download dependencies for backend**
 
-Modification
-1, Have to migrate when ever change the data model.
-python manage.py makemigrations
-python manage.py migrate
+   - Navigate to the `backend` folder.
+   - Run the command: `pip install -r .\requirements.txt`
+
+7. **Download VS Code**  
+   [Visual Studio Code](https://code.visualstudio.com/) is recommended for development.
+
+8. **Run historical migrations scripts**
+   - Navigate to the `historical_migrations` folder.
+   - Run the command: `python import_parts.py`
+
+## Running the App
+
+### On Mac:
+
+1. Navigate to the `iMIS` folder.
+2. Run the script: `./start-app-mac.sh`
+
+### On Windows:
+
+1. Navigate to the `iMIS` folder.
+2.
+
+## Modification
+
+1. **Migrate whenever you change the data model.**
+   - Run: `python manage.py makemigrations`
+   - Then: `python manage.py migrate`
