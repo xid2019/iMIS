@@ -1,11 +1,21 @@
 @echo off
-
-:: Start PostgreSQL (assuming Postgres is installed as a Windows service)
-echo Starting PostgreSQL...
-net start postgresql-x64-13
+setlocal
 
 :: Save the current directory
 set SCRIPT_DIR=%~dp0
+
+:: Ensure the path to the VBS script is correct
+set VBS_SCRIPT=%SCRIPT_DIR%runasadmin.vbs
+
+:: Check if the VBS script exists
+if not exist "%VBS_SCRIPT%" (
+    echo VBS script not found at %VBS_SCRIPT%.
+    exit /b 1
+)
+
+:: Start PostgreSQL (adjust the service name as needed)
+echo Starting PostgreSQL...
+cscript //nologo "%VBS_SCRIPT%" "net start postgresql-x64-16"
 
 :: Navigate to the Django backend directory
 cd %SCRIPT_DIR%\backend
