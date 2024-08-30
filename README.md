@@ -22,22 +22,44 @@
    Visit [https://nodejs.org/en/download/prebuilt-installer](https://nodejs.org/en/download/prebuilt-installer)  
    Download the LTS version.
 
-5. **Download dependencies for frontend**
+5. **Download VS Code**  
+    Download from [https://code.visualstudio.com/download](https://code.visualstudio.com/download)
+
+   **Install the following extensions:**
+
+   - Prettier
+   - Python
+   - Django
+   - ES7 React/Redux/GraphQL/React-Native snippets
+   - JavaScript (ES6) code snippets
+
+6. **Download dependencies for frontend**
 
    - Navigate to the `frontend` folder.
    - Run the command: `npm i`
+   - Check if the frontend app can run successfully: `npm run dev`
 
-6. **Download dependencies for backend**
+7. **Download dependencies for backend**
 
    - Navigate to the `backend` folder.
    - Run the command: `pip install -r .\requirements.txt`
+   - Check if the backend server can run successfully: `python manage.py runserver`
 
-7. **Download VS Code**  
-   [Visual Studio Code](https://code.visualstudio.com/) is recommended for development.
+8. **Connect to Database**
 
-8. **Run historical migrations scripts**
-   - Navigate to the `historical_migrations` folder.
-   - Run the command: `python import_parts.py`
+   - Open pgAdmin and create a new database.
+   - Go to the `backend/backend/settings.py` file.
+   - Update the `DATABASES` block with the new database name and password.
+
+9. **Data Schema Migration**
+
+   - Run: `python manage.py makemigrations`
+   - Then: `python manage.py migrate`
+
+10. **Run historical migrations scripts**
+    - Navigate to the `historical_migrations` folder.
+    - Run: `python import_parts.py`
+    - Run: `python import_companies.py`
 
 ## Running the App
 
