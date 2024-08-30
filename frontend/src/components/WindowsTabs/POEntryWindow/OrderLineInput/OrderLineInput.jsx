@@ -92,10 +92,13 @@ const OrderLineInput = ({ data, setData, staticArr, setStaticArr }) => {
 
 			setSearchedParts(response.data);
 			let selectedPart;
-			if (formData.part_number !== null || formData.dwg_number !== null) {
+			if (formData.part_number !== "" || formData.dwg_number !== "") {
 				let currentQuantity = 0;
 				for (let partData of response.data) {
-					if (partData.order_quantity <= formData.quantity && partData.order_quantity > currentQuantity) {
+					if (!partData.order_quantity) {
+						partData.order_quantity = 0;
+					}
+					if (partData.order_quantity <= formData.quantity && partData.order_quantity >= currentQuantity) {
 						currentQuantity = partData.order_quantity;
 						selectedPart = partData;
 					}
@@ -213,6 +216,7 @@ const OrderLineInput = ({ data, setData, staticArr, setStaticArr }) => {
 											<TableCell>Material</TableCell>
 											<TableCell>Weight</TableCell>
 											<TableCell>Order Quantity</TableCell>
+											<TableCell>Factory</TableCell>
 										</TableRow>
 									</TableHead>
 									<TableBody>
@@ -228,6 +232,7 @@ const OrderLineInput = ({ data, setData, staticArr, setStaticArr }) => {
 												<TableCell>{part.material}</TableCell>
 												<TableCell>{part.weight}</TableCell>
 												<TableCell>{part.order_quantity}</TableCell>
+												<TableCell>{part.factory}</TableCell>
 											</TableRow>
 										))}
 									</TableBody>
