@@ -3,35 +3,31 @@ import PropTypes from "prop-types";
 
 const ExtraChargeRow = ({ extraExpenseRow, setExtraExpenseRow, handleAddExtraExpense }) => {
 	const handleExtraChargeEntryChange = (event) => {
-		const newExtraChargeRow = {
-			...extraExpenseRow,
+		setExtraExpenseRow((prev) => ({
+			...prev,
 			extraChargeEntry: event.target.value,
-		};
-		setExtraExpenseRow(newExtraChargeRow);
+		}));
 	};
 
 	const handleCountChange = (event) => {
-		const newExtraChargeRow = {
-			...extraExpenseRow,
+		setExtraExpenseRow((prev) => ({
+			...prev,
 			count: event.target.value,
-		};
-		setExtraExpenseRow(newExtraChargeRow);
+		}));
 	};
 
 	const handleChargeChange = (event) => {
-		const newExtraChargeRow = {
-			...extraExpenseRow,
+		setExtraExpenseRow((prev) => ({
+			...prev,
 			charge: event.target.value,
-		};
-		setExtraExpenseRow(newExtraChargeRow);
+		}));
 	};
 
 	const handleExpenseChange = (event) => {
-		const newExtraChargeRow = {
-			...extraExpenseRow,
+		setExtraExpenseRow((prev) => ({
+			...prev,
 			expense: event.target.value,
-		};
-		setExtraExpenseRow(newExtraChargeRow);
+		}));
 	};
 
 	return (
