@@ -1,7 +1,11 @@
-import { Box } from "@mui/material";
-
+import { Paper } from "@mui/material";
+import InvoiceInput from "./InvoiceInput/InvoiceInput";
 function InvoiceWindow() {
-	return <Box sx={{ width: "100vw", height: "100vh", backgroundColor: "white" }}></Box>;
+	return (
+		<Paper>
+			<InvoiceInput></InvoiceInput>
+		</Paper>
+	);
 }
 
 export default InvoiceWindow;
