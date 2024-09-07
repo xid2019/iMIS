@@ -52,7 +52,6 @@ timeout /t 10 > nul
 
 :check_connection
 for /f "tokens=3" %%a in ('netstat -ano ^| findstr :%PORT% ^| findstr ESTABLISHED') do (
-    echo Connection found on port %PORT%.
     timeout /t 2 > nul
     goto check_connection
 )
