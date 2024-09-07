@@ -71,7 +71,8 @@
 ### On Windows:
 
 1. Navigate to the `iMIS` folder.
-2.
+2. Run the script: `start-app-windows.bat`
+   or double click the start-app-windows.bat file
 
 ## Modification
 
