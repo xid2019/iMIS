@@ -38,12 +38,7 @@ const OrderLineStatic = ({ data, setData, index, staticArr, setStaticArr }) => {
 						<Button onClick={handleEdit} variant="text" color="primary">
 							Edit
 						</Button>
-						<Button
-							onClick={handleDelete}
-							variant="text"
-							color="error"
-							style={{ marginLeft: 8 }} // Add some space between the buttons
-						>
+						<Button onClick={handleDelete} variant="text" color="error" style={{ marginLeft: 8 }}>
 							Delete
 						</Button>
 					</Box>

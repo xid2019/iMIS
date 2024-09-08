@@ -1,32 +1,44 @@
 import { Grid, TextField, Button } from "@mui/material";
 import PropTypes from "prop-types";
 
-const ExtraChargeRow = ({ extraExpenseRow, setExtraExpenseRow, handleAddExtraExpense }) => {
+const ExtraChargeRow = ({ formData, setFormData, handleAddExtraExpense }) => {
 	const handleExtraChargeEntryChange = (event) => {
-		setExtraExpenseRow((prev) => ({
+		setFormData((prev) => ({
 			...prev,
-			extraChargeEntry: event.target.value,
+			extraExpenseRow: {
+				...prev.extraExpenseRow,
+				extraChargeEntry: event.target.value,
+			},
 		}));
 	};
 
 	const handleCountChange = (event) => {
-		setExtraExpenseRow((prev) => ({
+		setFormData((prev) => ({
 			...prev,
-			count: event.target.value,
+			extraExpenseRow: {
+				...prev.extraExpenseRow,
+				count: event.target.value,
+			},
 		}));
 	};
 
 	const handleChargeChange = (event) => {
-		setExtraExpenseRow((prev) => ({
+		setFormData((prev) => ({
 			...prev,
-			charge: event.target.value,
+			extraExpenseRow: {
+				...prev.extraExpenseRow,
+				charge: event.target.value,
+			},
 		}));
 	};
 
 	const handleExpenseChange = (event) => {
-		setExtraExpenseRow((prev) => ({
+		setFormData((prev) => ({
 			...prev,
-			expense: event.target.value,
+			extraExpenseRow: {
+				...prev.extraExpenseRow,
+				expense: event.target.value,
+			},
 		}));
 	};
 
@@ -34,43 +46,40 @@ const ExtraChargeRow = ({ extraExpenseRow, setExtraExpenseRow, handleAddExtraExp
 		<Grid container item spacing={2} alignItems="center">
 			{/* Extra Charge Entry */}
 			<Grid item xs={3}>
-				{" "}
-				{/* Adjust size as needed */}
 				<TextField
 					label="Extra Charge Entry"
 					variant="outlined"
 					fullWidth
-					value={extraExpenseRow.extraChargeEntry}
+					value={formData.extraExpenseRow.extraChargeEntry}
 					onChange={handleExtraChargeEntryChange}
 				/>
 			</Grid>
 
 			{/* Count */}
 			<Grid item xs={2}>
-				{" "}
-				{/* Adjust size as needed */}
-				<TextField label="Count" variant="outlined" type="number" fullWidth value={extraExpenseRow.count} onChange={handleCountChange} />
+				<TextField label="Count" variant="outlined" type="number" fullWidth value={formData.extraExpenseRow.count} onChange={handleCountChange} />
 			</Grid>
 
 			{/* Charge */}
 			<Grid item xs={2}>
-				{" "}
-				{/* Adjust size as needed */}
-				<TextField label="Charge" variant="outlined" type="number" fullWidth value={extraExpenseRow.charge} onChange={handleChargeChange} />
+				<TextField label="Charge" variant="outlined" type="number" fullWidth value={formData.extraExpenseRow.charge} onChange={handleChargeChange} />
 			</Grid>
 
 			{/* Expense */}
 			<Grid item xs={3}>
-				{" "}
-				{/* Adjust size as needed */}
-				<TextField label="Expense" variant="outlined" type="number" fullWidth value={extraExpenseRow.expense} onChange={handleExpenseChange} />
+				<TextField
+					label="Expense"
+					variant="outlined"
+					type="number"
+					fullWidth
+					value={formData.extraExpenseRow.expense}
+					onChange={handleExpenseChange}
+				/>
 			</Grid>
 
 			{/* Add Button */}
 			<Grid item xs={2}>
-				{" "}
-				{/* Adjust size as needed */}
-				<Button variant="contained" color="primary" fullWidth onClick={() => handleAddExtraExpense(extraExpenseRow)}>
+				<Button variant="contained" color="primary" fullWidth onClick={() => handleAddExtraExpense(formData.extraExpenseRow)}>
 					Add Extra Expense
 				</Button>
 			</Grid>
@@ -80,12 +89,14 @@ const ExtraChargeRow = ({ extraExpenseRow, setExtraExpenseRow, handleAddExtraExp
 
 ExtraChargeRow.propTypes = {
 	handleAddExtraExpense: PropTypes.func.isRequired,
-	setExtraExpenseRow: PropTypes.func.isRequired,
-	extraExpenseRow: PropTypes.shape({
-		extraChargeEntry: PropTypes.string,
-		count: PropTypes.string,
-		charge: PropTypes.string,
-		expense: PropTypes.string,
+	setFormData: PropTypes.func.isRequired,
+	formData: PropTypes.shape({
+		extraExpenseRow: PropTypes.shape({
+			extraChargeEntry: PropTypes.string,
+			count: PropTypes.string,
+			charge: PropTypes.string,
+			expense: PropTypes.string,
+		}).isRequired,
 	}).isRequired,
 };
 

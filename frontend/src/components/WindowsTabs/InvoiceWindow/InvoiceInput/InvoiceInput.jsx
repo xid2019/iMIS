@@ -2,83 +2,99 @@ import { Grid, Paper, Typography, TextField, Button, Divider, FormControl, Box, 
 import { useEffect, useState } from "react";
 import axios from "axios";
 import ExtraChargeRow from "./ExtraCharge/ExtraChargeRow";
+import PropTypes from "prop-types";
 
-const InvoiceInput = () => {
-	const [customerMapSub, setCustomerMapSub] = useState({});
-	const [selectedCustomerId, setSelectedCustomerId] = useState("");
-	const [selectedSubId, setSelectedSubId] = useState("");
-	const [customerPOMapOrderLines, setCustomerPOMapOrderLines] = useState({});
-	const [selectedCustomerPO, setSelectedCustomerPO] = useState("");
-	const [selectedLineNumber, setSelectedLineNumber] = useState("");
-	const [extraExpenseRow, setExtraExpenseRow] = useState({
-		extraChargeEntry: "",
-		count: "",
-		charge: "",
-		expense: "",
+const InvoiceInput = ({ setData, setStaticArr }) => {
+	const [formData, setFormData] = useState({
+		customerMapSub: {},
+		selectedCustomerId: "",
+		selectedSubId: "",
+		customerPOMapOrderLines: {},
+		selectedCustomerPO: "",
+		selectedLineNumber: "",
+		extraExpenseRow: {
+			extraChargeEntry: "",
+			count: "",
+			charge: "",
+			expense: "",
+		},
+		shippingAddress: {
+			line1: "",
+			line2: "",
+			line3: "",
+			line4: "",
+		},
+		billingAddress: {
+			line1: "",
+			line2: "",
+			line3: "",
+			line4: "",
+		},
 	});
-	// State for Shipping Address
-	const [shippingAddress, setShippingAddress] = useState({
-		line1: "",
-		line2: "",
-		line3: "",
-		line4: "",
-	});
-
-	// State for Billing Address
-	const [billingAddress, setBillingAddress] = useState({
-		line1: "",
-		line2: "",
-		line3: "",
-		line4: "",
-	});
-
-	const handleAddExtraExpense = (newExtraExpenseRow) => {
-		setExtraExpenseRow(newExtraExpenseRow);
-	};
 
 	const handleCustomerChange = (event) => {
-		setSelectedCustomerId(event.target.value);
-		setSelectedSubId("");
-		setSelectedCustomerPO("");
-		setSelectedLineNumber("");
+		const newCustomerId = event.target.value;
+		setFormData((prev) => ({
+			...prev,
+			selectedCustomerId: newCustomerId,
+			selectedSubId: "",
+			selectedCustomerPO: "",
+			selectedLineNumber: "",
+		}));
 	};
 
 	const handleSubIdChange = (event) => {
-		setSelectedSubId(event.target.value);
-		setSelectedCustomerPO("");
-		setSelectedLineNumber("");
+		const newSubId = event.target.value;
+		setFormData((prev) => ({
+			...prev,
+			selectedSubId: newSubId,
+			selectedCustomerPO: "",
+			selectedLineNumber: "",
+		}));
 	};
 
 	const handleCustomerPOChange = (event) => {
-		setSelectedCustomerPO(event.target.value);
-		setSelectedLineNumber("");
+		const newCustomerPO = event.target.value;
+		setFormData((prev) => ({
+			...prev,
+			selectedCustomerPO: newCustomerPO,
+			selectedLineNumber: "",
+		}));
 	};
 
 	const handleLineNumberChange = (event) => {
-		setSelectedLineNumber(event.target.value);
+		const newLineNumber = event.target.value;
+		setFormData((prev) => ({
+			...prev,
+			selectedLineNumber: newLineNumber,
+		}));
 	};
 
 	const handleShippingAddressChange = (event) => {
 		const { name, value } = event.target;
-		setShippingAddress((prev) => ({
+		setFormData((prev) => ({
 			...prev,
-			[name]: value,
+			shippingAddress: {
+				...prev.shippingAddress,
+				[name]: value,
+			},
 		}));
 	};
 
 	const handleBillingAddressChange = (event) => {
 		const { name, value } = event.target;
-		setBillingAddress((prev) => ({
+		setFormData((prev) => ({
 			...prev,
-			[name]: value,
+			billingAddress: {
+				...prev.billingAddress,
+				[name]: value,
+			},
 		}));
 	};
 
-	// Handler for Autofill Button Click
 	const handleAutofill = async () => {
 		try {
-			// Example GET request to fetch addresses
-			const response = await axios.get(`http://localhost:8000/customers/${selectedCustomerId}/`);
+			const response = await axios.get(`http://localhost:8000/customers/${formData.selectedCustomerId}/`);
 			const {
 				ship_to_address_line1,
 				ship_to_address_line2,
@@ -90,32 +106,61 @@ const InvoiceInput = () => {
 				sold_to_address_line4,
 			} = response.data;
 
-			// Update state with fetched data
-			setShippingAddress({
-				line1: ship_to_address_line1 || "",
-				line2: ship_to_address_line2 || "",
-				line3: ship_to_address_line3 || "",
-				line4: ship_to_address_line4 || "",
-			});
-			setBillingAddress({
-				line1: sold_to_address_line1 || "",
-				line2: sold_to_address_line2 || "",
-				line3: sold_to_address_line3 || "",
-				line4: sold_to_address_line4 || "",
-			});
+			setFormData((prev) => ({
+				...prev,
+				shippingAddress: {
+					line1: ship_to_address_line1 || "",
+					line2: ship_to_address_line2 || "",
+					line3: ship_to_address_line3 || "",
+					line4: ship_to_address_line4 || "",
+				},
+				billingAddress: {
+					line1: sold_to_address_line1 || "",
+					line2: sold_to_address_line2 || "",
+					line3: sold_to_address_line3 || "",
+					line4: sold_to_address_line4 || "",
+				},
+			}));
 		} catch (error) {
 			console.error("Failed to autofill addresses:", error);
 		}
 	};
 
-	// State and handlers would go here
+	const handleAddInvoiceLine = async () => {
+		let customerId = formData.selectedCustomerId;
+		if (formData.selectedSubId !== "None") {
+			customerId += formData.selectedSubId;
+		}
+
+		const queryParams = new URLSearchParams({
+			customer_id: customerId,
+			customer_po: formData.selectedCustomerPO,
+			line_number: formData.selectedLineNumber,
+		}).toString();
+
+		let orderLine;
+		try {
+			const response = await axios.get(`http://localhost:8000/order_lines/get/?${queryParams}`);
+			orderLine = response.data[0];
+			orderLine.total_price = orderLine.price * orderLine.quantity;
+			setData((prev) => [...prev, orderLine]);
+		} catch (error) {
+			console.error("Failed to fetch invoice line data:", error);
+		}
+		setStaticArr((prev) => [...prev, true]);
+	};
+
+	const handleAddExtraExpense = (extraExpense) => {
+		setFormData((prev) => ({
+			...prev,
+			extraExpenses: [...prev.extraExpenses, extraExpense],
+		}));
+	};
+
 	useEffect(() => {
-		// Function to fetch customer data
 		const fetchCustomers = async () => {
 			try {
-				// Send GET request to the backend server
 				const response = await axios.get("http://localhost:8000/customers/");
-				// Update the state with the fetched data
 				const customers = response.data;
 				const map = {};
 				for (let customer of customers) {
@@ -138,27 +183,27 @@ const InvoiceInput = () => {
 						map[customerId].push(subId);
 					}
 				}
-				setCustomerMapSub(map);
+				setFormData((prev) => ({
+					...prev,
+					customerMapSub: map,
+				}));
 			} catch (err) {
-				return err;
+				console.error("Failed to fetch customers:", err);
 			}
 		};
 
-		// Call the function to fetch the data
 		fetchCustomers();
 	}, []);
 
 	useEffect(() => {
 		const fetchOrders = async () => {
 			try {
-				let fullCustomerId = selectedCustomerId;
-				if (selectedSubId !== "None") {
-					fullCustomerId += selectedSubId;
+				let fullCustomerId = formData.selectedCustomerId;
+				if (formData.selectedSubId !== "None") {
+					fullCustomerId += formData.selectedSubId;
 				}
 
-				// Send GET request to the backend server
 				const response = await axios.get(`http://localhost:8000/orders/?customer_id=${fullCustomerId}`);
-				// Update the state with the fetched data
 				const orderLines = response.data;
 				const map = {};
 				for (let orderLine of orderLines) {
@@ -167,15 +212,17 @@ const InvoiceInput = () => {
 					}
 					map[orderLine.customer_po].push(orderLine.line_number);
 				}
-				setCustomerPOMapOrderLines(map);
+				setFormData((prev) => ({
+					...prev,
+					customerPOMapOrderLines: map,
+				}));
 			} catch (err) {
-				return err;
+				console.error("Failed to fetch orders:", err);
 			}
 		};
 
-		// Call the function to fetch the data
 		fetchOrders();
-	}, [selectedSubId]);
+	}, [formData.selectedSubId]);
 
 	return (
 		<Paper sx={{ padding: "16px" }}>
@@ -190,18 +237,16 @@ const InvoiceInput = () => {
 					<Grid container item spacing={2}>
 						{/* Customer ID Dropdown */}
 						<Grid item xs={3}>
-							{" "}
-							{/* Adjust the size as needed */}
 							<FormControl fullWidth>
 								<InputLabel id="customer-id-select-label">Customer ID</InputLabel>
 								<Select
 									labelId="customer-id-select-label"
 									id="customer-id-select"
-									value={selectedCustomerId}
+									value={formData.selectedCustomerId}
 									label="Customer ID"
 									onChange={handleCustomerChange}
 								>
-									{Object.keys(customerMapSub).map((key) => (
+									{Object.keys(formData.customerMapSub).map((key) => (
 										<MenuItem key={key} value={key}>
 											{key}
 										</MenuItem>
@@ -211,16 +256,14 @@ const InvoiceInput = () => {
 						</Grid>
 
 						{/* Sub ID Dropdown */}
-						{selectedCustomerId && (
+						{formData.selectedCustomerId && (
 							<Grid item xs={3}>
-								{" "}
-								{/* Adjust the size as needed */}
 								<FormControl fullWidth>
 									<InputLabel id="sub-id-select-label">Sub ID</InputLabel>
-									<Select labelId="sub-id-select-label" id="sub-id-select" value={selectedSubId} label="Sub ID" onChange={handleSubIdChange}>
-										{customerMapSub[selectedCustomerId].length === 0 && <MenuItem value="None">None</MenuItem>}
-										{customerMapSub[selectedCustomerId] &&
-											customerMapSub[selectedCustomerId].map((subId) => (
+									<Select labelId="sub-id-select-label" id="sub-id-select" value={formData.selectedSubId} label="Sub ID" onChange={handleSubIdChange}>
+										{formData.customerMapSub[formData.selectedCustomerId].length === 0 && <MenuItem value="None">None</MenuItem>}
+										{formData.customerMapSub[formData.selectedCustomerId] &&
+											formData.customerMapSub[formData.selectedCustomerId].map((subId) => (
 												<MenuItem key={subId} value={subId}>
 													{subId}
 												</MenuItem>
@@ -230,19 +273,19 @@ const InvoiceInput = () => {
 							</Grid>
 						)}
 
-						{selectedSubId && (
+						{/* PO Number Dropdown */}
+						{formData.selectedSubId && (
 							<Grid item xs={3}>
-								{" "}
 								<FormControl fullWidth>
 									<InputLabel id="customer-po-select-label">PO Number</InputLabel>
 									<Select
 										labelId="customer-po-select-label"
 										id="customer-po-select"
-										value={selectedCustomerPO}
+										value={formData.selectedCustomerPO}
 										label="Customer PO"
 										onChange={handleCustomerPOChange}
 									>
-										{Object.keys(customerPOMapOrderLines).map((key) => (
+										{Object.keys(formData.customerPOMapOrderLines).map((key) => (
 											<MenuItem key={key} value={key}>
 												{key}
 											</MenuItem>
@@ -253,26 +296,33 @@ const InvoiceInput = () => {
 						)}
 
 						{/* Line Number Dropdown */}
-						{selectedCustomerPO && (
+						{formData.selectedCustomerPO && (
 							<Grid item xs={3}>
-								{" "}
-								{/* Adjust the size as needed */}
 								<FormControl fullWidth>
 									<InputLabel id="line-number-select-label">Line Number</InputLabel>
 									<Select
 										labelId="line-number-select-label"
 										id="line-number-select"
-										value={selectedLineNumber}
+										value={formData.selectedLineNumber}
 										label="Line Number"
 										onChange={handleLineNumberChange}
 									>
-										{customerPOMapOrderLines[selectedCustomerPO].map((lineNumber) => (
+										{formData.customerPOMapOrderLines[formData.selectedCustomerPO].map((lineNumber) => (
 											<MenuItem key={lineNumber} value={lineNumber}>
 												{lineNumber}
 											</MenuItem>
 										))}
 									</Select>
 								</FormControl>
+							</Grid>
+						)}
+
+						{/* Add Invoice Line Button */}
+						{formData.selectedLineNumber && (
+							<Grid item xs={3}>
+								<Button variant="contained" color="primary" onClick={handleAddInvoiceLine} fullWidth>
+									Add Invoice Line
+								</Button>
 							</Grid>
 						)}
 					</Grid>
@@ -283,26 +333,8 @@ const InvoiceInput = () => {
 						<Divider />
 					</Grid>
 					{/* Extra Charge Row */}
-					<ExtraChargeRow
-						extraExpenseRow={extraExpenseRow}
-						setExtraExpenseRow={setExtraExpenseRow}
-						handleAddExtraExpense={handleAddExtraExpense}
-					></ExtraChargeRow>
+					<ExtraChargeRow formData={formData} handleAddExtraExpense={handleAddExtraExpense} setFormData={setFormData} />
 
-					{/* Title for Surcharge */}
-					<Grid item xs={12}>
-						<Typography variant="h6">Surcharge</Typography>
-						<Divider />
-					</Grid>
-					{/* Surcharge Row */}
-					<Grid container item spacing={2}>
-						<Grid item xs={2}>
-							{/* Dropdown or Input Field */}
-						</Grid>
-						<Grid item xs={2}>
-							{/* Input Field */}
-						</Grid>
-					</Grid>
 					{/* Title for Shipping Info */}
 					<Grid item xs={12}>
 						<Typography variant="h6">Shipping Info</Typography>
@@ -317,7 +349,7 @@ const InvoiceInput = () => {
 								name="line1"
 								variant="outlined"
 								fullWidth
-								value={shippingAddress.line1}
+								value={formData.shippingAddress.line1}
 								onChange={handleShippingAddressChange}
 								margin="normal"
 							/>
@@ -326,7 +358,7 @@ const InvoiceInput = () => {
 								name="line2"
 								variant="outlined"
 								fullWidth
-								value={shippingAddress.line2}
+								value={formData.shippingAddress.line2}
 								onChange={handleShippingAddressChange}
 								margin="normal"
 							/>
@@ -335,7 +367,7 @@ const InvoiceInput = () => {
 								name="line3"
 								variant="outlined"
 								fullWidth
-								value={shippingAddress.line3}
+								value={formData.shippingAddress.line3}
 								onChange={handleShippingAddressChange}
 								margin="normal"
 							/>
@@ -344,7 +376,7 @@ const InvoiceInput = () => {
 								name="line4"
 								variant="outlined"
 								fullWidth
-								value={shippingAddress.line4}
+								value={formData.shippingAddress.line4}
 								onChange={handleShippingAddressChange}
 								margin="normal"
 							/>
@@ -357,7 +389,7 @@ const InvoiceInput = () => {
 								name="line1"
 								variant="outlined"
 								fullWidth
-								value={billingAddress.line1}
+								value={formData.billingAddress.line1}
 								onChange={handleBillingAddressChange}
 								margin="normal"
 							/>
@@ -366,7 +398,7 @@ const InvoiceInput = () => {
 								name="line2"
 								variant="outlined"
 								fullWidth
-								value={billingAddress.line2}
+								value={formData.billingAddress.line2}
 								onChange={handleBillingAddressChange}
 								margin="normal"
 							/>
@@ -375,7 +407,7 @@ const InvoiceInput = () => {
 								name="line3"
 								variant="outlined"
 								fullWidth
-								value={billingAddress.line3}
+								value={formData.billingAddress.line3}
 								onChange={handleBillingAddressChange}
 								margin="normal"
 							/>
@@ -384,7 +416,7 @@ const InvoiceInput = () => {
 								name="line4"
 								variant="outlined"
 								fullWidth
-								value={billingAddress.line4}
+								value={formData.billingAddress.line4}
 								onChange={handleBillingAddressChange}
 								margin="normal"
 							/>
@@ -403,6 +435,9 @@ const InvoiceInput = () => {
 	);
 };
 
-InvoiceInput.propTypes = {};
+InvoiceInput.propTypes = {
+	setData: PropTypes.func.isRequired,
+	setStaticArr: PropTypes.func.isRequired,
+};
 
 export default InvoiceInput;

@@ -8,6 +8,8 @@ from django.db import transaction
 from orders.serializers import OrderSerializer
 from .serializers import OrderLineSerializer
 from datetime import datetime
+from django.db import connection
+from django.db.utils import OperationalError
 
 
 @api_view(['GET'])
@@ -16,6 +18,103 @@ def get_order_lines(request):
     serializer = OrderLineSerializer(order_lines, many=True)
     return Response(serializer.data)
 
+@api_view(['GET'])
+def get_order_line(request):
+    # Extract query parameters
+    customer_id = request.GET.get('customer_id')
+    customer_po = request.GET.get('customer_po')
+    line_number = request.GET.get('line_number')
+
+    # Base SQL query
+    sql_query = """
+    SELECT
+        o.id AS order_id,
+        o.customer_id,
+        o.customer_po,
+        o.order_date,
+        ol.id AS orderline_id,
+        ol.line_number,
+        ol.part_number,
+        ol.description,
+        ol.quantity,
+        ol.ship_via,
+        ol.balance,
+        ol.required_date,
+        ol.confirmed_date,
+        ol.factory,
+        ol.dwg_number,
+        ol.material,
+        ol.price,
+        ol.revision,
+        ol.weight,
+        ol.status
+    FROM
+        orders_order AS o
+    JOIN
+        order_lines_orderline AS ol
+    ON
+        o.id = ol.order_id
+    """
+
+    # Initialize an empty list to hold WHERE conditions
+    where_clauses = []
+    query_params = []
+
+    # Add WHERE clauses based on available query parameters
+    if customer_id:
+        where_clauses.append("o.customer_id = %s")
+        query_params.append(customer_id)
+
+    if customer_po:
+        where_clauses.append("o.customer_po = %s")
+        query_params.append(customer_po)
+
+    if line_number:
+        where_clauses.append("ol.line_number = %s")
+        query_params.append(line_number)
+
+    # Combine the WHERE clauses
+    if where_clauses:
+        sql_query += "WHERE " + " AND ".join(where_clauses)
+
+    sql_query += " LIMIT 1;"
+
+    try:
+        # Execute the query with parameters
+        with connection.cursor() as cursor:
+            cursor.execute(sql_query, query_params)
+            rows = cursor.fetchall()
+
+        keys = [
+            "order_id",
+            "customer_id",
+            "customer_po",
+            "order_date",
+            "orderline_id",
+            "line_number",
+            "part_number",
+            "description",
+            "quantity",
+            "ship_via",
+            "balance",
+            "required_date",
+            "confirmed_date",
+            "factory",
+            "dwg_number",
+            "material",
+            "price",
+            "revision",
+            "weight",
+            "status"
+        ]
+
+        # Convert the result to a list of dictionaries
+        result = [dict(zip(keys, row)) for row in rows]
+
+        return Response(result)
+
+    except OperationalError as e:
+        return Response({"error": str(e)}, status=500)
 
 @api_view(['POST'])
 def create_order_line(request):
