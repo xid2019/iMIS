@@ -316,15 +316,13 @@ const InvoiceInput = ({ setData, setStaticArr }) => {
 								</FormControl>
 							</Grid>
 						)}
-
-						{/* Add Invoice Line Button */}
-						{formData.selectedLineNumber && (
+						<Grid container item spacing={2}>
 							<Grid item xs={3}>
-								<Button variant="contained" color="primary" onClick={handleAddInvoiceLine} fullWidth>
+								<Button disabled={!formData.selectedLineNumber} variant="contained" color="primary" onClick={handleAddInvoiceLine} fullWidth>
 									Add Invoice Line
 								</Button>
 							</Grid>
-						)}
+						</Grid>
 					</Grid>
 
 					{/* Title for Extra Charge */}
