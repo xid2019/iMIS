@@ -13,3 +13,9 @@ class Part(models.Model):
     weight = models.FloatField(null=True, blank=True)
     order_quantity = models.IntegerField(null=True, blank=True)
     factory = models.TextField(null=True, blank=True)
+
+    class Meta:
+        # Create an index on customer_id and part_number
+        indexes = [
+            models.Index(fields=['customer_id', 'part_number'], name='idx_customer_id_part_number'),
+        ]
