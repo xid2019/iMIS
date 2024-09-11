@@ -1,7 +1,7 @@
 import { Grid, Paper, Typography, TextField, Button, Divider, FormControl, Box, InputLabel, Select, MenuItem } from "@mui/material";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import ExtraChargeRow from "./ExtraCharge/ExtraChargeRow";
+import ExtraCharge from "./ExtraCharge/ExtraCharge";
 import PropTypes from "prop-types";
 
 const InvoiceInput = ({ setData, setStaticArr }) => {
@@ -331,7 +331,7 @@ const InvoiceInput = ({ setData, setStaticArr }) => {
 						<Divider />
 					</Grid>
 					{/* Extra Charge Row */}
-					<ExtraChargeRow formData={formData} handleAddExtraExpense={handleAddExtraExpense} setFormData={setFormData} />
+					<ExtraCharge formData={formData} handleAddExtraExpense={handleAddExtraExpense} setFormData={setFormData} />
 
 					{/* Title for Shipping Info */}
 					<Grid item xs={12}>

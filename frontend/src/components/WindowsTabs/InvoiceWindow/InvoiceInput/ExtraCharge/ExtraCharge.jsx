@@ -1,7 +1,7 @@
 import { Grid, TextField, Button } from "@mui/material";
 import PropTypes from "prop-types";
 
-const ExtraChargeRow = ({ formData, setFormData, handleAddExtraExpense }) => {
+const ExtraCharge = ({ formData, setFormData, handleAddExtraExpense }) => {
 	const handleExtraChargeEntryChange = (event) => {
 		setFormData((prev) => ({
 			...prev,
@@ -87,7 +87,7 @@ const ExtraChargeRow = ({ formData, setFormData, handleAddExtraExpense }) => {
 	);
 };
 
-ExtraChargeRow.propTypes = {
+ExtraCharge.propTypes = {
 	handleAddExtraExpense: PropTypes.func.isRequired,
 	setFormData: PropTypes.func.isRequired,
 	formData: PropTypes.shape({
@@ -100,4 +100,4 @@ ExtraChargeRow.propTypes = {
 	}).isRequired,
 };
 
-export default ExtraChargeRow;
+export default ExtraCharge;
