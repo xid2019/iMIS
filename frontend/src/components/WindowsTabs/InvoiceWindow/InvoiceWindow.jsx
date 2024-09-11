@@ -13,7 +13,7 @@ function InvoiceWindow() {
 
 	return (
 		<Paper>
-			<InvoiceInput setData={setData} staticArr={staticArr} setStaticArr={setStaticArr}></InvoiceInput>
+			<InvoiceInput setData={setData} setStaticArr={setStaticArr}></InvoiceInput>
 			<InvoiceTable data={data} setData={setData} staticArr={staticArr} setStaticArr={setStaticArr}></InvoiceTable>
 			<ExtraChargeTable></ExtraChargeTable>
 			<Grid container item spacing={2}>
