@@ -3,7 +3,7 @@ import InvoiceLineStatic from "./InvoiceLineStatic/InvoiceLineStatic";
 import { TableContainer, Paper, Table, TableBody, TableCell, TableHead, TableRow, Box } from "@mui/material";
 import PropTypes from "prop-types";
 
-const InvoiceTable = ({ data, setData, staticArr, setStaticArr }) => {
+const InvoiceTable = ({ invoiceData, setData, invoiceTableStaticArr, setInvoiceTableStaticArr }) => {
 	return (
 		<Box sx={{ padding: 2 }}>
 			<TableContainer component={Paper} sx={{ maxHeight: "500px", minWidth: "1000px", maxWidth: "100%", overflowX: "auto" }}>
@@ -29,11 +29,25 @@ const InvoiceTable = ({ data, setData, staticArr, setStaticArr }) => {
 						</TableRow>
 					</TableHead>
 					<TableBody>
-						{data.map((row, index) =>
-							staticArr[index] ? (
-								<InvoiceLineStatic key={index} index={index} data={data} setData={setData} staticArr={staticArr} setStaticArr={setStaticArr} />
+						{invoiceData.map((row, index) =>
+							invoiceTableStaticArr[index] ? (
+								<InvoiceLineStatic
+									key={index}
+									index={index}
+									invoiceData={invoiceData}
+									setData={setData}
+									invoiceTableStaticArr={invoiceTableStaticArr}
+									setInvoiceTableStaticArr={setInvoiceTableStaticArr}
+								/>
 							) : (
-								<InvoiceLineEditting key={index} index={index} data={data} setData={setData} staticArr={staticArr} setStaticArr={setStaticArr} />
+								<InvoiceLineEditting
+									key={index}
+									index={index}
+									invoiceData={invoiceData}
+									setData={setData}
+									invoiceTableStaticArr={invoiceTableStaticArr}
+									setInvoiceTableStaticArr={setInvoiceTableStaticArr}
+								/>
 							)
 						)}
 					</TableBody>
@@ -44,7 +58,7 @@ const InvoiceTable = ({ data, setData, staticArr, setStaticArr }) => {
 };
 
 InvoiceTable.propTypes = {
-	data: PropTypes.arrayOf(
+	invoiceData: PropTypes.arrayOf(
 		PropTypes.shape({
 			line_number: PropTypes.string,
 			quantity: PropTypes.number,
@@ -64,8 +78,8 @@ InvoiceTable.propTypes = {
 		})
 	).isRequired,
 	setData: PropTypes.func.isRequired,
-	staticArr: PropTypes.arrayOf(PropTypes.bool).isRequired,
-	setStaticArr: PropTypes.func.isRequired,
+	invoiceTableStaticArr: PropTypes.arrayOf(PropTypes.bool).isRequired,
+	setInvoiceTableStaticArr: PropTypes.func.isRequired,
 };
 
 export default InvoiceTable;

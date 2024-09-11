@@ -1,10 +1,9 @@
-import { Grid, Paper, Typography, TextField, Button, Divider, FormControl, Box, InputLabel, Select, MenuItem } from "@mui/material";
+import { Grid, Paper, Typography, Button, Divider, FormControl, Box, InputLabel, Select, MenuItem } from "@mui/material";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import ExtraCharge from "./ExtraCharge/ExtraCharge";
 import PropTypes from "prop-types";
 
-const InvoiceInput = ({ setData, setStaticArr }) => {
+const InvoiceInput = ({ setData, setInvoiceTableStaticArr }) => {
 	const [formData, setFormData] = useState({
 		customerMapSub: {},
 		selectedCustomerId: "",
@@ -12,24 +11,6 @@ const InvoiceInput = ({ setData, setStaticArr }) => {
 		customerPOMapOrderLines: {},
 		selectedCustomerPO: "",
 		selectedLineNumber: "",
-		extraExpenseRow: {
-			extraChargeEntry: "",
-			count: "",
-			charge: "",
-			expense: "",
-		},
-		shippingAddress: {
-			line1: "",
-			line2: "",
-			line3: "",
-			line4: "",
-		},
-		billingAddress: {
-			line1: "",
-			line2: "",
-			line3: "",
-			line4: "",
-		},
 	});
 
 	const handleCustomerChange = (event) => {
@@ -70,62 +51,6 @@ const InvoiceInput = ({ setData, setStaticArr }) => {
 		}));
 	};
 
-	const handleShippingAddressChange = (event) => {
-		const { name, value } = event.target;
-		setFormData((prev) => ({
-			...prev,
-			shippingAddress: {
-				...prev.shippingAddress,
-				[name]: value,
-			},
-		}));
-	};
-
-	const handleBillingAddressChange = (event) => {
-		const { name, value } = event.target;
-		setFormData((prev) => ({
-			...prev,
-			billingAddress: {
-				...prev.billingAddress,
-				[name]: value,
-			},
-		}));
-	};
-
-	const handleAutofill = async () => {
-		try {
-			const response = await axios.get(`http://localhost:8000/customers/${formData.selectedCustomerId}/`);
-			const {
-				ship_to_address_line1,
-				ship_to_address_line2,
-				ship_to_address_line3,
-				ship_to_address_line4,
-				sold_to_address_line1,
-				sold_to_address_line2,
-				sold_to_address_line3,
-				sold_to_address_line4,
-			} = response.data;
-
-			setFormData((prev) => ({
-				...prev,
-				shippingAddress: {
-					line1: ship_to_address_line1 || "",
-					line2: ship_to_address_line2 || "",
-					line3: ship_to_address_line3 || "",
-					line4: ship_to_address_line4 || "",
-				},
-				billingAddress: {
-					line1: sold_to_address_line1 || "",
-					line2: sold_to_address_line2 || "",
-					line3: sold_to_address_line3 || "",
-					line4: sold_to_address_line4 || "",
-				},
-			}));
-		} catch (error) {
-			console.error("Failed to autofill addresses:", error);
-		}
-	};
-
 	const handleAddInvoiceLine = async () => {
 		let customerId = formData.selectedCustomerId;
 		if (formData.selectedSubId !== "None") {
@@ -143,18 +68,14 @@ const InvoiceInput = ({ setData, setStaticArr }) => {
 			const response = await axios.get(`http://localhost:8000/order_lines/get/?${queryParams}`);
 			orderLine = response.data[0];
 			orderLine.total_price = orderLine.price * orderLine.quantity;
-			setData((prev) => [...prev, orderLine]);
+			setData((prev) => ({
+				...prev,
+				invoiceData: [...prev.invoiceData, orderLine],
+			}));
 		} catch (error) {
 			console.error("Failed to fetch invoice line data:", error);
 		}
-		setStaticArr((prev) => [...prev, true]);
-	};
-
-	const handleAddExtraExpense = (extraExpense) => {
-		setFormData((prev) => ({
-			...prev,
-			extraExpenses: [...prev.extraExpenses, extraExpense],
-		}));
+		setInvoiceTableStaticArr((prev) => [...prev, true]);
 	};
 
 	useEffect(() => {
@@ -228,12 +149,12 @@ const InvoiceInput = ({ setData, setStaticArr }) => {
 		<Paper sx={{ padding: "16px" }}>
 			<Box component="form" noValidate autoComplete="off">
 				<Grid container spacing={2}>
-					{/* Title for Input Info */}
+					{/* Title for Invoice Info */}
 					<Grid item xs={12}>
-						<Typography variant="h6">Input Info</Typography>
+						<Typography variant="h6">Invoice Info</Typography>
 						<Divider />
 					</Grid>
-					{/* Input Info Row */}
+					{/* Invoice Info Row */}
 					<Grid container item spacing={2}>
 						{/* Customer ID Dropdown */}
 						<Grid item xs={3}>
@@ -324,109 +245,6 @@ const InvoiceInput = ({ setData, setStaticArr }) => {
 							</Grid>
 						</Grid>
 					</Grid>
-
-					{/* Title for Extra Charge */}
-					<Grid item xs={12}>
-						<Typography variant="h6">Extra Charge</Typography>
-						<Divider />
-					</Grid>
-					{/* Extra Charge Row */}
-					<ExtraCharge formData={formData} handleAddExtraExpense={handleAddExtraExpense} setFormData={setFormData} />
-
-					{/* Title for Shipping Info */}
-					<Grid item xs={12}>
-						<Typography variant="h6">Shipping Info</Typography>
-						<Divider />
-					</Grid>
-					{/* Shipping Info Row */}
-					<Grid container spacing={2}>
-						{/* Shipping Address Column */}
-						<Grid item xs={3}>
-							<TextField
-								label="Shipping Address Line 1"
-								name="line1"
-								variant="outlined"
-								fullWidth
-								value={formData.shippingAddress.line1}
-								onChange={handleShippingAddressChange}
-								margin="normal"
-							/>
-							<TextField
-								label="Shipping Address Line 2"
-								name="line2"
-								variant="outlined"
-								fullWidth
-								value={formData.shippingAddress.line2}
-								onChange={handleShippingAddressChange}
-								margin="normal"
-							/>
-							<TextField
-								label="Shipping Address Line 3"
-								name="line3"
-								variant="outlined"
-								fullWidth
-								value={formData.shippingAddress.line3}
-								onChange={handleShippingAddressChange}
-								margin="normal"
-							/>
-							<TextField
-								label="Shipping Address Line 4"
-								name="line4"
-								variant="outlined"
-								fullWidth
-								value={formData.shippingAddress.line4}
-								onChange={handleShippingAddressChange}
-								margin="normal"
-							/>
-						</Grid>
-
-						{/* Billing Address Column */}
-						<Grid item xs={3}>
-							<TextField
-								label="Bill To Address Line 1"
-								name="line1"
-								variant="outlined"
-								fullWidth
-								value={formData.billingAddress.line1}
-								onChange={handleBillingAddressChange}
-								margin="normal"
-							/>
-							<TextField
-								label="Bill To Address Line 2"
-								name="line2"
-								variant="outlined"
-								fullWidth
-								value={formData.billingAddress.line2}
-								onChange={handleBillingAddressChange}
-								margin="normal"
-							/>
-							<TextField
-								label="Bill To Address Line 3"
-								name="line3"
-								variant="outlined"
-								fullWidth
-								value={formData.billingAddress.line3}
-								onChange={handleBillingAddressChange}
-								margin="normal"
-							/>
-							<TextField
-								label="Bill To Address Line 4"
-								name="line4"
-								variant="outlined"
-								fullWidth
-								value={formData.billingAddress.line4}
-								onChange={handleBillingAddressChange}
-								margin="normal"
-							/>
-						</Grid>
-
-						{/* Autofill Button */}
-						<Grid item xs={12}>
-							<Button variant="contained" color="primary" onClick={handleAutofill}>
-								Autofill
-							</Button>
-						</Grid>
-					</Grid>
 				</Grid>
 			</Box>
 		</Paper>
@@ -435,7 +253,7 @@ const InvoiceInput = ({ setData, setStaticArr }) => {
 
 InvoiceInput.propTypes = {
 	setData: PropTypes.func.isRequired,
-	setStaticArr: PropTypes.func.isRequired,
+	setInvoiceTableStaticArr: PropTypes.func.isRequired,
 };
 
 export default InvoiceInput;

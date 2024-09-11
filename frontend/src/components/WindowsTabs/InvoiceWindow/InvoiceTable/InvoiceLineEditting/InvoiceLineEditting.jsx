@@ -2,26 +2,38 @@ import PropTypes from "prop-types";
 import { FormControl, Select, MenuItem, Button, TextField, TableCell, TableRow } from "@mui/material";
 import { useState } from "react";
 
-const InvoiceLineEditting = ({ data, setData, index, staticArr, setStaticArr }) => {
-	const [formData, setFormData] = useState(data[index]);
+const InvoiceLineEditting = ({ invoiceData, setData, index, invoiceTableStaticArr, setInvoiceTableStaticArr }) => {
+	const [formData, setFormData] = useState(invoiceData[index]);
 
 	const handleChange = (e) => {
 		const { name, value } = e.target;
 		const newValue = name === "price" || name === "quantity" || name === "weight" ? parseFloat(value) : value;
-		setFormData((prev) => ({
-			...prev,
-			[name]: newValue,
-			total_price: prev.price * prev.quantity,
-		}));
+		setFormData((prev) => {
+			let totalPrice;
+			if (name === "price") {
+				totalPrice = newValue * prev.quantity;
+			}
+			if (name === "quantity") {
+				totalPrice = newValue * prev.price;
+			}
+			return {
+				...prev,
+				[name]: newValue,
+				total_price: totalPrice || prev.price * prev.quantity,
+			};
+		});
 	};
 
 	const handleSave = async () => {
-		const newData = [...data];
-		newData[index] = formData;
-		setData(newData);
-		const newStaticArr = [...staticArr];
+		const newInvoiceData = [...invoiceData];
+		newInvoiceData[index] = formData;
+		setData((prev) => ({
+			...prev,
+			invoiceData: newInvoiceData,
+		}));
+		const newStaticArr = [...invoiceTableStaticArr];
 		newStaticArr[index] = true;
-		setStaticArr(newStaticArr);
+		setInvoiceTableStaticArr(newStaticArr);
 	};
 
 	return (
@@ -83,7 +95,7 @@ const InvoiceLineEditting = ({ data, setData, index, staticArr, setStaticArr }) 
 };
 
 InvoiceLineEditting.propTypes = {
-	data: PropTypes.arrayOf(
+	invoiceData: PropTypes.arrayOf(
 		PropTypes.shape({
 			line_number: PropTypes.string.isRequired,
 			part_number: PropTypes.string.isRequired,
@@ -104,8 +116,8 @@ InvoiceLineEditting.propTypes = {
 	).isRequired,
 	setData: PropTypes.func.isRequired,
 	index: PropTypes.number.isRequired,
-	staticArr: PropTypes.arrayOf(PropTypes.bool),
-	setStaticArr: PropTypes.func.isRequired,
+	invoiceTableStaticArr: PropTypes.arrayOf(PropTypes.bool),
+	setInvoiceTableStaticArr: PropTypes.func.isRequired,
 };
 
 export default InvoiceLineEditting;

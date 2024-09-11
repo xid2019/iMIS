@@ -1,34 +1,37 @@
 import PropTypes from "prop-types";
 import { Box, Button, TableCell, TableRow } from "@mui/material";
 
-const InvoiceLineStatic = ({ data, setData, index, staticArr, setStaticArr }) => {
+const InvoiceLineStatic = ({ invoiceData, setData, index, invoiceTableStaticArr, setInvoiceTableStaticArr }) => {
 	const handleEdit = () => {
-		const newStaticArr = [...staticArr];
-		newStaticArr[index] = false;
-		setStaticArr(newStaticArr);
+		const newInvoiceTableStaticArr = [...invoiceTableStaticArr];
+		newInvoiceTableStaticArr[index] = false;
+		setInvoiceTableStaticArr(newInvoiceTableStaticArr);
 	};
 
 	const handleDelete = () => {
-		const newData = data.filter((_, i) => i !== index);
-		setData(newData);
+		const newData = invoiceData.filter((_, i) => i !== index);
+		setData((prev) => ({
+			...prev,
+			invoiceData: newData,
+		}));
 	};
 	return (
 		<TableRow>
-			<TableCell>{data[index].line_number}</TableCell>
-			<TableCell>{data[index].quantity}</TableCell>
-			<TableCell>{data[index].unit}</TableCell>
-			<TableCell>{data[index].part_number}</TableCell>
-			<TableCell>{data[index].dwg_number}</TableCell>
-			<TableCell>{data[index].revision}</TableCell>
-			<TableCell>{data[index].hts_code}</TableCell>
-			<TableCell>{data[index].description}</TableCell>
-			<TableCell>{data[index].ship_via}</TableCell>
-			<TableCell>{data[index].required_date}</TableCell>
-			<TableCell>{data[index].confirmed_date}</TableCell>
-			<TableCell>{data[index].material}</TableCell>
-			<TableCell>{data[index].weight}</TableCell>
-			<TableCell>{data[index].price}</TableCell>
-			<TableCell>{data[index].total_price}</TableCell>
+			<TableCell>{invoiceData[index].line_number}</TableCell>
+			<TableCell>{invoiceData[index].quantity}</TableCell>
+			<TableCell>{invoiceData[index].unit}</TableCell>
+			<TableCell>{invoiceData[index].part_number}</TableCell>
+			<TableCell>{invoiceData[index].dwg_number}</TableCell>
+			<TableCell>{invoiceData[index].revision}</TableCell>
+			<TableCell>{invoiceData[index].hts_code}</TableCell>
+			<TableCell>{invoiceData[index].description}</TableCell>
+			<TableCell>{invoiceData[index].ship_via}</TableCell>
+			<TableCell>{invoiceData[index].required_date}</TableCell>
+			<TableCell>{invoiceData[index].confirmed_date}</TableCell>
+			<TableCell>{invoiceData[index].material}</TableCell>
+			<TableCell>{invoiceData[index].weight}</TableCell>
+			<TableCell>{invoiceData[index].price}</TableCell>
+			<TableCell>{invoiceData[index].total_price}</TableCell>
 			<TableCell>
 				<Box display="flex" justifyContent="flex-start" alignItems="center">
 					<Button onClick={handleEdit} variant="text" color="primary">
@@ -44,7 +47,7 @@ const InvoiceLineStatic = ({ data, setData, index, staticArr, setStaticArr }) =>
 };
 
 InvoiceLineStatic.propTypes = {
-	data: PropTypes.arrayOf(
+	invoiceData: PropTypes.arrayOf(
 		PropTypes.shape({
 			line_number: PropTypes.string.isRequired,
 			part_number: PropTypes.string.isRequired,
@@ -65,8 +68,8 @@ InvoiceLineStatic.propTypes = {
 	).isRequired,
 	setData: PropTypes.func.isRequired,
 	index: PropTypes.number.isRequired,
-	staticArr: PropTypes.arrayOf(PropTypes.bool),
-	setStaticArr: PropTypes.func.isRequired,
+	invoiceTableStaticArr: PropTypes.arrayOf(PropTypes.bool),
+	setInvoiceTableStaticArr: PropTypes.func.isRequired,
 };
 
 export default InvoiceLineStatic;
