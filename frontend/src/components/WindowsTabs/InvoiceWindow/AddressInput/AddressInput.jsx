@@ -1,24 +1,14 @@
-import React from "react";
 import { Grid, TextField, Button, Typography, Divider } from "@mui/material";
+import PropTypes from "prop-types";
+import axios from "axios";
 
-const AddressInput = ({ formData, handleShippingAddressChange, handleBillingAddressChange, handleAutofill }) => {
-	const handleShippingAddressChange = (event) => {
+const AddressInput = ({ customerId, addressData, setData }) => {
+	const handleAddressChange = (event) => {
 		const { name, value } = event.target;
-		setFormData((prev) => ({
+		setData((prev) => ({
 			...prev,
-			shippingAddress: {
-				...prev.shippingAddress,
-				[name]: value,
-			},
-		}));
-	};
-
-	const handleBillingAddressChange = (event) => {
-		const { name, value } = event.target;
-		setFormData((prev) => ({
-			...prev,
-			billingAddress: {
-				...prev.billingAddress,
+			addressData: {
+				...prev.addressData,
 				[name]: value,
 			},
 		}));
@@ -26,31 +16,18 @@ const AddressInput = ({ formData, handleShippingAddressChange, handleBillingAddr
 
 	const handleAutofill = async () => {
 		try {
-			const response = await axios.get(`http://localhost:8000/customers/${formData.selectedCustomerId}/`);
-			const {
-				ship_to_address_line1,
-				ship_to_address_line2,
-				ship_to_address_line3,
-				ship_to_address_line4,
-				sold_to_address_line1,
-				sold_to_address_line2,
-				sold_to_address_line3,
-				sold_to_address_line4,
-			} = response.data;
-
-			setFormData((prev) => ({
+			const response = await axios.get(`http://localhost:8000/customers/${customerId}/`);
+			setData((prev) => ({
 				...prev,
-				shippingAddress: {
-					line1: ship_to_address_line1 || "",
-					line2: ship_to_address_line2 || "",
-					line3: ship_to_address_line3 || "",
-					line4: ship_to_address_line4 || "",
-				},
-				billingAddress: {
-					line1: sold_to_address_line1 || "",
-					line2: sold_to_address_line2 || "",
-					line3: sold_to_address_line3 || "",
-					line4: sold_to_address_line4 || "",
+				addressData: {
+					shipToAddressLine1: response.data.ship_to_address_line1,
+					shipToAddressLine2: response.data.ship_to_address_line2,
+					shipToAddressLine3: response.data.ship_to_address_line3,
+					shipToAddressLine4: response.data.ship_to_address_line4,
+					billToAddressLine1: response.data.sold_to_address_line1,
+					billToAddressLine2: response.data.sold_to_address_line2,
+					billToAddressLine3: response.data.sold_to_address_line3,
+					billToAddressLine4: response.data.sold_to_address_line4,
 				},
 			}));
 		} catch (error) {
@@ -68,38 +45,38 @@ const AddressInput = ({ formData, handleShippingAddressChange, handleBillingAddr
 				<Grid item xs={3}>
 					<TextField
 						label="Shipping Address Line 1"
-						name="line1"
+						name="shipToAddressLine1"
 						variant="outlined"
 						fullWidth
-						value={formData.shippingAddress.line1}
-						onChange={handleShippingAddressChange}
+						value={addressData.shipToAddressLine1}
+						onChange={handleAddressChange}
 						margin="normal"
 					/>
 					<TextField
 						label="Shipping Address Line 2"
-						name="line2"
+						name="shipToAddressLine2"
 						variant="outlined"
 						fullWidth
-						value={formData.shippingAddress.line2}
-						onChange={handleShippingAddressChange}
+						value={addressData.shipToAddressLine2}
+						onChange={handleAddressChange}
 						margin="normal"
 					/>
 					<TextField
 						label="Shipping Address Line 3"
-						name="line3"
+						name="shipToAddressLine3"
 						variant="outlined"
 						fullWidth
-						value={formData.shippingAddress.line3}
-						onChange={handleShippingAddressChange}
+						value={addressData.shipToAddressLine3}
+						onChange={handleAddressChange}
 						margin="normal"
 					/>
 					<TextField
 						label="Shipping Address Line 4"
-						name="line4"
+						name="shipToAddressLine4"
 						variant="outlined"
 						fullWidth
-						value={formData.shippingAddress.line4}
-						onChange={handleShippingAddressChange}
+						value={addressData.shipToAddressLine4}
+						onChange={handleAddressChange}
 						margin="normal"
 					/>
 				</Grid>
@@ -108,38 +85,38 @@ const AddressInput = ({ formData, handleShippingAddressChange, handleBillingAddr
 				<Grid item xs={3}>
 					<TextField
 						label="Bill To Address Line 1"
-						name="line1"
+						name="billToAddressLine1"
 						variant="outlined"
 						fullWidth
-						value={formData.billingAddress.line1}
-						onChange={handleBillingAddressChange}
+						value={addressData.billToAddressLine1}
+						onChange={handleAddressChange}
 						margin="normal"
 					/>
 					<TextField
 						label="Bill To Address Line 2"
-						name="line2"
+						name="billToAddressLine2"
 						variant="outlined"
 						fullWidth
-						value={formData.billingAddress.line2}
-						onChange={handleBillingAddressChange}
+						value={addressData.billToAddressLine2}
+						onChange={handleAddressChange}
 						margin="normal"
 					/>
 					<TextField
 						label="Bill To Address Line 3"
-						name="line3"
+						name="billToAddressLine3"
 						variant="outlined"
 						fullWidth
-						value={formData.billingAddress.line3}
-						onChange={handleBillingAddressChange}
+						value={addressData.billToAddressLine3}
+						onChange={handleAddressChange}
 						margin="normal"
 					/>
 					<TextField
 						label="Bill To Address Line 4"
-						name="line4"
+						name="billToAddressLine4"
 						variant="outlined"
 						fullWidth
-						value={formData.billingAddress.line4}
-						onChange={handleBillingAddressChange}
+						value={addressData.billToAddressLine4}
+						onChange={handleAddressChange}
 						margin="normal"
 					/>
 				</Grid>
@@ -153,6 +130,21 @@ const AddressInput = ({ formData, handleShippingAddressChange, handleBillingAddr
 			</Grid>
 		</>
 	);
+};
+
+AddressInput.propTypes = {
+	addressData: PropTypes.shape({
+		shipToAddressLine1: PropTypes.string.isRequired,
+		shipToAddressLine2: PropTypes.string.isRequired,
+		shipToAddressLine3: PropTypes.string.isRequired,
+		shipToAddressLine4: PropTypes.string.isRequired,
+		billToAddressLine1: PropTypes.string.isRequired,
+		billToAddressLine2: PropTypes.string.isRequired,
+		billToAddressLine3: PropTypes.string.isRequired,
+		billToAddressLine4: PropTypes.string.isRequired,
+	}).isRequired,
+	setData: PropTypes.func.isRequired,
+	customerId: PropTypes.string.isRequired,
 };
 
 export default AddressInput;
