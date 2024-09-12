@@ -1,9 +1,12 @@
 import PropTypes from "prop-types";
 import { FormControl, Select, MenuItem, Button, TextField, TableCell, TableRow } from "@mui/material";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { updateOrderLine } from "../../../../../redux/orderLinesSlice";
 
-const OrderLineEditting = ({ data, onSave }) => {
+const OrderLineEditting = ({ data }) => {
 	const [formData, setFormData] = useState({ ...data });
+	const dispatch = useDispatch();
 
 	const handleChange = (e) => {
 		const { name, value } = e.target;
@@ -13,9 +16,11 @@ const OrderLineEditting = ({ data, onSave }) => {
 		});
 	};
 
-	const handleSave = () => {
-		onSave(formData); // Pass the updated data to the parent component
+	// Save handler to update the order line
+	const handleSave = (updatedData) => {
+		dispatch(updateOrderLine(updatedData));
 	};
+
 	return (
 		<TableRow>
 			<TableCell>{formData.customer_id}</TableCell>
@@ -79,7 +84,7 @@ const OrderLineEditting = ({ data, onSave }) => {
 				</FormControl>
 			</TableCell>
 			<TableCell>
-				<Button onClick={handleSave} variant="text">
+				<Button onClick={() => handleSave(formData)} variant="text">
 					Save
 				</Button>
 			</TableCell>

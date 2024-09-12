@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchOrderLines, updateOrderLine } from "../../../redux/orderLinesSlice";
+import { fetchOrderLines } from "../../../redux/orderLinesSlice";
 import OrderLineStatic from "./OrderLineTable/OrderLineStatic/OrderLineStatic";
 import OrderLineEditting from "./OrderLineTable/OrderLineEditting/OrderLineEditting";
 import { TableContainer, Paper, Table, TableBody, TableCell, TableHead, TableRow, Grid, TextField, Button, Box, Typography } from "@mui/material";
@@ -47,16 +47,6 @@ const OrderLineWindow = () => {
 		};
 		setFilters(clearedFilters);
 		dispatch(fetchOrderLines(clearedFilters));
-	};
-
-	// Edit mode handler
-	const handleEdit = (index) => {
-		dispatch({ type: "orderLines/setEditMode", payload: { index, editMode: staticArr[index] } });
-	};
-
-	// Save handler to update the order line
-	const handleSave = (index, updatedData) => {
-		dispatch(updateOrderLine(updatedData));
 	};
 
 	return (
@@ -189,11 +179,7 @@ const OrderLineWindow = () => {
 						</TableHead>
 						<TableBody>
 							{data.map((row, index) =>
-								staticArr[index] ? (
-									<OrderLineStatic key={index} data={row} onEdit={() => handleEdit(index)} />
-								) : (
-									<OrderLineEditting key={index} data={row} onSave={(updatedData) => handleSave(index, updatedData)} />
-								)
+								staticArr[index] ? <OrderLineStatic key={index} index={index} data={row} /> : <OrderLineEditting key={index} data={row} />
 							)}
 						</TableBody>
 					</Table>

@@ -1,16 +1,21 @@
 import PropTypes from "prop-types";
 import { Dialog, Box, DialogContent, Button, TableCell, TableRow, DialogActions, DialogTitle, Typography } from "@mui/material";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { deleteOrderLine } from "../../../../../redux/orderLinesSlice";
 
-const OrderLineStatic = ({ data, onEdit }) => {
+const OrderLineStatic = ({ index, data }) => {
 	const [openDialog, setOpenDialog] = useState(false);
 	const dispatch = useDispatch();
+	const { staticArr } = useSelector((state) => state.orderLines);
+
+	// Edit mode handler
+	const handleEdit = () => {
+		dispatch({ type: "orderLines/setEditMode", payload: { index, editMode: staticArr[index] } });
+	};
 
 	// Handle delete operation
 	const handleDeleteClick = () => {
-		console.log(data.orderline_id);
 		dispatch(deleteOrderLine(data.orderline_id)); // Dispatch the delete action
 		setOpenDialog(false); // Close the dialog
 	};
@@ -38,7 +43,7 @@ const OrderLineStatic = ({ data, onEdit }) => {
 				<TableCell>{data.status}</TableCell>
 				<TableCell>
 					<Box display="flex" justifyContent="flex-start" alignItems="center">
-						<Button onClick={onEdit} variant="text" color="primary">
+						<Button onClick={handleEdit} variant="text" color="primary">
 							Edit
 						</Button>
 						<Button
@@ -94,7 +99,6 @@ OrderLineStatic.propTypes = {
 		factory: PropTypes.string,
 		status: PropTypes.string,
 	}).isRequired,
-	onEdit: PropTypes.func.isRequired,
+	index: PropTypes.number.isRequired,
 };
-
 export default OrderLineStatic;
