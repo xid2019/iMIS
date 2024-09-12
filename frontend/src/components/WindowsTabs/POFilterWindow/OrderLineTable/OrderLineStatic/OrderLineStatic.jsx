@@ -1,21 +1,20 @@
 import PropTypes from "prop-types";
 import { Dialog, Box, DialogContent, Button, TableCell, TableRow, DialogActions, DialogTitle, Typography } from "@mui/material";
-import axios from "axios";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { deleteOrderLine } from "../../../../../redux/orderLinesSlice";
 
-const OrderLineStatic = ({ data, onEdit, fetchData }) => {
+const OrderLineStatic = ({ data, onEdit }) => {
 	const [openDialog, setOpenDialog] = useState(false);
+	const dispatch = useDispatch();
 
-	const handleDeleteClick = async () => {
-		try {
-			await axios.delete(`http://localhost:8000/order_lines/delete/${data.orderline_id}/`);
-			console.log("Order line deleted successfully");
-		} catch (error) {
-			console.error("Error deleting order line:", error);
-		}
-		setOpenDialog(false);
-		fetchData();
+	// Handle delete operation
+	const handleDeleteClick = () => {
+		console.log(data.orderline_id);
+		dispatch(deleteOrderLine(data.orderline_id)); // Dispatch the delete action
+		setOpenDialog(false); // Close the dialog
 	};
+
 	return (
 		<>
 			<TableRow>
@@ -53,6 +52,7 @@ const OrderLineStatic = ({ data, onEdit, fetchData }) => {
 					</Box>
 				</TableCell>
 			</TableRow>
+
 			<Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
 				<DialogTitle>Confirm Deletion</DialogTitle>
 				<DialogContent>
@@ -95,7 +95,6 @@ OrderLineStatic.propTypes = {
 		status: PropTypes.string,
 	}).isRequired,
 	onEdit: PropTypes.func.isRequired,
-	fetchData: PropTypes.func.isRequired,
 };
 
 export default OrderLineStatic;

@@ -95,7 +95,7 @@ def get_orders(request):
     if where_clauses:
         sql_query += " WHERE " + " AND ".join(where_clauses)
 
-    sql_query += " ORDER BY o.order_date DESC"
+    sql_query += " ORDER BY o.order_date DESC, o.customer_po ASC"
 
     try:
         # Execute the query with parameters
