@@ -2,16 +2,16 @@ import PropTypes from "prop-types";
 import { Dialog, Box, DialogContent, Button, TableCell, TableRow, DialogActions, DialogTitle, Typography } from "@mui/material";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteOrderLine } from "../../../../../redux/orderLinesSlice";
+import { deleteOrderLine } from "../../../../../redux/poFilterWindowSlice";
 
 const OrderLineStatic = ({ index, data }) => {
 	const [openDialog, setOpenDialog] = useState(false);
 	const dispatch = useDispatch();
-	const { staticArr } = useSelector((state) => state.orderLines);
+	const { staticArr } = useSelector((state) => state.poFilterWindow);
 
 	// Edit mode handler
 	const handleEdit = () => {
-		dispatch({ type: "orderLines/setEditMode", payload: { index, editMode: staticArr[index] } });
+		dispatch({ type: "poFilterWindow/setEditMode", payload: { index, editMode: staticArr[index] } });
 	};
 
 	// Handle delete operation

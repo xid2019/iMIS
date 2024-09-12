@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 export const fetchOrderLines = createAsyncThunk(
-  'orderLines/fetchOrderLines',
+  'poFilterWindow/fetchOrderLines',
   async (filters) => {
     const queryParams = new URLSearchParams(filters).toString();
     const response = await axios.get(`http://localhost:8000/orders/?${queryParams}`);
@@ -11,23 +11,23 @@ export const fetchOrderLines = createAsyncThunk(
 );
 
 export const updateOrderLine = createAsyncThunk(
-  'orderLines/updateOrderLine',
+  'poFilterWindow/updateOrderLine',
   async (updatedData) => {
     await axios.put(`http://localhost:8000/order_lines/update/${updatedData.orderline_id}/`, updatedData);
-    return updatedData; // Assuming the updatedData is successfully saved
+    return updatedData; 
   }
 );
 
 export const deleteOrderLine = createAsyncThunk(
-  'orderLines/deleteOrderLine',
+  'poFilterWindow/deleteOrderLine',
   async (orderline_id) => {
     await axios.delete(`http://localhost:8000/order_lines/delete/${orderline_id}/`);
-    return orderline_id; // Return the deleted order line's ID
+    return orderline_id; 
   }
 );
 
-const orderLinesSlice = createSlice({
-  name: 'orderLines',
+const POFilterWindowSlice = createSlice({
+  name: 'poFilterWindow',
   initialState: {
     data: [],
     staticArr: [],
@@ -37,7 +37,7 @@ const orderLinesSlice = createSlice({
   reducers: {
     setEditMode: (state, action) => {
       const { index, editMode } = action.payload;
-      state.staticArr[index] = !editMode; // Toggle edit mode for the row
+      state.staticArr[index] = !editMode;
     },
   },
   extraReducers: (builder) => {
@@ -67,5 +67,5 @@ const orderLinesSlice = createSlice({
   },
 });
 
-export const { setEditMode } = orderLinesSlice.actions;
-export default orderLinesSlice.reducer;
+export const { setEditMode } = POFilterWindowSlice.actions;
+export default POFilterWindowSlice.reducer;

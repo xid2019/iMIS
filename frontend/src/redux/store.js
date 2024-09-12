@@ -1,8 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit';
-import orderLinesReducer from './orderLinesSlice';
+import poFilterWindowReducer from './poFilterWindowSlice';
 
 export const store = configureStore({
   reducer: {
-    orderLines: orderLinesReducer,
+    poFilterWindow: poFilterWindowReducer,
   },
 });

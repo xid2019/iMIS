@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import { FormControl, Select, MenuItem, Button, TextField, TableCell, TableRow } from "@mui/material";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { updateOrderLine } from "../../../../../redux/orderLinesSlice";
+import { updateOrderLine } from "../../../../../redux/poFilterWindowSlice";
 
 const OrderLineEditting = ({ data }) => {
 	const [formData, setFormData] = useState({ ...data });
@@ -110,7 +110,6 @@ OrderLineEditting.propTypes = {
 		updated_confirm_date: PropTypes.string,
 		status: PropTypes.string,
 	}).isRequired,
-	onSave: PropTypes.func.isRequired,
 };
 
 export default OrderLineEditting;

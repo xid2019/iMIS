@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchOrderLines } from "../../../redux/orderLinesSlice";
+import { fetchOrderLines } from "../../../redux/poFilterWindowSlice";
 import OrderLineStatic from "./OrderLineTable/OrderLineStatic/OrderLineStatic";
 import OrderLineEditting from "./OrderLineTable/OrderLineEditting/OrderLineEditting";
 import { TableContainer, Paper, Table, TableBody, TableCell, TableHead, TableRow, Grid, TextField, Button, Box, Typography } from "@mui/material";
 
 const OrderLineWindow = () => {
 	const dispatch = useDispatch();
-	const { data, staticArr } = useSelector((state) => state.orderLines);
+	const { data, staticArr } = useSelector((state) => state.poFilterWindow);
 
 	const [filters, setFilters] = useState({
 		customer_id: "",
