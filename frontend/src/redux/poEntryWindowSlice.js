@@ -9,14 +9,6 @@ export const addOrder = createAsyncThunk(
   }
 );
 
-export const updateOrderLine = createAsyncThunk(
-  'poEntryWindow/updateOrderLine',
-  async (updatedData) => {
-    await axios.put(`http://localhost:8000/order_lines/update/${updatedData.orderline_id}/`, updatedData);
-    return updatedData; 
-  }
-);
-
 const POEntryWindowSlice = createSlice({
   name: 'poEntryWindow',
   initialState: {
