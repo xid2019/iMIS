@@ -1,28 +1,20 @@
 import OrderLineInput from "./OrderLineInput/OrderLineInput";
 import OrderLineEntries from "./OrderLineTable/OrderLineEntries";
-import { useState } from "react";
 import { Grid, Button, Paper } from "@mui/material";
-import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { addOrder } from "../../../redux/poEntryWindowSlice";
 
 function POEntryWindow() {
-	const [data, setData] = useState([]);
-	const [staticArr, setStaticArr] = useState([]);
-
+	const dispatch = useDispatch();
+	const { data } = useSelector((state) => state.poEntryWindow);
 	const handleSave = async () => {
-		try {
-			const response = await axios.post("http://localhost:8000/orders/create/", data);
-			console.log("Data saved successfully:", response.data);
-			setData([]);
-			setStaticArr([]);
-		} catch (error) {
-			console.error("Error saving data:", error);
-		}
+		dispatch(addOrder(data));
 	};
 
 	return (
 		<Paper>
-			<OrderLineInput data={data} setData={setData} staticArr={staticArr} setStaticArr={setStaticArr} />
-			<OrderLineEntries data={data} setData={setData} staticArr={staticArr} setStaticArr={setStaticArr} />
+			<OrderLineInput />
+			<OrderLineEntries data={data} />
 			{data.length > 0 && (
 				<Grid item>
 					<Button variant="contained" color="primary" onClick={handleSave} sx={{ margin: "16px" }}>

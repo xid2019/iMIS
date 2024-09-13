@@ -1,16 +1,17 @@
+import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import { Box, Button, TableCell, TableRow } from "@mui/material";
 
-const OrderLineStatic = ({ data, setData, index, staticArr, setStaticArr }) => {
+const OrderLineStatic = ({ index }) => {
+	const dispatch = useDispatch();
+	const { data, staticArr } = useSelector((state) => state.poEntryWindow);
+	// Edit mode handler
 	const handleEdit = () => {
-		const newStaticArr = [...staticArr];
-		newStaticArr[index] = false;
-		setStaticArr(newStaticArr);
+		dispatch({ type: "poEntryWindow/setEditMode", payload: { index, editMode: staticArr[index] } });
 	};
 
 	const handleDelete = () => {
-		const newData = data.filter((_, i) => i !== index);
-		setData(newData);
+		dispatch({ type: "poEntryWindow/deleteOrderLineInTable", payload: index });
 	};
 	return (
 		<>
@@ -49,33 +50,7 @@ const OrderLineStatic = ({ data, setData, index, staticArr, setStaticArr }) => {
 };
 
 OrderLineStatic.propTypes = {
-	data: PropTypes.arrayOf(
-		PropTypes.shape({
-			order_id: PropTypes.number.isRequired,
-			customer_id: PropTypes.string.isRequired,
-			customer_po: PropTypes.string.isRequired,
-			order_date: PropTypes.string.isRequired,
-			line_number: PropTypes.string.isRequired,
-			part_number: PropTypes.string.isRequired,
-			description: PropTypes.string.isRequired,
-			quantity: PropTypes.number.isRequired,
-			ship_via: PropTypes.string.isRequired,
-			balance: PropTypes.number.isRequired,
-			required_date: PropTypes.string.isRequired,
-			confirmed_date: PropTypes.string,
-			status: PropTypes.string.isRequired,
-			dwg_number: PropTypes.string.isRequired,
-			revision: PropTypes.string.isRequired,
-			price: PropTypes.number.isRequired,
-			material: PropTypes.string.isRequired,
-			weight: PropTypes.string.isRequired,
-			factory: PropTypes.string.isRequired,
-		})
-	).isRequired,
-	setData: PropTypes.func.isRequired,
 	index: PropTypes.number.isRequired,
-	staticArr: PropTypes.arrayOf(PropTypes.bool),
-	setStaticArr: PropTypes.func.isRequired,
 };
 
 export default OrderLineStatic;

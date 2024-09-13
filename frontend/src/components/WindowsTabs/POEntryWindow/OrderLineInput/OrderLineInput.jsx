@@ -17,11 +17,12 @@ import {
 	MenuItem,
 	TableBody,
 } from "@mui/material";
-import PropTypes from "prop-types";
 import axios from "axios";
 import dayjs from "dayjs";
+import { useDispatch } from "react-redux";
 
-const OrderLineInput = ({ data, setData, staticArr, setStaticArr }) => {
+const OrderLineInput = () => {
+	const dispatch = useDispatch();
 	const [formData, setFormData] = useState({
 		customer_id: "",
 		customer_po: "",
@@ -73,8 +74,7 @@ const OrderLineInput = ({ data, setData, staticArr, setStaticArr }) => {
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		setData([...data, formData]);
-		setStaticArr([...staticArr, true]);
+		dispatch({ type: "poEntryWindow/addOrderLineInTable", payload: formData });
 	};
 
 	const handleSearchPart = async () => {
@@ -89,7 +89,6 @@ const OrderLineInput = ({ data, setData, staticArr, setStaticArr }) => {
 			}).toString();
 
 			const response = await axios.get(`http://localhost:8000/parts/?${queryParams}`);
-
 			setSearchedParts(response.data);
 			let selectedPart;
 			if (formData.part_number !== "" || formData.dwg_number !== "") {
@@ -130,10 +129,10 @@ const OrderLineInput = ({ data, setData, staticArr, setStaticArr }) => {
 
 			const updatedFormData = {
 				...formData,
-				shipping_address1: response.data.ship_to_address_line1,
-				shipping_address2: response.data.ship_to_address_line2,
-				shipping_address3: response.data.ship_to_address_line3,
-				shipping_address4: response.data.ship_to_address_line4,
+				shipping_address1: response.data.ship_to_address_line1 || "",
+				shipping_address2: response.data.ship_to_address_line2 || "",
+				shipping_address3: response.data.ship_to_address_line3 || "",
+				shipping_address4: response.data.ship_to_address_line4 || "",
 			};
 
 			setFormData(updatedFormData);
@@ -390,36 +389,6 @@ const OrderLineInput = ({ data, setData, staticArr, setStaticArr }) => {
 			</form>
 		</Paper>
 	);
-};
-
-OrderLineInput.propTypes = {
-	data: PropTypes.arrayOf(
-		PropTypes.shape({
-			customer_id: PropTypes.string,
-			customer_po: PropTypes.string,
-			buyer: PropTypes.string,
-			line_number: PropTypes.string,
-			part_number: PropTypes.string,
-			dwg_number: PropTypes.string,
-			revision: PropTypes.string,
-			quantity: PropTypes.string,
-			description: PropTypes.string,
-			price: PropTypes.string,
-			cost: PropTypes.string,
-			unit: PropTypes.string,
-			pay_terms: PropTypes.string,
-			required_date: PropTypes.string,
-			due_date: PropTypes.string,
-			material: PropTypes.string,
-			weight: PropTypes.string,
-			schd_days: PropTypes.string,
-			factory: PropTypes.string,
-			ship_via: PropTypes.string,
-		})
-	).isRequired,
-	staticArr: PropTypes.arrayOf(PropTypes.bool),
-	setStaticArr: PropTypes.func.isRequired,
-	setData: PropTypes.func.isRequired,
 };
 
 export default OrderLineInput;
