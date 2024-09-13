@@ -3,7 +3,7 @@ import OrderLineEditting from "./OrderLineEditting/OrderLineEditting";
 import { TableContainer, Paper, Table, TableBody, TableCell, TableHead, TableRow, Box } from "@mui/material";
 import { useSelector } from "react-redux";
 
-const OrderLineEntries = () => {
+const OrderLineTable = () => {
 	const { data, staticArr } = useSelector((state) => state.poEntryWindow);
 	return (
 		<Box sx={{ padding: 2 }}>
@@ -43,4 +43,4 @@ const OrderLineEntries = () => {
 	);
 };
 
-export default OrderLineEntries;
+export default OrderLineTable;

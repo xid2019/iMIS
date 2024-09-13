@@ -1,5 +1,5 @@
 import OrderLineInput from "./OrderLineInput/OrderLineInput";
-import OrderLineEntries from "./OrderLineTable/OrderLineEntries";
+import OrderLineTable from "./OrderLineTable/OrderLineTable";
 import { Grid, Button, Paper } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { addOrder } from "../../../redux/poEntryWindowSlice";
@@ -14,7 +14,7 @@ function POEntryWindow() {
 	return (
 		<Paper>
 			<OrderLineInput />
-			<OrderLineEntries data={data} />
+			<OrderLineTable data={data} />
 			{data.length > 0 && (
 				<Grid item>
 					<Button variant="contained" color="primary" onClick={handleSave} sx={{ margin: "16px" }}>
