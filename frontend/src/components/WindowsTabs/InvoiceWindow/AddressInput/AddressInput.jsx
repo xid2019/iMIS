@@ -1,35 +1,33 @@
 import { Grid, TextField, Button, Typography, Divider } from "@mui/material";
-import PropTypes from "prop-types";
 import axios from "axios";
+import { useSelector, useDispatch } from "react-redux";
 
-const AddressInput = ({ customerId, addressData, setData }) => {
+const AddressInput = () => {
+	const dispatch = useDispatch();
+	const { addressData, customerId } = useSelector((state) => state.invoiceWindow);
 	const handleAddressChange = (event) => {
 		const { name, value } = event.target;
-		setData((prev) => ({
-			...prev,
-			addressData: {
-				...prev.addressData,
-				[name]: value,
-			},
-		}));
+		const updatedAddressData = {
+			...addressData,
+			[name]: value,
+		};
+		dispatch({ type: "invoiceWindow/updateAddressData", payload: updatedAddressData });
 	};
 
 	const handleAutofill = async () => {
 		try {
 			const response = await axios.get(`http://localhost:8000/customers/${customerId}/`);
-			setData((prev) => ({
-				...prev,
-				addressData: {
-					shipToAddressLine1: response.data.ship_to_address_line1,
-					shipToAddressLine2: response.data.ship_to_address_line2,
-					shipToAddressLine3: response.data.ship_to_address_line3,
-					shipToAddressLine4: response.data.ship_to_address_line4,
-					billToAddressLine1: response.data.sold_to_address_line1,
-					billToAddressLine2: response.data.sold_to_address_line2,
-					billToAddressLine3: response.data.sold_to_address_line3,
-					billToAddressLine4: response.data.sold_to_address_line4,
-				},
-			}));
+			const newAddressData = {
+				shipToAddressLine1: response.data.ship_to_address_line1 || "",
+				shipToAddressLine2: response.data.ship_to_address_line2 || "",
+				shipToAddressLine3: response.data.ship_to_address_line3 || "",
+				shipToAddressLine4: response.data.ship_to_address_line4 || "",
+				billToAddressLine1: response.data.sold_to_address_line1 || "",
+				billToAddressLine2: response.data.sold_to_address_line2 || "",
+				billToAddressLine3: response.data.sold_to_address_line3 || "",
+				billToAddressLine4: response.data.sold_to_address_line4 || "",
+			};
+			dispatch({ type: "invoiceWindow/updateAddressData", payload: newAddressData });
 		} catch (error) {
 			console.error("Failed to autofill addresses:", error);
 		}
@@ -130,21 +128,6 @@ const AddressInput = ({ customerId, addressData, setData }) => {
 			</Grid>
 		</>
 	);
-};
-
-AddressInput.propTypes = {
-	addressData: PropTypes.shape({
-		shipToAddressLine1: PropTypes.string.isRequired,
-		shipToAddressLine2: PropTypes.string.isRequired,
-		shipToAddressLine3: PropTypes.string.isRequired,
-		shipToAddressLine4: PropTypes.string.isRequired,
-		billToAddressLine1: PropTypes.string.isRequired,
-		billToAddressLine2: PropTypes.string.isRequired,
-		billToAddressLine3: PropTypes.string.isRequired,
-		billToAddressLine4: PropTypes.string.isRequired,
-	}).isRequired,
-	setData: PropTypes.func.isRequired,
-	customerId: PropTypes.string.isRequired,
 };
 
 export default AddressInput;

@@ -67,5 +67,4 @@ const POFilterWindowSlice = createSlice({
   },
 });
 
-export const { setEditMode } = POFilterWindowSlice.actions;
 export default POFilterWindowSlice.reducer;

@@ -46,5 +46,4 @@ const POEntryWindowSlice = createSlice({
   },
 });
 
-export const { setEditMode } = POEntryWindowSlice.actions;
 export default POEntryWindowSlice.reducer;

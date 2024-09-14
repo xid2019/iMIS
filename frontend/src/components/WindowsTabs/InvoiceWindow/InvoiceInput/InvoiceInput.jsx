@@ -1,9 +1,11 @@
 import { Grid, Paper, Typography, Button, Divider, FormControl, Box, InputLabel, Select, MenuItem } from "@mui/material";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import PropTypes from "prop-types";
+import { useDispatch, useSelector } from "react-redux";
 
-const InvoiceInput = ({ setData, setInvoiceTableStaticArr }) => {
+const InvoiceInput = () => {
+	const dispatch = useDispatch();
+	const { customerId } = useSelector((state) => state.invoiceWindow);
 	const [formData, setFormData] = useState({
 		customerMapSub: {},
 		selectedCustomerId: "",
@@ -14,10 +16,11 @@ const InvoiceInput = ({ setData, setInvoiceTableStaticArr }) => {
 	});
 
 	const handleCustomerChange = (event) => {
-		const newCustomerId = event.target.value;
+		const customerId = event.target.value;
+		dispatch({ type: "invoiceWindow/updateCustomerId", payload: customerId });
 		setFormData((prev) => ({
 			...prev,
-			selectedCustomerId: newCustomerId,
+			selectedCustomerId: customerId,
 			selectedSubId: "",
 			selectedCustomerPO: "",
 			selectedLineNumber: "",
@@ -26,6 +29,10 @@ const InvoiceInput = ({ setData, setInvoiceTableStaticArr }) => {
 
 	const handleSubIdChange = (event) => {
 		const newSubId = event.target.value;
+		if (newSubId !== "None") {
+			const newCustomerId = customerId + newSubId;
+			dispatch({ type: "invoiceWindow/updateCustomerId", payload: newCustomerId });
+		}
 		setFormData((prev) => ({
 			...prev,
 			selectedSubId: newSubId,
@@ -68,14 +75,10 @@ const InvoiceInput = ({ setData, setInvoiceTableStaticArr }) => {
 			const response = await axios.get(`http://localhost:8000/order_lines/get/?${queryParams}`);
 			orderLine = response.data[0];
 			orderLine.total_price = orderLine.price * orderLine.quantity;
-			setData((prev) => ({
-				...prev,
-				invoiceData: [...prev.invoiceData, orderLine],
-			}));
+			dispatch({ type: "invoiceWindow/addOrderLineInTable", payload: orderLine });
 		} catch (error) {
 			console.error("Failed to fetch invoice line data:", error);
 		}
-		setInvoiceTableStaticArr((prev) => [...prev, true]);
 	};
 
 	useEffect(() => {
@@ -228,8 +231,8 @@ const InvoiceInput = ({ setData, setInvoiceTableStaticArr }) => {
 										label="Line Number"
 										onChange={handleLineNumberChange}
 									>
-										{formData.customerPOMapOrderLines[formData.selectedCustomerPO].map((lineNumber) => (
-											<MenuItem key={lineNumber} value={lineNumber}>
+										{formData.customerPOMapOrderLines[formData.selectedCustomerPO].map((lineNumber, index) => (
+											<MenuItem key={index} value={lineNumber}>
 												{lineNumber}
 											</MenuItem>
 										))}
@@ -249,11 +252,6 @@ const InvoiceInput = ({ setData, setInvoiceTableStaticArr }) => {
 			</Box>
 		</Paper>
 	);
-};
-
-InvoiceInput.propTypes = {
-	setData: PropTypes.func.isRequired,
-	setInvoiceTableStaticArr: PropTypes.func.isRequired,
 };
 
 export default InvoiceInput;

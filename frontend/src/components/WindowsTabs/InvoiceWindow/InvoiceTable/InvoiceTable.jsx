@@ -1,9 +1,10 @@
 import InvoiceLineEditting from "./InvoiceLineEditting/InvoiceLineEditting";
 import InvoiceLineStatic from "./InvoiceLineStatic/InvoiceLineStatic";
 import { TableContainer, Paper, Table, TableBody, TableCell, TableHead, TableRow, Box } from "@mui/material";
-import PropTypes from "prop-types";
+import { useSelector } from "react-redux";
 
-const InvoiceTable = ({ invoiceData, setData, invoiceTableStaticArr, setInvoiceTableStaticArr }) => {
+const InvoiceTable = () => {
+	const { orderLineData, orderLineStaticArr } = useSelector((state) => state.invoiceWindow);
 	return (
 		<Box sx={{ padding: 2 }}>
 			<TableContainer component={Paper} sx={{ maxHeight: "500px", minWidth: "1000px", maxWidth: "100%", overflowX: "auto" }}>
@@ -29,57 +30,14 @@ const InvoiceTable = ({ invoiceData, setData, invoiceTableStaticArr, setInvoiceT
 						</TableRow>
 					</TableHead>
 					<TableBody>
-						{invoiceData.map((row, index) =>
-							invoiceTableStaticArr[index] ? (
-								<InvoiceLineStatic
-									key={index}
-									index={index}
-									invoiceData={invoiceData}
-									setData={setData}
-									invoiceTableStaticArr={invoiceTableStaticArr}
-									setInvoiceTableStaticArr={setInvoiceTableStaticArr}
-								/>
-							) : (
-								<InvoiceLineEditting
-									key={index}
-									index={index}
-									invoiceData={invoiceData}
-									setData={setData}
-									invoiceTableStaticArr={invoiceTableStaticArr}
-									setInvoiceTableStaticArr={setInvoiceTableStaticArr}
-								/>
-							)
+						{orderLineData.map((row, index) =>
+							orderLineStaticArr[index] ? <InvoiceLineStatic key={index} index={index} /> : <InvoiceLineEditting key={index} index={index} />
 						)}
 					</TableBody>
 				</Table>
 			</TableContainer>
 		</Box>
 	);
-};
-
-InvoiceTable.propTypes = {
-	invoiceData: PropTypes.arrayOf(
-		PropTypes.shape({
-			line_number: PropTypes.string,
-			quantity: PropTypes.number,
-			unit: PropTypes.string,
-			part_number: PropTypes.string,
-			dwg_number: PropTypes.string,
-			revision: PropTypes.string,
-			hts_code: PropTypes.string,
-			description: PropTypes.string,
-			ship_via: PropTypes.string,
-			required_date: PropTypes.string,
-			confirmed_date: PropTypes.string,
-			material: PropTypes.string,
-			weight: PropTypes.number,
-			price: PropTypes.number,
-			total_price: PropTypes.number,
-		})
-	).isRequired,
-	setData: PropTypes.func.isRequired,
-	invoiceTableStaticArr: PropTypes.arrayOf(PropTypes.bool).isRequired,
-	setInvoiceTableStaticArr: PropTypes.func.isRequired,
 };
 
 export default InvoiceTable;

@@ -1,19 +1,16 @@
 import PropTypes from "prop-types";
 import { Box, Button, TableCell, TableRow } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
 
-const ExtraChargeLineStatic = ({ extraChargeData, setData, index, extraChargeTableStaticArr, setExtraChargeTableStaticArr }) => {
+const ExtraChargeLineStatic = ({ index }) => {
+	const dispatch = useDispatch();
+	const { extraChargeData, extraChargeStaticArr } = useSelector((state) => state.invoiceWindow);
 	const handleEdit = () => {
-		const newExtraChargeTableStaticArr = [...extraChargeTableStaticArr];
-		newExtraChargeTableStaticArr[index] = false;
-		setExtraChargeTableStaticArr(newExtraChargeTableStaticArr);
+		dispatch({ type: "invoiceWindow/setExtraChargeEditMode", payload: { index, editMode: extraChargeStaticArr[index] } });
 	};
 
 	const handleDelete = () => {
-		const newData = extraChargeData.filter((_, i) => i !== index);
-		setData((prev) => ({
-			...prev,
-			extraChargeData: newData,
-		}));
+		dispatch({ type: "invoiceWindow/deleteExtraChargeInTable", payload: index });
 	};
 	return (
 		<TableRow>
@@ -36,18 +33,7 @@ const ExtraChargeLineStatic = ({ extraChargeData, setData, index, extraChargeTab
 };
 
 ExtraChargeLineStatic.propTypes = {
-	extraChargeData: PropTypes.arrayOf(
-		PropTypes.shape({
-			extraChargeEntry: PropTypes.string.isRequired,
-			count: PropTypes.number.isRequired,
-			charge: PropTypes.number.isRequired,
-			expense: PropTypes.number.isRequired,
-		})
-	).isRequired,
-	setData: PropTypes.func.isRequired,
 	index: PropTypes.number.isRequired,
-	extraChargeTableStaticArr: PropTypes.arrayOf(PropTypes.bool),
-	setExtraChargeTableStaticArr: PropTypes.func.isRequired,
 };
 
 export default ExtraChargeLineStatic;

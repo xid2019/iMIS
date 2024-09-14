@@ -1,14 +1,15 @@
 import { Grid, TextField, Button, Paper, Box, Typography, Divider } from "@mui/material";
-import PropTypes from "prop-types";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 
-const ExtraChargeInput = ({ setData, setExtraChargeTableStaticArr }) => {
+const ExtraChargeInput = () => {
 	const [formData, setFormData] = useState({
 		extraChargeEntry: "",
 		count: "",
 		charge: "",
 		expense: "",
 	});
+	const dispatch = useDispatch();
 	const handleExtraChargeEntryChange = (event) => {
 		setFormData((prev) => ({
 			...prev,
@@ -38,8 +39,7 @@ const ExtraChargeInput = ({ setData, setExtraChargeTableStaticArr }) => {
 	};
 
 	const handleAddExtraExpense = () => {
-		setData((prev) => ({ ...prev, extraChargeData: [...prev.extraChargeData, formData] }));
-		setExtraChargeTableStaticArr((prev) => [...prev, true]);
+		dispatch({ type: "invoiceWindow/addExtraChargeInTable", payload: formData });
 	};
 
 	return (
@@ -87,11 +87,6 @@ const ExtraChargeInput = ({ setData, setExtraChargeTableStaticArr }) => {
 			</Box>
 		</Paper>
 	);
-};
-
-ExtraChargeInput.propTypes = {
-	setData: PropTypes.func.isRequired,
-	setExtraChargeTableStaticArr: PropTypes.func.isRequired,
 };
 
 export default ExtraChargeInput;
