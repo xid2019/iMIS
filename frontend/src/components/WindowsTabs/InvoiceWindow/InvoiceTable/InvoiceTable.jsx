@@ -25,6 +25,9 @@ const InvoiceTable = () => {
 							<TableCell sx={{ whiteSpace: "nowrap" }}>Material</TableCell>
 							<TableCell sx={{ whiteSpace: "nowrap" }}>Unit Weight(KG)</TableCell>
 							<TableCell sx={{ whiteSpace: "nowrap" }}>Unit Price</TableCell>
+							<TableCell sx={{ whiteSpace: "nowrap" }}>Surcharge</TableCell>
+							<TableCell sx={{ whiteSpace: "nowrap" }}>Surcharge Rate (%)</TableCell>
+							<TableCell sx={{ whiteSpace: "nowrap" }}>Discount (%)</TableCell>
 							<TableCell sx={{ whiteSpace: "nowrap" }}>Total Price</TableCell>
 							<TableCell sx={{ whiteSpace: "nowrap" }}>Pay Terms</TableCell>
 							<TableCell sx={{ whiteSpace: "nowrap" }}>Action</TableCell>

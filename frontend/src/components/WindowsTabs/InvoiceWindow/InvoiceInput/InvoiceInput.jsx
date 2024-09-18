@@ -1,4 +1,4 @@
-import { Grid, Paper, Typography, Button, Divider, FormControl, Box, InputLabel, Select, MenuItem } from "@mui/material";
+import { Grid, Paper, Typography, Button, Divider, TextField, FormControl, Box, InputLabel, Select, MenuItem } from "@mui/material";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
@@ -13,6 +13,9 @@ const InvoiceInput = () => {
 		customerPOMapOrderLines: {},
 		selectedCustomerPO: "",
 		selectedLineNumber: "",
+		surcharge: "",
+		surchargeRate: 0,
+		discount: 0,
 	});
 
 	const handleCustomerChange = (event) => {
@@ -74,7 +77,10 @@ const InvoiceInput = () => {
 		try {
 			const response = await axios.get(`http://localhost:8000/order_lines/get/?${queryParams}`);
 			orderLine = response.data[0];
-			orderLine.total_price = orderLine.price * orderLine.quantity;
+			orderLine.surcharge = formData.surcharge;
+			orderLine.surcharge_rate = Number(formData.surchargeRate);
+			orderLine.discount = Number(formData.discount);
+			orderLine.total_price = orderLine.price * orderLine.quantity * (1 - orderLine.discount / 100) * (1 + orderLine.surcharge_rate / 100);
 			dispatch({ type: "invoiceWindow/addOrderLineInTable", payload: orderLine });
 		} catch (error) {
 			console.error("Failed to fetch invoice line data:", error);
@@ -240,6 +246,34 @@ const InvoiceInput = () => {
 								</FormControl>
 							</Grid>
 						)}
+						<Grid container item spacing={2}>
+							<Grid item xs={3}>
+								<TextField
+									label="Surcharge"
+									value={formData.surcharge || ""}
+									onChange={(e) => setFormData({ ...formData, surcharge: e.target.value })}
+									fullWidth
+								/>
+							</Grid>
+							<Grid item xs={3}>
+								<TextField
+									label="Surcharge Rate (%)"
+									type="number"
+									value={formData.surchargeRate || ""}
+									onChange={(e) => setFormData({ ...formData, surchargeRate: e.target.value })}
+									fullWidth
+								/>
+							</Grid>
+							<Grid item xs={3}>
+								<TextField
+									label="Discount (%)"
+									type="number"
+									value={formData.discount || ""}
+									onChange={(e) => setFormData({ ...formData, discount: e.target.value })}
+									fullWidth
+								/>
+							</Grid>
+						</Grid>
 						<Grid container item spacing={2}>
 							<Grid item xs={3}>
 								<Button disabled={!formData.selectedLineNumber} variant="contained" color="primary" onClick={handleAddInvoiceLine} fullWidth>

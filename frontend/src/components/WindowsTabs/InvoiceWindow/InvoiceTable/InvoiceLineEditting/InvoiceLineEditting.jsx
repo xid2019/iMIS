@@ -8,18 +8,28 @@ const InvoiceLineEditting = ({ index }) => {
 
 	const handleChange = (e) => {
 		const { name, value } = e.target;
-		const newValue = name === "price" || name === "quantity" || name === "weight" ? parseFloat(value) : value;
+		const newValue =
+			name === "price" || name === "quantity" || name === "weight" || name === "surcharge_rate" || name === "discount" ? parseFloat(value) : value;
 		let totalPrice;
 		if (name === "price") {
-			totalPrice = newValue * orderLineData[index].quantity;
+			totalPrice =
+				newValue * orderLineData[index].quantity * (1 - orderLineData[index].discount / 100) * (1 + orderLineData[index].surcharge_rate / 100);
 		}
 		if (name === "quantity") {
-			totalPrice = newValue * orderLineData[index].price;
+			totalPrice =
+				newValue * orderLineData[index].price * (1 - orderLineData[index].discount / 100) * (1 + orderLineData[index].surcharge_rate / 100);
+		}
+		if (name === "surcharge_rate") {
+			totalPrice = orderLineData[index].price * orderLineData[index].quantity * (1 - orderLineData[index].discount / 100) * (1 + newValue / 100);
+		}
+		if (name === "discount") {
+			totalPrice =
+				orderLineData[index].price * orderLineData[index].quantity * (1 - newValue / 100) * (1 + orderLineData[index].surcharge_rate / 100);
 		}
 		const updatedOrderLine = {
 			...orderLineData[index],
 			[name]: value,
-			totalPrice,
+			total_price: totalPrice,
 		};
 		dispatch({ type: "invoiceWindow/updateOrderLineInTable", payload: { index, updatedOrderLine } });
 	};
@@ -75,6 +85,15 @@ const InvoiceLineEditting = ({ index }) => {
 			</TableCell>
 			<TableCell>
 				<TextField value={orderLineData[index].price || ""} name="price" type="number" variant="outlined" onChange={handleChange} />
+			</TableCell>
+			<TableCell>
+				<TextField value={orderLineData[index].surcharge || ""} name="surcharge" variant="outlined" onChange={handleChange} />
+			</TableCell>
+			<TableCell>
+				<TextField value={orderLineData[index].surcharge_rate || ""} name="surcharge_rate" type="number" variant="outlined" onChange={handleChange} />
+			</TableCell>
+			<TableCell>
+				<TextField value={orderLineData[index].discount || ""} name="discount" type="number" variant="outlined" onChange={handleChange} />
 			</TableCell>
 			<TableCell>{orderLineData[index].total_price}</TableCell>
 			<TableCell>

@@ -28,6 +28,9 @@ const InvoiceLineStatic = ({ index }) => {
 			<TableCell>{orderLineData[index].material}</TableCell>
 			<TableCell>{orderLineData[index].weight}</TableCell>
 			<TableCell>{orderLineData[index].price}</TableCell>
+			<TableCell>{orderLineData[index].surcharge}</TableCell>
+			<TableCell>{orderLineData[index].surcharge_rate}</TableCell>
+			<TableCell>{orderLineData[index].discount}</TableCell>
 			<TableCell>{orderLineData[index].total_price}</TableCell>
 			<TableCell>{orderLineData[index].pay_terms}</TableCell>
 			<TableCell>
