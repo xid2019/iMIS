@@ -11,22 +11,23 @@ const InvoiceTable = () => {
 				<Table stickyHeader>
 					<TableHead>
 						<TableRow>
-							<TableCell>Line Number</TableCell>
-							<TableCell>Quantity</TableCell>
-							<TableCell>Unit</TableCell>
-							<TableCell>Part Number</TableCell>
-							<TableCell>DWG Number</TableCell>
-							<TableCell>Revision</TableCell>
-							<TableCell>HTS Code</TableCell>
-							<TableCell>Description</TableCell>
-							<TableCell>Ship Via</TableCell>
-							<TableCell>Required Date</TableCell>
-							<TableCell>Confirmed Date</TableCell>
-							<TableCell>Material</TableCell>
-							<TableCell>Unit Weight(KG)</TableCell>
-							<TableCell>Unit Price</TableCell>
-							<TableCell>Total Price</TableCell>
-							<TableCell>Action</TableCell>
+							<TableCell sx={{ whiteSpace: "nowrap" }}>Line Number</TableCell>
+							<TableCell sx={{ whiteSpace: "nowrap" }}>Quantity</TableCell>
+							<TableCell sx={{ whiteSpace: "nowrap" }}>Unit</TableCell>
+							<TableCell sx={{ whiteSpace: "nowrap" }}>Part Number</TableCell>
+							<TableCell sx={{ whiteSpace: "nowrap" }}>DWG Number</TableCell>
+							<TableCell sx={{ whiteSpace: "nowrap" }}>Revision</TableCell>
+							<TableCell sx={{ whiteSpace: "nowrap" }}>HTS Code</TableCell>
+							<TableCell sx={{ whiteSpace: "nowrap" }}>Description</TableCell>
+							<TableCell sx={{ whiteSpace: "nowrap" }}>Ship Via</TableCell>
+							<TableCell sx={{ whiteSpace: "nowrap" }}>Required Date</TableCell>
+							<TableCell sx={{ whiteSpace: "nowrap" }}>Confirmed Date</TableCell>
+							<TableCell sx={{ whiteSpace: "nowrap" }}>Material</TableCell>
+							<TableCell sx={{ whiteSpace: "nowrap" }}>Unit Weight(KG)</TableCell>
+							<TableCell sx={{ whiteSpace: "nowrap" }}>Unit Price</TableCell>
+							<TableCell sx={{ whiteSpace: "nowrap" }}>Total Price</TableCell>
+							<TableCell sx={{ whiteSpace: "nowrap" }}>Pay Terms</TableCell>
+							<TableCell sx={{ whiteSpace: "nowrap" }}>Action</TableCell>
 						</TableRow>
 					</TableHead>
 					<TableBody>

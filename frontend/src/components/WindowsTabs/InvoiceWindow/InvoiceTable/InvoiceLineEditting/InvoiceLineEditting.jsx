@@ -78,6 +78,19 @@ const InvoiceLineEditting = ({ index }) => {
 			</TableCell>
 			<TableCell>{orderLineData[index].total_price}</TableCell>
 			<TableCell>
+				<FormControl variant="outlined">
+					<Select name="pay_terms" value={orderLineData[index].pay_terms || ""} onChange={handleChange}>
+						<MenuItem value="net 7 days">Net 7 Days</MenuItem>
+						<MenuItem value="net 10 days">Net 10 Days</MenuItem>
+						<MenuItem value="net 15 days">Net 15 Days</MenuItem>
+						<MenuItem value="net 30 days">Net 30 Days</MenuItem>
+						<MenuItem value="net 60 days">Net 60 Days</MenuItem>
+						<MenuItem value="net 90 days">Net 90 Days</MenuItem>
+						<MenuItem value="due upon receipt">Due Upon Receipt</MenuItem>
+					</Select>
+				</FormControl>
+			</TableCell>
+			<TableCell>
 				<Button onClick={handleSave} variant="text">
 					Save
 				</Button>

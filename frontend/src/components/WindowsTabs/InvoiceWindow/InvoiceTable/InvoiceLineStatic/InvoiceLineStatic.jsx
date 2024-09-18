@@ -29,6 +29,7 @@ const InvoiceLineStatic = ({ index }) => {
 			<TableCell>{orderLineData[index].weight}</TableCell>
 			<TableCell>{orderLineData[index].price}</TableCell>
 			<TableCell>{orderLineData[index].total_price}</TableCell>
+			<TableCell>{orderLineData[index].pay_terms}</TableCell>
 			<TableCell>
 				<Box display="flex" justifyContent="flex-start" alignItems="center">
 					<Button onClick={handleEdit} variant="text" color="primary">
