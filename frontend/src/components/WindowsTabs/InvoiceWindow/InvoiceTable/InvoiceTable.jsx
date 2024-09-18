@@ -34,8 +34,16 @@ const InvoiceTable = () => {
 						</TableRow>
 					</TableHead>
 					<TableBody>
-						{orderLineData.map((row, index) =>
-							orderLineStaticArr[index] ? <InvoiceLineStatic key={index} index={index} /> : <InvoiceLineEditting key={index} index={index} />
+						{orderLineData.length === 0 ? (
+							<TableRow>
+								<TableCell colSpan={20} style={{ textAlign: "center", color: "gray" }}>
+									No Data Input
+								</TableCell>
+							</TableRow>
+						) : (
+							orderLineData.map((row, index) =>
+								orderLineStaticArr[index] ? <InvoiceLineStatic key={index} index={index} /> : <InvoiceLineEditting key={index} index={index} />
+							)
 						)}
 					</TableBody>
 				</Table>

@@ -19,11 +19,19 @@ const ExtraChargeTable = () => {
 						</TableRow>
 					</TableHead>
 					<TableBody>
-						{extraChargeData.map((row, index) =>
-							extraChargeStaticArr[index] ? (
-								<ExtraChargeLineStatic key={index} index={index} />
-							) : (
-								<ExtraChargeLineEditting key={index} index={index} />
+						{extraChargeData.length === 0 ? (
+							<TableRow>
+								<TableCell colSpan={5} style={{ textAlign: "center" }}>
+									No Data Input
+								</TableCell>
+							</TableRow>
+						) : (
+							extraChargeData.map((row, index) =>
+								extraChargeStaticArr[index] ? (
+									<ExtraChargeLineStatic key={index} index={index} />
+								) : (
+									<ExtraChargeLineEditting key={index} index={index} />
+								)
 							)
 						)}
 					</TableBody>

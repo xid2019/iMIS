@@ -1,4 +1,4 @@
-import { Grid, TextField, Button, Typography, Divider } from "@mui/material";
+import { Grid, TextField, Button, Typography, Paper, Divider } from "@mui/material";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -33,7 +33,7 @@ const AddressInput = () => {
 		}
 	};
 	return (
-		<>
+		<Paper sx={{ padding: "16px" }}>
 			<Grid item xs={12}>
 				<Typography variant="h6">Shipping Info</Typography>
 				<Divider />
@@ -126,7 +126,7 @@ const AddressInput = () => {
 					</Button>
 				</Grid>
 			</Grid>
-		</>
+		</Paper>
 	);
 };
 

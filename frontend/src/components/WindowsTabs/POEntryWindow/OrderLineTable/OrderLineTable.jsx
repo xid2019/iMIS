@@ -34,8 +34,16 @@ const OrderLineTable = () => {
 						</TableRow>
 					</TableHead>
 					<TableBody>
-						{data.map((row, index) =>
-							staticArr[index] ? <OrderLineStatic key={index} index={index} /> : <OrderLineEditting key={index} index={index} />
+						{data.length === 0 ? (
+							<TableRow>
+								<TableCell colSpan={20} style={{ textAlign: "center", color: "gray" }}>
+									No Data Input
+								</TableCell>
+							</TableRow>
+						) : (
+							data.map((row, index) =>
+								staticArr[index] ? <OrderLineStatic key={index} index={index} /> : <OrderLineEditting key={index} index={index} />
+							)
 						)}
 					</TableBody>
 				</Table>
