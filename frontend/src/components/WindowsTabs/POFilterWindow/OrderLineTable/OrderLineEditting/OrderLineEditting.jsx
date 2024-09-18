@@ -24,17 +24,17 @@ const OrderLineEditting = ({ index }) => {
 
 	return (
 		<TableRow>
-			<TableCell>{data[index].customer_id}</TableCell>
-			<TableCell>{data[index].customer_po}</TableCell>
-			<TableCell>{data[index].order_date}</TableCell>
+			<TableCell>{data[index].customer_id || ""}</TableCell>
+			<TableCell>{data[index].customer_po || ""}</TableCell>
+			<TableCell>{data[index].order_date || ""}</TableCell>
 			<TableCell>
-				<TextField value={data[index].line_number} name="line_number" variant="outlined" onChange={handleChange} />
+				<TextField value={data[index].line_number || ""} name="line_number" variant="outlined" onChange={handleChange} />
 			</TableCell>
 			<TableCell>
-				<TextField value={data[index].part_number} name="part_number" variant="outlined" onChange={handleChange} />
+				<TextField value={data[index].part_number || ""} name="part_number" variant="outlined" onChange={handleChange} />
 			</TableCell>
 			<TableCell>
-				<TextField value={data[index].description} name="description" variant="outlined" onChange={handleChange} />
+				<TextField value={data[index].description || ""} name="description" variant="outlined" onChange={handleChange} />
 			</TableCell>
 			<TableCell>
 				<TextField value={data[index].quantity || ""} name="quantity" type="number" variant="outlined" onChange={handleChange} />
@@ -52,32 +52,32 @@ const OrderLineEditting = ({ index }) => {
 				<TextField value={data[index].balance || ""} name="balance" type="number" variant="outlined" onChange={handleChange} />
 			</TableCell>
 			<TableCell>
-				<TextField name="required_date" type="date" value={data[index].required_date} onChange={handleChange} variant="outlined" />
+				<TextField name="required_date" type="date" value={data[index].required_date || ""} onChange={handleChange} variant="outlined" />
 			</TableCell>
 			<TableCell>
-				<TextField name="confirmed_date" type="date" value={data[index].confirmed_date} onChange={handleChange} variant="outlined" />
+				<TextField name="confirmed_date" type="date" value={data[index].confirmed_date || ""} onChange={handleChange} variant="outlined" />
 			</TableCell>
 			<TableCell>
-				<TextField value={data[index].dwg_number} name="dwg_number" variant="outlined" onChange={handleChange} />
+				<TextField value={data[index].dwg_number || ""} name="dwg_number" variant="outlined" onChange={handleChange} />
 			</TableCell>
 			<TableCell>
-				<TextField value={data[index].revision} name="revision" variant="outlined" onChange={handleChange} />
+				<TextField value={data[index].revision || ""} name="revision" variant="outlined" onChange={handleChange} />
 			</TableCell>
 			<TableCell>
-				<TextField value={data[index].unit_price} name="dwg_number" type="number" variant="outlined" onChange={handleChange} />
+				<TextField value={data[index].unit_price || ""} name="dwg_number" type="number" variant="outlined" onChange={handleChange} />
 			</TableCell>
 			<TableCell>
-				<TextField value={data[index].material} name="material" variant="outlined" onChange={handleChange} />
+				<TextField value={data[index].material || ""} name="material" variant="outlined" onChange={handleChange} />
 			</TableCell>
 			<TableCell>
-				<TextField value={data[index].weight} name="weight" type="number" variant="outlined" onChange={handleChange} />
+				<TextField value={data[index].weight || ""} name="weight" type="number" variant="outlined" onChange={handleChange} />
 			</TableCell>
 			<TableCell>
-				<TextField value={data[index].factory} name="factory" variant="outlined" onChange={handleChange} />
+				<TextField value={data[index].factory || ""} name="factory" variant="outlined" onChange={handleChange} />
 			</TableCell>
 			<TableCell>
 				<FormControl variant="outlined">
-					<Select name="status" value={data[index].status} onChange={handleChange}>
+					<Select name="status" value={data[index].status || ""} onChange={handleChange}>
 						<MenuItem value="OPEN">OPEN</MenuItem>
 						<MenuItem value="DELIVERED">DELIVERED</MenuItem>
 						<MenuItem value="SHIPPED">SHIPPED</MenuItem>

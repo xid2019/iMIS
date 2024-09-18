@@ -30,6 +30,10 @@ const OrderLineTable = () => {
 							<TableCell sx={{ whiteSpace: "nowrap" }}>Factory</TableCell>
 							<TableCell sx={{ whiteSpace: "nowrap" }}>Status</TableCell>
 							<TableCell sx={{ whiteSpace: "nowrap" }}>Pay Terms</TableCell>
+							<TableCell sx={{ whiteSpace: "nowrap" }}>Address Line 1</TableCell>
+							<TableCell sx={{ whiteSpace: "nowrap" }}>Address Line 2</TableCell>
+							<TableCell sx={{ whiteSpace: "nowrap" }}>Address Line 3</TableCell>
+							<TableCell sx={{ whiteSpace: "nowrap" }}>Address Line 4</TableCell>
 							<TableCell sx={{ whiteSpace: "nowrap" }}>Action</TableCell>
 						</TableRow>
 					</TableHead>

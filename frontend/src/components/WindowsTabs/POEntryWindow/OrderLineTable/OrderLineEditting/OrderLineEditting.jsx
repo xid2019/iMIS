@@ -94,6 +94,18 @@ const OrderLineEditting = ({ index }) => {
 				</FormControl>
 			</TableCell>
 			<TableCell>
+				<TextField value={data[index].shipping_address1} name="shipping_address1" variant="outlined" onChange={handleChange} />
+			</TableCell>
+			<TableCell>
+				<TextField value={data[index].shipping_address2} name="shipping_address2" variant="outlined" onChange={handleChange} />
+			</TableCell>
+			<TableCell>
+				<TextField value={data[index].shipping_address3} name="shipping_address3" variant="outlined" onChange={handleChange} />
+			</TableCell>
+			<TableCell>
+				<TextField value={data[index].shipping_address4} name="shipping_address4" variant="outlined" onChange={handleChange} />
+			</TableCell>
+			<TableCell>
 				<Button onClick={handleSave} variant="text">
 					Save
 				</Button>
