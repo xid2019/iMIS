@@ -14,7 +14,7 @@ def delete_old_files(directory):
 def create_po_excel(data, shipping_address):
     
     source_path = "./static/PO TemplateLT.xlsx"
-    destination_directory = "../results"
+    destination_directory = "../results/PO"
     # Delete old files before creating new ones
     delete_old_files(destination_directory)
     
@@ -94,14 +94,10 @@ def create_po_excel(data, shipping_address):
             cell.value = shipping_address[i-9]
         
         # add supplier info
-        sheet.cell(row=9, column=2).value = data[0][20]
-        sheet.cell(row=10, column=2).value = data[0][21]
-        if data[0][24]:
-            sheet.cell(row=11, column=2).value = data[0][22] + ', ' + str(int(float(data[0][24])))
-        else:
-            sheet.cell(row=11, column=2).value = data[0][22]
-        sheet.cell(row=12, column=2).value = data[0][23]
-        
+        sheet.cell(row=9, column=2).value = data[0][21]
+        sheet.cell(row=10, column=2).value = data[0][22]
+        sheet.cell(row=11, column=2).value = data[0][23]
+        sheet.cell(row=12, column=2).value = data[0][24]
         # Define the border style
         border_style = Side(border_style="thin", color="000000")
 

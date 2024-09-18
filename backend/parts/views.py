@@ -9,6 +9,10 @@ from rest_framework import status
 @api_view(['GET'])
 def get_parts(request):
     customer_id = request.GET.get('customer_id')
+    if len(customer_id) == 6:
+        customer_id = customer_id[:3]
+    elif len(customer_id) == 5:
+        customer_id = customer_id[:2]
     part_number = request.GET.get('part_number')
     dwg_number = request.GET.get('dwg_number')
     revision = request.GET.get('revision')

@@ -239,52 +239,61 @@ def create_order(request):
             transaction.set_rollback(True)
             return Response({"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-    # fetch the order with all its order lines
-    with connection.cursor() as cursor:
-        cursor.execute("""
-            SELECT
-                o.id AS order_id,
-                o.customer_id,
-                o.customer_po,
-                o.order_date,
-                ol.id AS orderline_id,
-                ol.line_number,
-                ol.part_number,
-                ol.description,
-                ol.quantity,
-                ol.ship_via,
-                ol.balance,
-                ol.required_date,
-                ol.confirmed_date,
-                ol.factory,
-                ol.status,
-                ol.dwg_number,
-                ol.revision,
-                ol.price,
-                ol.material,
-                ol.weight,
-                ol.pay_terms,
-                s.address_line1,
-                s.address_line2,
-                s.address_line3,
-                s.address_line4,
-                s.zip
-            FROM
-                orders_order AS o
-            JOIN
-                order_lines_orderline AS ol
-            ON
-                o.id = ol.order_id
-            JOIN 
-                suppliers_supplier as s
-            ON 
-                ol.factory = s.name
-            WHERE
-                o.customer_po = %s
-        """, [customer_po])
-        rows = cursor.fetchall()
-        shipping_address = [request.data[0]['shipping_address1'],request.data[0]['shipping_address2'],request.data[0]['shipping_address3'],request.data[0]['shipping_address4']]
-        create_po_excel(rows, shipping_address)
+        try:
+            # Fetch the order with all its order lines
+            with connection.cursor() as cursor:
+                cursor.execute("""
+                    SELECT
+                        o.id AS order_id,
+                        o.customer_id,
+                        o.customer_po,
+                        o.order_date,
+                        ol.id AS orderline_id,
+                        ol.line_number,
+                        ol.part_number,
+                        ol.description,
+                        ol.quantity,
+                        ol.ship_via,
+                        ol.balance,
+                        ol.required_date,
+                        ol.confirmed_date,
+                        ol.factory,
+                        ol.status,
+                        ol.dwg_number,
+                        ol.revision,
+                        ol.price,
+                        ol.material,
+                        ol.weight,
+                        ol.pay_terms,
+                        s.address_line1,
+                        s.address_line2,
+                        s.address_line3,
+                        s.address_line4,
+                        s.zip
+                    FROM
+                        orders_order AS o
+                    JOIN
+                        order_lines_orderline AS ol
+                    ON
+                        o.id = ol.order_id
+                    JOIN 
+                        suppliers_supplier as s
+                    ON 
+                        ol.factory = s.name
+                    WHERE
+                        o.customer_po = %s
+                """, [customer_po])
+                rows = cursor.fetchall()
+                shipping_address = [
+                    request.data[0].get('shipping_address1', ''),
+                    request.data[0].get('shipping_address2', ''),
+                    request.data[0].get('shipping_address3', ''),
+                    request.data[0].get('shipping_address4', '')
+                ]
+                create_po_excel(rows, shipping_address)
+        except Exception as e:
+            transaction.set_rollback(True)
+            return Response({"detail": f"Failed to fetch data or create Excel: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     return Response(status=status.HTTP_201_CREATED)
 
 
