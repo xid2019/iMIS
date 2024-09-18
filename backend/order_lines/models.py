@@ -24,3 +24,4 @@ class OrderLine(models.Model):
     price = models.FloatField(null=True, blank=True)
     material = models.TextField(null=True, blank=True)
     weight = models.FloatField(null=True, blank=True)
+    pay_terms = models.TextField(null=True, blank=True)

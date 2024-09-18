@@ -4,10 +4,10 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteOrderLine } from "../../../../../redux/poFilterWindowSlice";
 
-const OrderLineStatic = ({ index, data }) => {
+const OrderLineStatic = ({ index }) => {
 	const [openDialog, setOpenDialog] = useState(false);
 	const dispatch = useDispatch();
-	const { staticArr } = useSelector((state) => state.poFilterWindow);
+	const { data, staticArr } = useSelector((state) => state.poFilterWindow);
 
 	// Edit mode handler
 	const handleEdit = () => {
@@ -16,31 +16,32 @@ const OrderLineStatic = ({ index, data }) => {
 
 	// Handle delete operation
 	const handleDeleteClick = () => {
-		dispatch(deleteOrderLine(data.orderline_id)); // Dispatch the delete action
+		dispatch(deleteOrderLine(data[index].orderline_id)); // Dispatch the delete action
 		setOpenDialog(false); // Close the dialog
 	};
 
 	return (
 		<>
 			<TableRow>
-				<TableCell>{data.customer_id}</TableCell>
-				<TableCell>{data.customer_po}</TableCell>
-				<TableCell>{data.order_date}</TableCell>
-				<TableCell>{data.line_number}</TableCell>
-				<TableCell>{data.part_number}</TableCell>
-				<TableCell>{data.description}</TableCell>
-				<TableCell>{data.quantity}</TableCell>
-				<TableCell>{data.ship_via}</TableCell>
-				<TableCell>{data.balance}</TableCell>
-				<TableCell>{data.required_date}</TableCell>
-				<TableCell>{data.confirmed_date}</TableCell>
-				<TableCell>{data.dwg_number}</TableCell>
-				<TableCell>{data.revision}</TableCell>
-				<TableCell>{data.price}</TableCell>
-				<TableCell>{data.material}</TableCell>
-				<TableCell>{data.weight}</TableCell>
-				<TableCell>{data.factory}</TableCell>
-				<TableCell>{data.status}</TableCell>
+				<TableCell>{data[index].customer_id}</TableCell>
+				<TableCell>{data[index].customer_po}</TableCell>
+				<TableCell>{data[index].order_date}</TableCell>
+				<TableCell>{data[index].line_number}</TableCell>
+				<TableCell>{data[index].part_number}</TableCell>
+				<TableCell>{data[index].description}</TableCell>
+				<TableCell>{data[index].quantity}</TableCell>
+				<TableCell>{data[index].ship_via}</TableCell>
+				<TableCell>{data[index].balance}</TableCell>
+				<TableCell>{data[index].required_date}</TableCell>
+				<TableCell>{data[index].confirmed_date}</TableCell>
+				<TableCell>{data[index].dwg_number}</TableCell>
+				<TableCell>{data[index].revision}</TableCell>
+				<TableCell>{data[index].price}</TableCell>
+				<TableCell>{data[index].material}</TableCell>
+				<TableCell>{data[index].weight}</TableCell>
+				<TableCell>{data[index].factory}</TableCell>
+				<TableCell>{data[index].status}</TableCell>
+				<TableCell>{data[index].pay_terms}</TableCell>
 				<TableCell>
 					<Box display="flex" justifyContent="flex-start" alignItems="center">
 						<Button onClick={handleEdit} variant="text" color="primary">
@@ -75,30 +76,7 @@ const OrderLineStatic = ({ index, data }) => {
 		</>
 	);
 };
-
 OrderLineStatic.propTypes = {
-	data: PropTypes.shape({
-		order_id: PropTypes.number.isRequired,
-		customer_id: PropTypes.string.isRequired,
-		customer_po: PropTypes.string.isRequired,
-		order_date: PropTypes.string.isRequired,
-		orderline_id: PropTypes.number,
-		line_number: PropTypes.string,
-		part_number: PropTypes.string,
-		description: PropTypes.string,
-		quantity: PropTypes.number,
-		ship_via: PropTypes.string,
-		balance: PropTypes.number,
-		required_date: PropTypes.string,
-		confirmed_date: PropTypes.string,
-		dwg_number: PropTypes.string,
-		revision: PropTypes.string,
-		price: PropTypes.number,
-		material: PropTypes.string,
-		weight: PropTypes.number,
-		factory: PropTypes.string,
-		status: PropTypes.string,
-	}).isRequired,
 	index: PropTypes.number.isRequired,
 };
 export default OrderLineStatic;

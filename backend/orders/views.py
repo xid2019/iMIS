@@ -45,7 +45,8 @@ def get_orders(request):
             ol.price,
             ol.revision,
             ol.weight,
-            ol.status
+            ol.status,
+            ol.pay_terms
         FROM
             orders_order AS o
         JOIN
@@ -123,7 +124,8 @@ def get_orders(request):
             "price",
             "revision",
             "weight",
-            "status"
+            "status",
+            "pay_terms"
         ]
 
         # Convert the result to a list of dictionaries
@@ -152,7 +154,8 @@ def get_order(request, order_id):
                 ol.quantity,
                 ol.ship_via,
                 ol.required_date,
-                ol.status
+                ol.status,
+                ol.pay_terms
             FROM
                 orders_order AS o
             LEFT JOIN
@@ -184,7 +187,8 @@ def get_order(request, order_id):
                 'quantity': row[8],
                 'ship_via': row[9],
                 'required_date': row[10],
-                'status': row[11]
+                'status': row[11],
+                'pay_terms': row[12]
             })
 
     # Convert the dictionary into a list of orders
@@ -259,6 +263,7 @@ def create_order(request):
                 ol.price,
                 ol.material,
                 ol.weight,
+                ol.pay_terms,
                 s.address_line1,
                 s.address_line2,
                 s.address_line3,

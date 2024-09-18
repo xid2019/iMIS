@@ -11,25 +11,26 @@ const OrderLineTable = () => {
 				<Table stickyHeader>
 					<TableHead>
 						<TableRow>
-							<TableCell>Customer ID</TableCell>
-							<TableCell>Customer PO</TableCell>
-							<TableCell>Order Date</TableCell>
-							<TableCell>Line Number</TableCell>
-							<TableCell>Part Number</TableCell>
-							<TableCell>Description</TableCell>
-							<TableCell>Quantity</TableCell>
-							<TableCell>Ship Via</TableCell>
-							<TableCell>Balance</TableCell>
-							<TableCell>Required Date</TableCell>
-							<TableCell>Confirmed Date</TableCell>
-							<TableCell>DWG Number</TableCell>
-							<TableCell>Revision</TableCell>
-							<TableCell>Unit Price</TableCell>
-							<TableCell>Material</TableCell>
-							<TableCell>Unit Weight(KG)</TableCell>
-							<TableCell>Factory</TableCell>
-							<TableCell>Status</TableCell>
-							<TableCell>Action</TableCell>
+							<TableCell sx={{ whiteSpace: "nowrap" }}>Customer ID</TableCell>
+							<TableCell sx={{ whiteSpace: "nowrap" }}>Customer PO</TableCell>
+							<TableCell sx={{ whiteSpace: "nowrap" }}>Order Date</TableCell>
+							<TableCell sx={{ whiteSpace: "nowrap" }}>Line Number</TableCell>
+							<TableCell sx={{ whiteSpace: "nowrap" }}>Part Number</TableCell>
+							<TableCell sx={{ whiteSpace: "nowrap" }}>Description</TableCell>
+							<TableCell sx={{ whiteSpace: "nowrap" }}>Quantity</TableCell>
+							<TableCell sx={{ whiteSpace: "nowrap" }}>Ship Via</TableCell>
+							<TableCell sx={{ whiteSpace: "nowrap" }}>Balance</TableCell>
+							<TableCell sx={{ whiteSpace: "nowrap" }}>Required Date</TableCell>
+							<TableCell sx={{ whiteSpace: "nowrap" }}>Confirmed Date</TableCell>
+							<TableCell sx={{ whiteSpace: "nowrap" }}>DWG Number</TableCell>
+							<TableCell sx={{ whiteSpace: "nowrap" }}>Revision</TableCell>
+							<TableCell sx={{ whiteSpace: "nowrap" }}>Unit Price</TableCell>
+							<TableCell sx={{ whiteSpace: "nowrap" }}>Material</TableCell>
+							<TableCell sx={{ whiteSpace: "nowrap" }}>Unit Weight(KG)</TableCell>
+							<TableCell sx={{ whiteSpace: "nowrap" }}>Factory</TableCell>
+							<TableCell sx={{ whiteSpace: "nowrap" }}>Status</TableCell>
+							<TableCell sx={{ whiteSpace: "nowrap" }}>Pay Terms</TableCell>
+							<TableCell sx={{ whiteSpace: "nowrap" }}>Action</TableCell>
 						</TableRow>
 					</TableHead>
 					<TableBody>

@@ -47,7 +47,8 @@ def get_order_line(request):
         ol.price,
         ol.revision,
         ol.weight,
-        ol.status
+        ol.status,
+        ol.pay_terms
     FROM
         orders_order AS o
     JOIN
@@ -105,7 +106,8 @@ def get_order_line(request):
             "price",
             "revision",
             "weight",
-            "status"
+            "status",
+            "pay_terms"
         ]
 
         # Convert the result to a list of dictionaries
@@ -130,6 +132,7 @@ def create_order_line(request):
         "factory": request.data.get("factory"),
         "balance": request.data.get("balance"),
         "status": 'OPEN',
+        "pay_terms": request.data.get("pay_terms"),
     }
 
     # Check if customer_po exists in the Order table

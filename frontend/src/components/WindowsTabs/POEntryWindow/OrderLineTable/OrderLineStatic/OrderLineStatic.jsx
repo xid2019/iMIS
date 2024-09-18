@@ -34,6 +34,7 @@ const OrderLineStatic = ({ index }) => {
 				<TableCell>{data[index].weight}</TableCell>
 				<TableCell>{data[index].factory}</TableCell>
 				<TableCell>{data[index].status}</TableCell>
+				<TableCell>{data[index].pay_terms}</TableCell>
 				<TableCell>
 					<Box display="flex" justifyContent="flex-start" alignItems="center">
 						<Button onClick={handleEdit} variant="text" color="primary">

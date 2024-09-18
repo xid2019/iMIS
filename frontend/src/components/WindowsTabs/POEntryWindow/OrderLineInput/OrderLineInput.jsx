@@ -159,7 +159,18 @@ const OrderLineInput = () => {
 							<TextField name="buyer" label="Buyer" value={formData.buyer} onChange={handleChange} fullWidth variant="outlined" />
 						</Grid>
 						<Grid item xs={2}>
-							<TextField name="pay_terms" label="Pay Terms" value={formData.pay_terms} onChange={handleChange} fullWidth variant="outlined" />
+							<FormControl fullWidth variant="outlined">
+								<InputLabel>Pay Terms</InputLabel>
+								<Select name="pay_terms" value={formData.pay_terms} onChange={handleChange} label="Pay Terms">
+									<MenuItem value="net 7 days">Net 7 Days</MenuItem>
+									<MenuItem value="net 10 days">Net 10 Days</MenuItem>
+									<MenuItem value="net 15 days">Net 15 Days</MenuItem>
+									<MenuItem value="net 30 days">Net 30 Days</MenuItem>
+									<MenuItem value="net 60 days">Net 60 Days</MenuItem>
+									<MenuItem value="net 90 days">Net 90 Days</MenuItem>
+									<MenuItem value="due upon receipt">Due Upon Receipt</MenuItem>
+								</Select>
+							</FormControl>
 						</Grid>
 					</Grid>
 

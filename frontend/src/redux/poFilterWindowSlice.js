@@ -39,6 +39,10 @@ const POFilterWindowSlice = createSlice({
       const { index, editMode } = action.payload;
       state.staticArr[index] = !editMode;
     },
+    updateOrderLine: (state, action) => {
+      const {index, updatedOrderLine} = action.payload;
+      state.data[index] = updatedOrderLine;
+    },
   },
   extraReducers: (builder) => {
     builder
