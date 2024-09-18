@@ -27,7 +27,8 @@ def create_po_excel(data, shipping_address):
         factory_map_to_data[factory].append(order_line)
 
     for factory in factory_map_to_data:
-        data = factory_map_to_data[factory]    
+        data = factory_map_to_data[factory]
+        data.sort(key=lambda x:int(x[5]))    
         # Step 1: Copy the Excel file to a new directory
         destination_path = os.path.join(destination_directory, "PO_" + factory+ ".xlsx")
         # Ensure the destination directory exists
