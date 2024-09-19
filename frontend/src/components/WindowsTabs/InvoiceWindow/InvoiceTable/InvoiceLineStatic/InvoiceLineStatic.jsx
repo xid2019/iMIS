@@ -16,6 +16,7 @@ const InvoiceLineStatic = ({ index }) => {
 		<TableRow>
 			<TableCell>{orderLineData[index].line_number}</TableCell>
 			<TableCell>{orderLineData[index].quantity}</TableCell>
+			<TableCell>{orderLineData[index].balance}</TableCell>
 			<TableCell>{orderLineData[index].unit}</TableCell>
 			<TableCell>{orderLineData[index].part_number}</TableCell>
 			<TableCell>{orderLineData[index].dwg_number}</TableCell>

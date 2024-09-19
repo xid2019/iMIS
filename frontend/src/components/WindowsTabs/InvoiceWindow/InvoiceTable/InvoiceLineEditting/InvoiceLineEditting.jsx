@@ -9,23 +9,46 @@ const InvoiceLineEditting = ({ index }) => {
 	const handleChange = (e) => {
 		const { name, value } = e.target;
 		const newValue =
-			name === "price" || name === "quantity" || name === "weight" || name === "surcharge_rate" || name === "discount" ? parseFloat(value) : value;
+			name === "price" || name === "quantity" || name === "weight" || name === "surcharge_rate" || name === "discount" || name === "balance"
+				? parseFloat(value)
+				: value;
 		let totalPrice;
 		if (name === "price") {
 			totalPrice =
-				newValue * orderLineData[index].quantity * (1 - orderLineData[index].discount / 100) * (1 + orderLineData[index].surcharge_rate / 100);
+				newValue *
+				(orderLineData[index].quantity + orderLineData[index].balance) *
+				(1 - orderLineData[index].discount / 100) *
+				(1 + orderLineData[index].surcharge_rate / 100);
 		}
 		if (name === "quantity") {
 			totalPrice =
-				newValue * orderLineData[index].price * (1 - orderLineData[index].discount / 100) * (1 + orderLineData[index].surcharge_rate / 100);
+				(newValue + orderLineData[index].balance) *
+				orderLineData[index].price *
+				(1 - orderLineData[index].discount / 100) *
+				(1 + orderLineData[index].surcharge_rate / 100);
 		}
 		if (name === "surcharge_rate") {
-			totalPrice = orderLineData[index].price * orderLineData[index].quantity * (1 - orderLineData[index].discount / 100) * (1 + newValue / 100);
+			totalPrice =
+				orderLineData[index].price *
+				(orderLineData[index].quantity + orderLineData[index].balance) *
+				(1 - orderLineData[index].discount / 100) *
+				(1 + newValue / 100);
 		}
 		if (name === "discount") {
 			totalPrice =
-				orderLineData[index].price * orderLineData[index].quantity * (1 - newValue / 100) * (1 + orderLineData[index].surcharge_rate / 100);
+				orderLineData[index].price *
+				(orderLineData[index].quantity + orderLineData[index].balance) *
+				(1 - newValue / 100) *
+				(1 + orderLineData[index].surcharge_rate / 100);
 		}
+		if (name === "balance") {
+			totalPrice =
+				orderLineData[index].price *
+				(orderLineData[index].quantity + newValue) *
+				(1 - orderLineData[index].discount / 100) *
+				(1 + orderLineData[index].surcharge_rate / 100);
+		}
+		totalPrice = totalPrice.toFixed(2);
 		const updatedOrderLine = {
 			...orderLineData[index],
 			[name]: value,
@@ -43,6 +66,9 @@ const InvoiceLineEditting = ({ index }) => {
 			<TableCell>{orderLineData[index].line_number}</TableCell>
 			<TableCell>
 				<TextField value={orderLineData[index].quantity} type="number" name="quantity" variant="outlined" onChange={handleChange} />
+			</TableCell>
+			<TableCell>
+				<TextField value={orderLineData[index].balance} type="number" name="balance" variant="outlined" onChange={handleChange} />
 			</TableCell>
 			<TableCell>
 				<TextField value={orderLineData[index].unit || ""} name="unit" variant="outlined" onChange={handleChange} />

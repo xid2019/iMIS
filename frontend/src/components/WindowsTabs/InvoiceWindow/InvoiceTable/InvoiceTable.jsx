@@ -13,6 +13,7 @@ const InvoiceTable = () => {
 						<TableRow>
 							<TableCell sx={{ whiteSpace: "nowrap" }}>Line Number</TableCell>
 							<TableCell sx={{ whiteSpace: "nowrap" }}>Quantity</TableCell>
+							<TableCell sx={{ whiteSpace: "nowrap" }}>Balance</TableCell>
 							<TableCell sx={{ whiteSpace: "nowrap" }}>Unit</TableCell>
 							<TableCell sx={{ whiteSpace: "nowrap" }}>Part Number</TableCell>
 							<TableCell sx={{ whiteSpace: "nowrap" }}>DWG Number</TableCell>
