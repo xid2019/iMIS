@@ -162,13 +162,13 @@ const OrderLineInput = () => {
 							<FormControl fullWidth variant="outlined">
 								<InputLabel>Pay Terms</InputLabel>
 								<Select name="pay_terms" value={formData.pay_terms} onChange={handleChange} label="Pay Terms">
-									<MenuItem value="net 7 days">Net 7 Days</MenuItem>
-									<MenuItem value="net 10 days">Net 10 Days</MenuItem>
-									<MenuItem value="net 15 days">Net 15 Days</MenuItem>
-									<MenuItem value="net 30 days">Net 30 Days</MenuItem>
-									<MenuItem value="net 60 days">Net 60 Days</MenuItem>
-									<MenuItem value="net 90 days">Net 90 Days</MenuItem>
-									<MenuItem value="due upon receipt">Due Upon Receipt</MenuItem>
+									<MenuItem value="Net 7 Days">Net 7 Days</MenuItem>
+									<MenuItem value="Net 10 Days">Net 10 Days</MenuItem>
+									<MenuItem value="Net 15 Days">Net 15 Days</MenuItem>
+									<MenuItem value="Net 30 Days">Net 30 Days</MenuItem>
+									<MenuItem value="Net 60 Days">Net 60 Days</MenuItem>
+									<MenuItem value="Net 90 Days">Net 90 Days</MenuItem>
+									<MenuItem value="Due Upon Receipt">Due Upon Receipt</MenuItem>
 								</Select>
 							</FormControl>
 						</Grid>

@@ -7,19 +7,25 @@ import AddressInput from "./AddressInput/AddressInput";
 import { useSelector, useDispatch } from "react-redux";
 import { updateOrderLine } from "../../../redux/invoiceWindow";
 import { useState } from "react";
+import axios from "axios";
 
 function InvoiceWindow() {
 	const dispatch = useDispatch();
 	const [invoiceKey, setInvoiceKey] = useState(0);
-	const { orderLineData, extraChargeData } = useSelector((state) => state.invoiceWindow);
+	const { orderLineData, extraChargeData, addressData } = useSelector((state) => state.invoiceWindow);
 
 	const handleGenerateInvoice = () => {
 		const updatedOrderLineData = orderLineData.map((orderLine) => ({
 			...orderLine,
 			status: "INVOICED",
 		}));
-		dispatch(updateOrderLine(updatedOrderLineData));
+		// dispatch(updateOrderLine(updatedOrderLineData));
 		setInvoiceKey(invoiceKey + 1);
+		axios.post("http://localhost:8000/invoices/create/", {
+			orderLineData,
+			extraChargeData,
+			addressData,
+		});
 		console.log(orderLineData, extraChargeData);
 	};
 
