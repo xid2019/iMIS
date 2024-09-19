@@ -4,22 +4,32 @@ import InvoiceTable from "./InvoiceTable/InvoiceTable";
 import ExtraChargeTable from "./ExtraChargeTable/ExtraChargeTable";
 import ExtraChargeInput from "./ExtraChargeInput/ExtraChargeInput";
 import AddressInput from "./AddressInput/AddressInput";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { updateOrderLine } from "../../../redux/invoiceWindow";
+import { useState } from "react";
 
 function InvoiceWindow() {
+	const dispatch = useDispatch();
+	const [invoiceKey, setInvoiceKey] = useState(0);
 	const { orderLineData, extraChargeData } = useSelector((state) => state.invoiceWindow);
 
 	const handleGenerateInvoice = () => {
+		const updatedOrderLineData = orderLineData.map((orderLine) => ({
+			...orderLine,
+			status: "INVOICED",
+		}));
+		dispatch(updateOrderLine(updatedOrderLineData));
+		setInvoiceKey(invoiceKey + 1);
 		console.log(orderLineData, extraChargeData);
 	};
 
 	return (
 		<Paper>
-			<InvoiceInput></InvoiceInput>
-			<InvoiceTable></InvoiceTable>
-			<ExtraChargeInput></ExtraChargeInput>
-			<ExtraChargeTable></ExtraChargeTable>
-			<AddressInput></AddressInput>
+			<InvoiceInput key={invoiceKey} />
+			<InvoiceTable />
+			<ExtraChargeInput />
+			<ExtraChargeTable />
+			<AddressInput />
 			<Grid container item spacing={2}>
 				<Grid item xs={3}>
 					<Button variant="contained" color="primary" onClick={handleGenerateInvoice} fullWidth>

@@ -81,6 +81,7 @@ const OrderLineEditting = ({ index }) => {
 						<MenuItem value="OPEN">OPEN</MenuItem>
 						<MenuItem value="DELIVERED">DELIVERED</MenuItem>
 						<MenuItem value="SHIPPED">SHIPPED</MenuItem>
+						<MenuItem value="INVOICED">INVOICED</MenuItem>
 					</Select>
 				</FormControl>
 			</TableCell>

@@ -10,26 +10,39 @@ export const fetchOrderLine = createAsyncThunk(
   }
 );
 
+export const updateOrderLine = createAsyncThunk(
+  'poFilterWindow/updateOrderLine',
+  async (updatedOrderLineData) => {
+    const promises = updatedOrderLineData.map((orderLine) =>
+      axios.put(`http://localhost:8000/order_lines/update/${orderLine.orderline_id}/`, orderLine)
+    );
+    const results = await Promise.all(promises);
+    return results.map(result => result.data);
+  } 
+);
+
+const initialState = {
+  orderLineData: [],
+  orderLineStaticArr: [],
+  extraChargeData: [],
+  extraChargeStaticArr: [],
+  addressData: {
+    shipToAddressLine1: "",
+    shipToAddressLine2: "",
+    shipToAddressLine3: "",
+    shipToAddressLine4: "",
+    billToAddressLine1: "",
+    billToAddressLine2: "",
+    billToAddressLine3: "",
+    billToAddressLine4: "",
+  },
+  customerId: "",
+  error: null,
+};
+
 const InvoiceWindowSlice = createSlice({
   name: 'invoiceWindow',
-  initialState: {
-    orderLineData: [],
-    orderLineStaticArr: [],
-    extraChargeData: [],
-    extraChargeStaticArr: [],
-    addressData: {
-      shipToAddressLine1: "",
-			shipToAddressLine2: "",
-			shipToAddressLine3: "",
-			shipToAddressLine4: "",
-			billToAddressLine1: "",
-			billToAddressLine2: "",
-			billToAddressLine3: "",
-			billToAddressLine4: "",
-    },
-    customerId: "",
-    error: null,
-  },
+  initialState,
   reducers: {
     setOrderLineEditMode: (state, action) => {
       const { index, editMode } = action.payload;
@@ -75,6 +88,12 @@ const InvoiceWindowSlice = createSlice({
       const customerId = action.payload;
       state.customerId = customerId;
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(updateOrderLine.fulfilled, () => {
+        return initialState;
+      })
   },
 });
 
