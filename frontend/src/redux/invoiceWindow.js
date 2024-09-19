@@ -10,17 +10,6 @@ export const fetchOrderLine = createAsyncThunk(
   }
 );
 
-export const updateOrderLine = createAsyncThunk(
-  'poFilterWindow/updateOrderLine',
-  async (updatedOrderLineData) => {
-    const promises = updatedOrderLineData.map((orderLine) =>
-      axios.put(`http://localhost:8000/order_lines/update/${orderLine.orderline_id}/`, orderLine)
-    );
-    const results = await Promise.all(promises);
-    return results.map(result => result.data);
-  } 
-);
-
 const initialState = {
   orderLineData: [],
   orderLineStaticArr: [],
@@ -88,12 +77,9 @@ const InvoiceWindowSlice = createSlice({
       const customerId = action.payload;
       state.customerId = customerId;
     },
-  },
-  extraReducers: (builder) => {
-    builder
-      .addCase(updateOrderLine.fulfilled, () => {
-        return initialState;
-      })
+    resetState: () => {
+      return initialState;
+    },
   },
 });
 

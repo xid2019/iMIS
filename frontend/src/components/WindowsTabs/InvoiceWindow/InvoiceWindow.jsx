@@ -5,7 +5,6 @@ import ExtraChargeTable from "./ExtraChargeTable/ExtraChargeTable";
 import ExtraChargeInput from "./ExtraChargeInput/ExtraChargeInput";
 import AddressInput from "./AddressInput/AddressInput";
 import { useSelector, useDispatch } from "react-redux";
-import { updateOrderLine } from "../../../redux/invoiceWindow";
 import { useState } from "react";
 import axios from "axios";
 
@@ -15,18 +14,19 @@ function InvoiceWindow() {
 	const { orderLineData, extraChargeData, addressData } = useSelector((state) => state.invoiceWindow);
 
 	const handleGenerateInvoice = () => {
-		const updatedOrderLineData = orderLineData.map((orderLine) => ({
-			...orderLine,
-			status: "INVOICED",
-		}));
-		// dispatch(updateOrderLine(updatedOrderLineData));
 		setInvoiceKey(invoiceKey + 1);
-		axios.post("http://localhost:8000/invoices/create/", {
-			orderLineData,
-			extraChargeData,
-			addressData,
-		});
-		console.log(orderLineData, extraChargeData);
+		axios
+			.post("http://localhost:8000/invoices/create/", {
+				orderLineData,
+				extraChargeData,
+				addressData,
+			})
+			.then(() => {
+				dispatch({ type: "invoiceWindow/resetState" });
+			})
+			.catch((error) => {
+				console.error("Failed to create invoice:", error);
+			});
 	};
 
 	return (

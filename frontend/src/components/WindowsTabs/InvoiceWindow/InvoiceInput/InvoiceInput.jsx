@@ -140,7 +140,7 @@ const InvoiceInput = () => {
 					if (!map[orderLine.customer_po]) {
 						map[orderLine.customer_po] = [];
 					}
-					map[orderLine.customer_po].push(orderLine.line_number);
+					map[orderLine.customer_po].push([orderLine.line_number, orderLine.status]);
 				}
 				setFormData((prev) => ({
 					...prev,
@@ -239,8 +239,8 @@ const InvoiceInput = () => {
 									>
 										{formData.customerPOMapOrderLines[formData.selectedCustomerPO]
 											.sort((a, b) => a[0] - b[0])
-											.map((lineNumber, index) => (
-												<MenuItem key={index} value={lineNumber}>
+											.map(([lineNumber, status], index) => (
+												<MenuItem key={index} value={lineNumber} disabled={status === "INVOICED"}>
 													{lineNumber}
 												</MenuItem>
 											))}
