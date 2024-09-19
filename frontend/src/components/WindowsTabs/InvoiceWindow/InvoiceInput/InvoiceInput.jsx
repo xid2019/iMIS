@@ -237,11 +237,13 @@ const InvoiceInput = () => {
 										label="Line Number"
 										onChange={handleLineNumberChange}
 									>
-										{formData.customerPOMapOrderLines[formData.selectedCustomerPO].map((lineNumber, index) => (
-											<MenuItem key={index} value={lineNumber}>
-												{lineNumber}
-											</MenuItem>
-										))}
+										{formData.customerPOMapOrderLines[formData.selectedCustomerPO]
+											.sort((a, b) => a[0] - b[0])
+											.map((lineNumber, index) => (
+												<MenuItem key={index} value={lineNumber}>
+													{lineNumber}
+												</MenuItem>
+											))}
 									</Select>
 								</FormControl>
 							</Grid>
