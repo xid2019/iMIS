@@ -7,53 +7,64 @@ const InvoiceLineEditting = ({ index }) => {
 	const { orderLineData, orderLineStaticArr } = useSelector((state) => state.invoiceWindow);
 
 	const handleChange = (e) => {
-		const { name, value } = e.target;
-		const newValue =
-			name === "price" || name === "quantity" || name === "weight" || name === "surcharge_rate" || name === "discount" || name === "balance"
-				? parseFloat(value)
-				: value;
-		let totalPrice;
-		if (name === "price") {
-			totalPrice =
-				newValue *
-				(orderLineData[index].quantity + orderLineData[index].balance) *
-				(1 - orderLineData[index].discount / 100) *
-				(1 + orderLineData[index].surcharge_rate / 100);
-		}
-		if (name === "quantity") {
-			totalPrice =
-				(newValue + orderLineData[index].balance) *
-				orderLineData[index].price *
-				(1 - orderLineData[index].discount / 100) *
-				(1 + orderLineData[index].surcharge_rate / 100);
-		}
-		if (name === "surcharge_rate") {
-			totalPrice =
-				orderLineData[index].price *
-				(orderLineData[index].quantity + orderLineData[index].balance) *
-				(1 - orderLineData[index].discount / 100) *
-				(1 + newValue / 100);
-		}
-		if (name === "discount") {
-			totalPrice =
-				orderLineData[index].price *
-				(orderLineData[index].quantity + orderLineData[index].balance) *
-				(1 - newValue / 100) *
-				(1 + orderLineData[index].surcharge_rate / 100);
-		}
-		if (name === "balance") {
-			totalPrice =
-				orderLineData[index].price *
-				(orderLineData[index].quantity + newValue) *
-				(1 - orderLineData[index].discount / 100) *
-				(1 + orderLineData[index].surcharge_rate / 100);
-		}
-		totalPrice = totalPrice.toFixed(2);
-		const updatedOrderLine = {
+		let { name, value } = e.target;
+		let updatedOrderLine = {
 			...orderLineData[index],
-			[name]: value,
-			total_price: totalPrice,
 		};
+		if (name === "price" || name === "quantity" || name === "weight" || name === "surcharge_rate" || name === "discount" || name === "balance") {
+			value = parseFloat(value);
+		}
+
+		if (name === "price" || name === "quantity" || name === "surcharge_rate" || name === "discount" || name === "balance") {
+			let totalPrice;
+			if (name === "price") {
+				totalPrice =
+					value *
+					(orderLineData[index].quantity + orderLineData[index].balance) *
+					(1 - orderLineData[index].discount / 100) *
+					(1 + orderLineData[index].surcharge_rate / 100);
+			}
+			if (name === "quantity") {
+				totalPrice =
+					(value + orderLineData[index].balance) *
+					orderLineData[index].price *
+					(1 - orderLineData[index].discount / 100) *
+					(1 + orderLineData[index].surcharge_rate / 100);
+			}
+			if (name === "surcharge_rate") {
+				totalPrice =
+					orderLineData[index].price *
+					(orderLineData[index].quantity + orderLineData[index].balance) *
+					(1 - orderLineData[index].discount / 100) *
+					(1 + value / 100);
+			}
+			if (name === "discount") {
+				totalPrice =
+					orderLineData[index].price *
+					(orderLineData[index].quantity + orderLineData[index].balance) *
+					(1 - value / 100) *
+					(1 + orderLineData[index].surcharge_rate / 100);
+			}
+			if (name === "balance") {
+				totalPrice =
+					orderLineData[index].price *
+					(orderLineData[index].quantity + value) *
+					(1 - orderLineData[index].discount / 100) *
+					(1 + orderLineData[index].surcharge_rate / 100);
+			}
+			totalPrice = totalPrice.toFixed(2);
+			updatedOrderLine = {
+				...updatedOrderLine,
+				[name]: value,
+				total_price: totalPrice,
+			};
+		} else {
+			updatedOrderLine = {
+				...updatedOrderLine,
+				[name]: value,
+			};
+		}
+
 		dispatch({ type: "invoiceWindow/updateOrderLineInTable", payload: { index, updatedOrderLine } });
 	};
 
