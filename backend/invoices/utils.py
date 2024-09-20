@@ -127,6 +127,6 @@ def create_invoice_excel(data):
     sheet.merge_cells(
         start_row=start_row + 1, start_column=1, end_row=start_row + 1, end_column=10
     )
-    sheet[f"A20"].alignment = alignment_center
+    sheet[f"A{start_row+1}"].alignment = alignment_center
     # Save the workbook
     wb.save(destination_path)
