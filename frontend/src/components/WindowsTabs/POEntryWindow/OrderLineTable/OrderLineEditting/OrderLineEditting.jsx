@@ -60,6 +60,14 @@ const OrderLineEditting = ({ index }) => {
 				<TextField name="revision" value={data[index].revision} onChange={handleChange} variant="outlined" />
 			</TableCell>
 			<TableCell>
+				<FormControl variant="outlined">
+					<Select name="unit" value={data[index].unit} onChange={handleChange}>
+						<MenuItem value="EACH">EACH</MenuItem>
+						<MenuItem value="KG">KG</MenuItem>
+					</Select>
+				</FormControl>
+			</TableCell>
+			<TableCell>
 				<TextField value={data[index].price} name="price" type="number" variant="outlined" onChange={handleChange} />
 			</TableCell>
 			<TableCell>

@@ -24,6 +24,7 @@ const OrderLineTable = () => {
 							<TableCell sx={{ whiteSpace: "nowrap" }}>Confirmed Date</TableCell>
 							<TableCell sx={{ whiteSpace: "nowrap" }}>DWG Number</TableCell>
 							<TableCell sx={{ whiteSpace: "nowrap" }}>Revision</TableCell>
+							<TableCell sx={{ whiteSpace: "nowrap" }}>Unit</TableCell>
 							<TableCell sx={{ whiteSpace: "nowrap" }}>Unit Price</TableCell>
 							<TableCell sx={{ whiteSpace: "nowrap" }}>Material</TableCell>
 							<TableCell sx={{ whiteSpace: "nowrap" }}>Unit Weight(KG)</TableCell>

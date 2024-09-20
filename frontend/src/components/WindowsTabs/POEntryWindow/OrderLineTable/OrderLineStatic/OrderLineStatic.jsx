@@ -29,6 +29,7 @@ const OrderLineStatic = ({ index }) => {
 				<TableCell>{data[index].confirmed_date}</TableCell>
 				<TableCell>{data[index].dwg_number}</TableCell>
 				<TableCell>{data[index].revision}</TableCell>
+				<TableCell>{data[index].unit}</TableCell>
 				<TableCell>{data[index].price}</TableCell>
 				<TableCell>{data[index].material}</TableCell>
 				<TableCell>{data[index].weight}</TableCell>

@@ -82,7 +82,12 @@ const InvoiceLineEditting = ({ index }) => {
 				<TextField value={orderLineData[index].balance} type="number" name="balance" variant="outlined" onChange={handleChange} />
 			</TableCell>
 			<TableCell>
-				<TextField value={orderLineData[index].unit || ""} name="unit" variant="outlined" onChange={handleChange} />
+				<FormControl variant="outlined">
+					<Select name="unit" value={orderLineData[index].unit || ""} onChange={handleChange}>
+						<MenuItem value="EACH">EACH</MenuItem>
+						<MenuItem value="KG">KG</MenuItem>
+					</Select>
+				</FormControl>
 			</TableCell>
 			<TableCell>
 				<TextField value={orderLineData[index].part_number || ""} name="part_number" variant="outlined" onChange={handleChange} />

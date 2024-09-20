@@ -281,7 +281,13 @@ const OrderLineInput = () => {
 							<TextField name="line_number" label="Line Number" value={formData.line_number} onChange={handleChange} fullWidth variant="outlined" />
 						</Grid>
 						<Grid item xs={2}>
-							<TextField name="unit" label="Unit" value={formData.unit} onChange={handleChange} fullWidth variant="outlined" />
+							<FormControl fullWidth variant="outlined">
+								<InputLabel id="unit-select-label">Unit</InputLabel>
+								<Select labelId="unit-select-label" id="unit-select" name="unit" value={formData.unit} onChange={handleChange} label="Unit">
+									<MenuItem value="EACH">EACH</MenuItem>
+									<MenuItem value="KG">KG</MenuItem>
+								</Select>
+							</FormControl>
 						</Grid>
 					</Grid>
 

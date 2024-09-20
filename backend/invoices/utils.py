@@ -94,6 +94,7 @@ def create_invoice_excel(data):
         if order_line["balance"]:
             balance = int(order_line["balance"])
         sheet[f"I{start_row}"] = int(order_line["quantity"]) + balance
+        sheet[f"J{start_row}"] = order_line["unit"]
         sheet[f"L{start_row}"] = order_line["material"]
         sheet[f"M{start_row}"] = order_line["price"]
 
