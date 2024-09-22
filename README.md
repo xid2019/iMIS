@@ -5,10 +5,11 @@
 1. **Install Git**  
    Download Git from [https://git-scm.com/download/win](https://git-scm.com/download/win)  
    Choose the 64-bit Git for Windows Setup.
-   Create a github account.
-   Fork the xid2019/iMIS repository to your account.
-   Clone the repository to local.
-   Change the repository to private in github.
+
+   - Create a github account.
+   - Fork the xid2019/iMIS repository to your account.
+   - Clone the repository to local.
+   - Change the repository to private in github.
 
 2. **Download PostgreSQL and pgAdmin**  
    Visit [https://www.postgresql.org/download/windows/](https://www.postgresql.org/download/windows/)  
