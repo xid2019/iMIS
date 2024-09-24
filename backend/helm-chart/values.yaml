@@ -1,0 +1,35 @@
+# Docker image settings
+image:
+  repository: "692859903719.dkr.ecr.us-east-2.amazonaws.com/ecr-repo"
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+# Replica settings
+replicaCount: 2
+
+# Service settings
+service:
+  type: LoadBalancer
+  port: 80
+
+# Ingress settings (if needed)
+ingress:
+  enabled: false
+
+# Resource settings
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 250m
+    memory: 256Mi
+
+# Environment variables (set these for Django settings)
+env:
+  DJANGO_SETTINGS_MODULE: "myproject.settings"
+  # DJANGO_SECRET_KEY: "your-secret-key"
+  DJANGO_DEBUG: "False"
+
+# Kubernetes Namespace (optional)
+namespaceOverride: ""
