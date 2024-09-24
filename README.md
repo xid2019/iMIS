@@ -62,9 +62,15 @@
    - Then: `python manage.py migrate`
 
 10. **Run historical migrations scripts**
+
     - Navigate to the `historical_migrations` folder.
     - Run: `python import_parts.py`
     - Run: `python import_companies.py`
+
+11. **Install Helm (Optional)**
+
+    - Run: `brew install helm`
+    - Run: `helm version`
 
 ## Running the App
 
@@ -84,3 +90,12 @@
 1. **Migrate whenever you change the data model.**
    - Run: `python manage.py makemigrations`
    - Then: `python manage.py migrate`
+
+## Deploy to AWS
+
+1. **Create an EC2 instance and install Jenkins.**
+2. **Install Docker on the EC2 instance.**
+   https://docs.docker.com/engine/install/ubuntu/
+3. **Install Helm on the EC2 instance.**
+   https://helm.sh/docs/intro/install/
+4. **Create an ECR repository.**

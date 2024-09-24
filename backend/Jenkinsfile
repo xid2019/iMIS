@@ -18,20 +18,20 @@ pipeline {
             }
         }
 
-        // stage('Build Docker Image') {
-        //     steps {
-        //         script {
-        //             // Login to AWS ECR
-        //             sh "aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_URI}"
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    // Login to AWS ECR
+                    sh "aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_URI}"
                     
-        //             // Build Docker image
-        //             def image = docker.build("${ECR_URI}:${env.BUILD_ID}")
+                    // Build Docker image
+                    def image = docker.build("${ECR_URI}:${env.BUILD_ID}")
                     
-        //             // Push to AWS ECR
-        //             image.push()
-        //         }
-        //     }
-        // }
+                    // Push to AWS ECR
+                    image.push()
+                }
+            }
+        }
 
         // stage('Deploy to EKS using Helm') {
         //     steps {
