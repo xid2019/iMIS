@@ -7,6 +7,7 @@ pipeline {
         EKS_CLUSTER = 'your-eks-cluster'
         NAMESPACE = 'default'
         HELM_RELEASE = 'django-app'
+        IMAGE_TAG = "${env.BUILD_ID}"
     }
     parameters {
         string(name: 'ROLLBACK_TO', defaultValue: '', description: 'Specify a release revision to rollback to (leave empty for no rollback)')
@@ -21,62 +22,75 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    // Login to AWS ECR
-                    sh "aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_URI}"
-                    
-                    // Build Docker image
-                    def image = docker.build("${ECR_URI}:${env.BUILD_ID}")
-                    
-                    // Push to AWS ECR
-                    image.push()
+                    withCredentials([[
+                        $class: 'AmazonWebServicesCredentialsBinding', 
+                        credentialsId: 'aws-credentials',
+                        accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                        secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) 
+                    {
+                        sh '''
+                        echo "Logging into ECR..."
+                        aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ECR_URI
+        
+                        echo "Building Docker image..."
+                        docker build -t django-app:$IMAGE_TAG -f backend/Dockerfile backend/
+        
+                        echo "Tagging Docker image..."
+                        docker tag django-app:$IMAGE_TAG $ECR_URI:django-app-$IMAGE_TAG
+        
+                        echo "Pushing Docker image to ECR..."
+                        docker push $ECR_URI:django-app-$IMAGE_TAG
+        
+                        echo "Docker image pushed successfully."
+                        '''
+                    }
                 }
             }
         }
 
-        // stage('Deploy to EKS using Helm') {
-        //     steps {
-        //         script {
-        //             // Update kubeconfig for EKS
-        //             sh "aws eks --region ${AWS_REGION} update-kubeconfig --name ${EKS_CLUSTER}"
-                    
-        //             if (params.ROLLBACK_TO) {
-        //                 // Rollback to the specified revision
-        //                 sh "helm rollback ${HELM_RELEASE} ${params.ROLLBACK_TO} --namespace ${NAMESPACE}"
-        //             } else {
-        //                 // Deploy using Helm
-        //                 sh """
-        //                     helm upgrade --install ${HELM_RELEASE} ./my-django-chart \
-        //                     --set image.repository=${ECR_URI} \
-        //                     --set image.tag=${env.BUILD_ID} \
-        //                     --namespace ${NAMESPACE} \
-        //                     --wait
-        //                 """
-        //             }
-        //         }
-        //     }
-        // }
+        stage('Deploy to EKS using Helm') {
+            steps {
+                script {
+                    // Update kubeconfig for EKS
+                    sh "aws eks --region ${AWS_REGION} update-kubeconfig --name ${EKS_CLUSTER}"
 
-        // stage('Post-Deployment Verification') {
-        //     steps {
-        //         echo 'Deployment successful. Verifying application...'
-        //         // Add verification logic here, such as running tests
-        //     }
-        // }
+                    if (params.ROLLBACK_TO) {
+                        // Rollback to the specified revision
+                        sh "helm rollback ${HELM_RELEASE} ${params.ROLLBACK_TO} --namespace ${NAMESPACE}"
+                    } else {
+                        // Deploy using Helm
+                        sh """
+                            helm upgrade --install ${HELM_RELEASE} ./my-django-chart \
+                            --set image.repository=${ECR_URI} \
+                            --set image.tag=${IMAGE_TAG} \
+                            --namespace ${NAMESPACE} \
+                            --wait
+                        """
+                    }
+                }
+            }
+        }
+
+        stage('Post-Deployment Verification') {
+            steps {
+                echo 'Deployment successful. Verifying application...'
+                // Add verification logic here, such as running tests
+            }
+        }
     }
-
-    // post {
-    //     always {
-    //         cleanWs() // Clean workspace
-    //     }
-    //     success {
-    //         echo 'Pipeline executed successfully.'
-    //     }
-    //     failure {
-    //         echo 'Pipeline failed. Rollback triggered...'
-    //         script {
-    //             // Optionally handle rollback on failure if not done in the deploy stage
-    //             sh "helm rollback ${HELM_RELEASE} --namespace ${NAMESPACE}"
-    //         }
-    //     }
-    // }
+    post {
+        always {
+            cleanWs() // Clean workspace
+        }
+        success {
+            echo 'Pipeline executed successfully.'
+        }
+        failure {
+            echo 'Pipeline failed. Rollback triggered...'
+            script {
+                // Optionally handle rollback on failure if not done in the deploy stage
+                sh "helm rollback ${HELM_RELEASE} --namespace ${NAMESPACE}"
+            }
+        }
+    }
 }

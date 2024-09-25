@@ -1,35 +1,27 @@
-# Docker image settings
+replicaCount: 1
+
 image:
-  repository: "692859903719.dkr.ecr.us-east-2.amazonaws.com/ecr-repo"
-  tag: "latest"
+  repository: 692859903719.dkr.ecr.us-east-2.amazonaws.com/ecr-repo/django-app
   pullPolicy: IfNotPresent
+  tag: "latest"  # You can set this to your build image tag dynamically
 
-# Replica settings
-replicaCount: 2
-
-# Service settings
 service:
   type: LoadBalancer
   port: 80
 
-# Ingress settings (if needed)
-ingress:
-  enabled: false
+resources: {}
+# Limits and requests for CPU and memory
+# Example:
+# resources:
+#   limits:
+#     cpu: 100m
+#     memory: 256Mi
+#   requests:
+#     cpu: 100m
+#     memory: 256Mi
 
-# Resource settings
-resources:
-  limits:
-    cpu: 500m
-    memory: 512Mi
-  requests:
-    cpu: 250m
-    memory: 256Mi
-
-# Environment variables (set these for Django settings)
-env:
-  DJANGO_SETTINGS_MODULE: "myproject.settings"
-  # DJANGO_SECRET_KEY: "your-secret-key"
-  DJANGO_DEBUG: "False"
-
-# Kubernetes Namespace (optional)
-namespaceOverride: ""
+autoscaling:
+  enabled: true
+  minReplicas: 1
+  maxReplicas: 2
+  targetCPUUtilizationPercentage: 50
