@@ -12,7 +12,6 @@ pipeline {
     parameters {
         string(name: 'ROLLBACK_TO', defaultValue: '', description: 'Specify a release revision to rollback to (leave empty for no rollback)')
     }
-    
     stages {
         stage('Clone Repository') {
             steps {
