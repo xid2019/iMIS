@@ -63,7 +63,7 @@ pipeline {
                         aws eks --region $AWS_REGION update-kubeconfig --name $EKS_CLUSTER
 
                         echo "Deploying with Helm..."
-                        helm upgrade --install ${HELM_RELEASE} ./path/to/your/chart --namespace ${NAMESPACE} --set image.repository=$ECR_URI --set image.tag=django-app-$IMAGE_TAG
+                        helm upgrade --install ${HELM_RELEASE} ./helm-chart/charts --namespace ${NAMESPACE} --set image.repository=$ECR_URI --set image.tag=django-app-$IMAGE_TAG
 
                         echo "Deployment to EKS completed."
                         '''
