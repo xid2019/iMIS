@@ -51,22 +51,28 @@ pipeline {
         stage('Deploy to EKS using Helm') {
             steps {
                 script {
-                    echo "create cluster"
-                    // Update kubeconfig for EKS
-                    sh "aws eks --region ${AWS_REGION} update-kubeconfig --name ${EKS_CLUSTER}"
+                    withCredentials([[
+                        $class: 'AmazonWebServicesCredentialsBinding', 
+                        credentialsId: 'aws-credentials',
+                        accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                        secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) 
+                    {
+                        echo "Updating kubeconfig for EKS cluster..."
+                        sh "aws eks --region ${AWS_REGION} update-kubeconfig --name ${EKS_CLUSTER}"
 
-                    if (params.ROLLBACK_TO) {
-                        // Rollback to the specified revision
-                        sh "helm rollback ${HELM_RELEASE} ${params.ROLLBACK_TO} --namespace ${NAMESPACE}"
-                    } else {
-                        // Deploy using Helm
-                        sh """
-                            helm upgrade --install ${HELM_RELEASE} ./my-django-chart \
-                            --set image.repository=${ECR_URI} \
-                            --set image.tag=${IMAGE_TAG} \
-                            --namespace ${NAMESPACE} \
-                            --wait
-                        """
+                        if (params.ROLLBACK_TO) {
+                            // Rollback to the specified revision
+                            sh "helm rollback ${HELM_RELEASE} ${params.ROLLBACK_TO} --namespace ${NAMESPACE}"
+                        } else {
+                            // Deploy using Helm
+                            sh """
+                                helm upgrade --install ${HELM_RELEASE} ./my-django-chart \
+                                --set image.repository=${ECR_URI} \
+                                --set image.tag=${IMAGE_TAG} \
+                                --namespace ${NAMESPACE} \
+                                --wait
+                            """
+                        }
                     }
                 }
             }
