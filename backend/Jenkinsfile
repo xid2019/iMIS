@@ -4,7 +4,7 @@ pipeline {
         REPO_URL = 'https://github.com/xid2019/iMIS.git'
         ECR_URI = '692859903719.dkr.ecr.us-east-2.amazonaws.com/ecr-repo'
         AWS_REGION = 'us-east-2'
-        EKS_CLUSTER = 'your-eks-cluster'
+        EKS_CLUSTER = 'django-cluster'
         NAMESPACE = 'default'
         HELM_RELEASE = 'django-app'
         IMAGE_TAG = "${env.BUILD_ID}"
