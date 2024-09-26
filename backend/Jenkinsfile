@@ -75,6 +75,7 @@ pipeline {
         stage('Post-Deployment Verification') {
             steps {
                 echo 'Deployment successful. Verifying application...'
+                
                 // Add verification logic here, such as running tests
             }
         }
