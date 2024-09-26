@@ -8,7 +8,6 @@ pipeline {
         NAMESPACE = 'default'
         HELM_RELEASE = 'django-app'
         IMAGE_TAG = "${env.BUILD_ID}"
-        JENKINS_IAM_ROLE = 'arn:aws:iam::692859903719:user/jenkins' // Your Jenkins IAM role ARN
     }
     parameters {
         string(name: 'ROLLBACK_TO', defaultValue: '', description: 'Specify a release revision to rollback to (leave empty for no rollback)')
@@ -60,11 +59,6 @@ pipeline {
                     {
                         echo "Updating kubeconfig for EKS cluster..."
                         sh "aws eks --region ${AWS_REGION} update-kubeconfig --name ${EKS_CLUSTER}"
-
-                        // Add a step to replace user with Jenkins IAM role
-                        sh """
-                        sed -i 's/name: arn:aws:eks:us-east-2:692859903719:cluster/django-cluster/name: ${JENKINS_IAM_ROLE}/' /var/lib/jenkins/.kube/config
-                        """
 
                         if (params.ROLLBACK_TO) {
                             // Rollback to the specified revision
