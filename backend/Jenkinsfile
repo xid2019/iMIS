@@ -51,6 +51,7 @@ pipeline {
         stage('Deploy to EKS using Helm') {
             steps {
                 script {
+                    echo "create cluster"
                     // Update kubeconfig for EKS
                     sh "aws eks --region ${AWS_REGION} update-kubeconfig --name ${EKS_CLUSTER}"
 
