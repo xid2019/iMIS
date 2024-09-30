@@ -105,13 +105,7 @@ const InvoiceLineEditting = ({ index }) => {
 				<TextField value={orderLineData[index].description || ""} name="description" variant="outlined" onChange={handleChange} />
 			</TableCell>
 			<TableCell>
-				<FormControl variant="outlined">
-					<Select name="ship_via" value={orderLineData[index].ship_via} onChange={handleChange}>
-						<MenuItem value="Exp">Exp</MenuItem>
-						<MenuItem value="Air">Air</MenuItem>
-						<MenuItem value="Sea">Sea</MenuItem>
-					</Select>
-				</FormControl>
+				<TextField value={orderLineData[index].ship_via || ""} name="ship_via" variant="outlined" onChange={handleChange} />
 			</TableCell>
 			<TableCell>
 				<TextField name="required_date" type="date" value={orderLineData[index].required_date || ""} onChange={handleChange} variant="outlined" />

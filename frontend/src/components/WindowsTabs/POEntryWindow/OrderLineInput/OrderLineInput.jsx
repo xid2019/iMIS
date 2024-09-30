@@ -16,6 +16,7 @@ import {
 	TableHead,
 	MenuItem,
 	TableBody,
+	Autocomplete,
 } from "@mui/material";
 import axios from "axios";
 import dayjs from "dayjs";
@@ -346,14 +347,18 @@ const OrderLineInput = () => {
 					</Grid>
 					<Grid container item spacing={2}>
 						<Grid item xs={2}>
-							<FormControl variant="outlined">
-								<InputLabel id="ship-via-label">Ship Via</InputLabel>
-								<Select labelId="ship-via-label" name="ship_via" value={formData.ship_via || "Sea"} onChange={handleChange} label="Ship Via">
-									<MenuItem value="Exp">Exp</MenuItem>
-									<MenuItem value="Air">Air</MenuItem>
-									<MenuItem value="Sea">Sea</MenuItem>
-								</Select>
-							</FormControl>
+							<Autocomplete
+								freeSolo
+								options={["Exp", "Air", "Sea"]}
+								value={formData.ship_via || ""}
+								onChange={(event, newValue) => {
+									setFormData((prev) => ({ ...prev, ship_via: newValue }));
+								}}
+								onInputChange={(event, newInputValue) => {
+									setFormData((prev) => ({ ...prev, ship_via: newInputValue }));
+								}}
+								renderInput={(params) => <TextField {...params} label="Ship Via" variant="outlined" />}
+							/>
 						</Grid>
 						<Grid container item spacing={2}>
 							<Grid item xs={2}>
