@@ -83,42 +83,59 @@ def create_invoice_excel(data):
         # fill in the titles
         sheet[f"D12"] = order_line["ship_via"]
         sheet[f"I12"] = order_line["pay_terms"]
+        
         # Populate the row with the order_line data
+        balance = 0
+        if order_line["balance"]:
+            balance = int(order_line["balance"])
+        
+        surcharge_rate = 0
+        if "surcharge_rate" in order_line and order_line["surcharge_rate"]:
+            surcharge_rate = float(order_line["surcharge_rate"])
+        
+        discount_rate = 0
+        if "discount" in order_line and order_line['discount']:
+            discount_rate = float(order_line["discount"])
+
+        basic_unit_price = 0
+        if order_line["price"]:
+            basic_unit_price = float(order_line["price"])
+            if discount_rate:
+                basic_unit_price *= (1-discount_rate*0.01)
+        basic_unit_price = round(basic_unit_price, 2)
+        sheet[f"M{start_row}"] = basic_unit_price
+
+        unit_surcharge = basic_unit_price * 0.01 * surcharge_rate
+        unit_surcharge = round(unit_surcharge, 2)
+
+        unit_price = 0
+        description = order_line["description"]
+        if "include_surcharge" in order_line:
+            unit_price = basic_unit_price + unit_surcharge
+        else:
+            if 'surcharge_line' in order_line:
+                unit_price = unit_surcharge
+                description = 'Surcharge ' + order_line['surcharge']
+            else:
+                unit_price = basic_unit_price
+        
+        total_quantity = int(order_line["quantity"]) + balance
+
         sheet[f"A{start_row}"] = item_num
         item_num += 1
         sheet[f"B{start_row}"] = order_line["customer_po"]
         sheet[f"D{start_row}"] = order_line["line_number"]
         sheet[f"E{start_row}"] = order_line["part_number"]
-        sheet[f"G{start_row}"] = order_line["description"]
-        balance = 0
-        if order_line["balance"]:
-            balance = int(order_line["balance"])
-        sheet[f"I{start_row}"] = int(order_line["quantity"]) + balance
+        sheet[f"I{start_row}"] = total_quantity
         sheet[f"J{start_row}"] = order_line["unit"]
         sheet[f"L{start_row}"] = order_line["material"]
-        sheet[f"M{start_row}"] = order_line["price"]
-
-        surcharge_rate = 0
-        if order_line["surcharge_rate"]:
-            surcharge_rate = float(order_line["surcharge_rate"])
+        sheet[f"G{start_row}"] = description
         sheet[f"N{start_row}"] = str(surcharge_rate) + "%"
         sheet[f"O{start_row}"] = order_line["weight"]
-
-        price = 0
-        if order_line["price"]:
-            price = float(order_line["price"])
-        sheet[f"P{start_row}"] = price * 0.01 * surcharge_rate
-        sheet[f"Q{start_row}"] = price * (0.01 * surcharge_rate + 1)
-        sheet[f"R{start_row}"] = (
-            (int(order_line["quantity"]) + balance)
-            * price
-            * (0.01 * surcharge_rate + 1)
-        )
-        total_due += (
-            (int(order_line["quantity"]) + balance)
-            * price
-            * (0.01 * surcharge_rate + 1)
-        )
+        sheet[f"P{start_row}"] = unit_surcharge
+        sheet[f"Q{start_row}"] = unit_price
+        sheet[f"R{start_row}"] = order_line["total_price"]
+        total_due += order_line["total_price"]
 
         # Move to the next row for the next order_line
         start_row += 1

@@ -9,7 +9,10 @@ from django.db import transaction
 @api_view(["POST"])
 def create_invoice(request):
     order_lines = request.data["orderLineData"]
-    orderline_ids = [line["orderline_id"] for line in order_lines]
+    orderline_ids = []
+    for line in order_lines:
+        if 'surcharge_line' not in line:
+            orderline_ids.append(line["orderline_id"])
 
     try:
         with transaction.atomic():
@@ -17,7 +20,6 @@ def create_invoice(request):
             updated_count = OrderLine.objects.filter(id__in=orderline_ids).update(
                 status="INVOICED"
             )
-
             if updated_count != len(orderline_ids):
                 raise Exception("Not all order lines were updated successfully.")
 

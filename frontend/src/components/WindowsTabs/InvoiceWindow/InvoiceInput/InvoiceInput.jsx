@@ -1,4 +1,18 @@
-import { Grid, Paper, Typography, Button, Divider, TextField, FormControl, Box, InputLabel, Select, MenuItem } from "@mui/material";
+import {
+	Grid,
+	Paper,
+	Typography,
+	FormControlLabel,
+	Checkbox,
+	Button,
+	Divider,
+	TextField,
+	FormControl,
+	Box,
+	InputLabel,
+	Select,
+	MenuItem,
+} from "@mui/material";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
@@ -16,6 +30,7 @@ const InvoiceInput = () => {
 		surcharge: "",
 		surchargeRate: 0,
 		discount: 0,
+		surchargeOneLine: true,
 	});
 
 	const handleCustomerChange = (event) => {
@@ -61,6 +76,13 @@ const InvoiceInput = () => {
 		}));
 	};
 
+	const handleCheckboxChange = (event) => {
+		setFormData((prev) => ({
+			...prev,
+			surchargeOneLine: event.target.checked, // Update the surchargeOneLine value
+		}));
+	};
+
 	const handleAddInvoiceLine = async () => {
 		let customerId = formData.selectedCustomerId;
 		if (formData.selectedSubId !== "None") {
@@ -77,11 +99,41 @@ const InvoiceInput = () => {
 		try {
 			const response = await axios.get(`http://localhost:8000/order_lines/get/?${queryParams}`);
 			orderLine = response.data[0];
-			orderLine.surcharge = formData.surcharge;
-			orderLine.surcharge_rate = Number(formData.surchargeRate);
-			orderLine.discount = Number(formData.discount);
-			orderLine.total_price = orderLine.price * orderLine.quantity * (1 - orderLine.discount / 100) * (1 + orderLine.surcharge_rate / 100);
-			dispatch({ type: "invoiceWindow/addOrderLineInTable", payload: orderLine });
+			if (!orderLine.balance) {
+				orderLine.balance = 0;
+			}
+			if (formData.surchargeOneLine) {
+				orderLine.surcharge = formData.surcharge;
+				orderLine.surcharge_rate = Number(formData.surchargeRate);
+				orderLine.discount = Number(formData.discount);
+				orderLine.total_price =
+					((orderLine.price * (1 - orderLine.discount / 100)).toFixed(2) * (1 + orderLine.surcharge_rate / 100)).toFixed(2) *
+					(orderLine.quantity + orderLine.balance);
+				orderLine.include_surcharge = true;
+				dispatch({ type: "invoiceWindow/addOrderLineInTable", payload: orderLine });
+			} else {
+				// First dispatch without surcharge
+				const orderLineWithoutSurcharge = {
+					...orderLine,
+					discount: Number(formData.discount),
+					total_price: (orderLine.price * (1 - Number(formData.discount) / 100)).toFixed(2) * (orderLine.quantity + orderLine.balance),
+				};
+
+				// Second dispatch for the surcharge line
+				const surchargeOrderLine = {
+					...orderLine, // Copy the original order line
+					surcharge: formData.surcharge,
+					surcharge_rate: Number(formData.surchargeRate),
+					discount: Number(formData.discount),
+					total_price:
+						(((orderLine.price * (1 - Number(formData.discount) / 100)).toFixed(2) * Number(formData.surchargeRate)) / 100).toFixed(2) *
+						(orderLine.quantity + orderLine.balance),
+					surcharge_line: true,
+				};
+
+				dispatch({ type: "invoiceWindow/addOrderLineInTable", payload: orderLineWithoutSurcharge });
+				dispatch({ type: "invoiceWindow/addOrderLineInTable", payload: surchargeOrderLine });
+			}
 		} catch (error) {
 			console.error("Failed to fetch invoice line data:", error);
 		}
@@ -264,6 +316,12 @@ const InvoiceInput = () => {
 									value={formData.surchargeRate || ""}
 									onChange={(e) => setFormData({ ...formData, surchargeRate: e.target.value })}
 									fullWidth
+								/>
+							</Grid>
+							<Grid item xs={3}>
+								<FormControlLabel
+									control={<Checkbox checked={formData.surchargeOneLine} onChange={handleCheckboxChange} color="primary" />}
+									label="Apply Surcharge on Same Line"
 								/>
 							</Grid>
 							<Grid item xs={3}>
