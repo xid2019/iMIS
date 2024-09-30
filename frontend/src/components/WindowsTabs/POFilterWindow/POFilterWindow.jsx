@@ -5,7 +5,7 @@ import OrderLineStatic from "./OrderLineTable/OrderLineStatic/OrderLineStatic";
 import OrderLineEditting from "./OrderLineTable/OrderLineEditting/OrderLineEditting";
 import { TableContainer, Paper, Table, TableBody, TableCell, TableHead, TableRow, Grid, TextField, Button, Box, Typography } from "@mui/material";
 
-const OrderLineWindow = () => {
+const POFilterWindow = () => {
 	const dispatch = useDispatch();
 	const { data, staticArr } = useSelector((state) => state.poFilterWindow);
 
@@ -191,4 +191,4 @@ const OrderLineWindow = () => {
 	);
 };
 
-export default OrderLineWindow;
+export default POFilterWindow;
