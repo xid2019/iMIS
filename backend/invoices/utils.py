@@ -139,6 +139,45 @@ def create_invoice_excel(data):
 
         # Move to the next row for the next order_line
         start_row += 1
+
+    for extra_charge in extra_charges:
+        # Insert a new row at the current start_row position
+        sheet.insert_rows(start_row)
+
+        # Add borders
+        for cell in sheet[start_row]:
+            cell.border = border_style
+
+        # Merge cells
+        sheet.merge_cells(
+            start_row=start_row, start_column=2, end_row=start_row, end_column=3
+        )
+        sheet.merge_cells(
+            start_row=start_row, start_column=5, end_row=start_row, end_column=6
+        )
+        sheet.merge_cells(
+            start_row=start_row, start_column=7, end_row=start_row, end_column=8
+        )
+
+        # Center the content
+        for cell in sheet[start_row]:
+            cell.alignment = alignment_center
+        
+        description = extra_charge["extraChargeEntry"]
+        quantity = int(extra_charge["count"])
+        unit_price = float(extra_charge["charge"])
+        total_price = quantity * unit_price
+        total_due += total_price
+        sheet[f"A{start_row}"] = item_num
+        item_num += 1
+        sheet[f"G{start_row}"] = description
+        sheet[f"I{start_row}"] = quantity
+        sheet[f"Q{start_row}"] = unit_price
+        sheet[f"R{start_row}"] = total_price
+
+        # Move to the next row for the next order_line
+        start_row += 1
+
     sheet[f"R{start_row}"] = total_due
     # Adjust the styles
     sheet.merge_cells(
