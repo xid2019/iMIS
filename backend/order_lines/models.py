@@ -4,8 +4,6 @@ from parts.models import Part
 
 
 # Create your models here.
-
-
 class OrderLine(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="order")
     line_number = models.CharField(max_length=10)

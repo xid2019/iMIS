@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "customers",
     "suppliers",
     "invoices",
+    "inventories",
     "corsheaders",
     "rest_framework",
 ]
