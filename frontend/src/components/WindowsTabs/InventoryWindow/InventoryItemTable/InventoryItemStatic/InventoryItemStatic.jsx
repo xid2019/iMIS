@@ -26,6 +26,7 @@ const InventoryItemStatic = ({ index }) => {
 				<TableCell>{data[index].factory}</TableCell>
 				<TableCell>{data[index].min_inventory}</TableCell>
 				<TableCell>{data[index].max_inventory}</TableCell>
+				<TableCell>{data[index].quantity}</TableCell>
 				<TableCell>
 					<Box display="flex" justifyContent="flex-start" alignItems="center">
 						<Button onClick={handleEdit} variant="text" color="primary">

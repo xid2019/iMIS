@@ -28,6 +28,7 @@ const InventoryItemTable = () => {
 							<TableCell sx={{ whiteSpace: "nowrap" }}>Factory</TableCell>
 							<TableCell sx={{ whiteSpace: "nowrap" }}>Min Inventory</TableCell>
 							<TableCell sx={{ whiteSpace: "nowrap" }}>Max Inventory</TableCell>
+							<TableCell sx={{ whiteSpace: "nowrap" }}>Quantity</TableCell>
 							<TableCell sx={{ whiteSpace: "nowrap" }}>Action</TableCell>
 						</TableRow>
 					</TableHead>

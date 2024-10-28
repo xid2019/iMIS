@@ -1,6 +1,7 @@
 from rest_framework.decorators import api_view
+from django.db.models.functions import Coalesce
 from .models import InventoryItem, InventoryRecord
-from django.db.models import Q 
+from django.db.models import Sum, Value
 from .serializers import InventoryItemSerializer, InventoryRecordSerializer
 from rest_framework.response import Response
 from rest_framework import status
@@ -23,7 +24,9 @@ def create_inventory_item(request):
 
 @api_view(['GET'])
 def get_inventory_items(request):
-    inventory_items = InventoryItem.objects.all()
+    inventory_items = InventoryItem.objects.annotate(
+        quantity=Coalesce(Sum('records__quantity'), Value(0))
+    )
     serializer = InventoryItemSerializer(inventory_items, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
