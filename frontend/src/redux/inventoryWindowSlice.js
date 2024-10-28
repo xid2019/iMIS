@@ -17,6 +17,14 @@ export const deleteInventoryItem = createAsyncThunk(
   }
 );
 
+export const updateInventoryItem = createAsyncThunk(
+  'inventoryWindow/updateInventoryItem',
+  async (updatedData) => {
+    await axios.put(`http://localhost:8000/inventories/inventory_items/update/${updatedData.id}/`, updatedData);
+    return updatedData; 
+  }
+);
+
 export const createInventoryItem = createAsyncThunk(
   'inventoryWindow/createInventoryItem',
   async (data) => {
@@ -29,9 +37,19 @@ const InventoryWindowSlice = createSlice({
   name: 'inventoryWindow',
   initialState: {
     data: [],
+    staticArr: [],
     error: null,
   },
-  reducers: {},
+  reducers: {
+    setEditMode: (state, action) => {
+      const { index, editMode } = action.payload;
+      state.staticArr[index] = !editMode;
+    },
+    updateInventoryItem: (state, action) => {
+      const {index, updatedInventoryItem} = action.payload;
+      state.data[index] = updatedInventoryItem;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchInventoryItems.pending, (state) => {
@@ -40,10 +58,18 @@ const InventoryWindowSlice = createSlice({
       .addCase(fetchInventoryItems.fulfilled, (state, action) => {
         state.status = 'succeeded';
         state.data = action.payload;
+        state.staticArr = new Array(action.payload.length).fill(true);
       })
       .addCase(fetchInventoryItems.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.error.message;
+      })
+      .addCase(updateInventoryItem.fulfilled, (state, action) => {
+        const index = state.data.findIndex((item) => item.orderline_id === action.payload.orderline_id);
+        if (index !== -1) {
+          state.data[index] = action.payload;
+          state.staticArr[index] = true;
+        }
       })
       .addCase(deleteInventoryItem.fulfilled, (state, action) => {
         state.data = state.data.filter((item) => item.orderline_id !== action.payload);

@@ -26,8 +26,8 @@ const InventoryItemInput = () => {
 		}));
 	};
 
-	const handleAddItem = () => {
-		dispatch(createInventoryItem(formData));
+	const handleAddItem = async () => {
+		await dispatch(createInventoryItem(formData));
 		dispatch(fetchInventoryItems());
 	};
 

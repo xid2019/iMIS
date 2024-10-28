@@ -1,15 +1,16 @@
 import { TableContainer, Paper, Table, TableBody, TableCell, TableHead, TableRow, Box } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
-import InventoryItemLine from "./InventoryItemLine/InventoryItemLine";
+import InventoryItemStatic from "./InventoryItemStatic/InventoryItemStatic";
 import { useEffect } from "react";
 import { fetchInventoryItems } from "../../../../redux/inventoryWindowSlice";
+import InventoryItemEditting from "./InventoryItemEditting/InventoryItemEditting";
 
 const InventoryItemTable = () => {
-	const { data } = useSelector((state) => state.inventoryWindow);
+	const { data, staticArr } = useSelector((state) => state.inventoryWindow);
 	const dispatch = useDispatch();
 	useEffect(() => {
 		dispatch(fetchInventoryItems());
-	}, [dispatch, data]);
+	}, [dispatch]);
 
 	return (
 		<Box sx={{ padding: 2 }}>
@@ -31,9 +32,9 @@ const InventoryItemTable = () => {
 						</TableRow>
 					</TableHead>
 					<TableBody>
-						{data.map((row, index) => (
-							<InventoryItemLine key={index} index={index} />
-						))}
+						{data.map((row, index) =>
+							staticArr[index] ? <InventoryItemStatic key={index} index={index} /> : <InventoryItemEditting key={index} index={index} />
+						)}
 					</TableBody>
 				</Table>
 			</TableContainer>

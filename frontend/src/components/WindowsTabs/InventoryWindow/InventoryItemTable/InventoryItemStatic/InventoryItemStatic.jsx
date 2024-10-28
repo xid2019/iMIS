@@ -2,9 +2,13 @@ import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import { Box, Button, TableCell, TableRow } from "@mui/material";
 
-const InventoryItemLine = ({ index }) => {
+const InventoryItemStatic = ({ index }) => {
 	const dispatch = useDispatch();
-	const { data } = useSelector((state) => state.inventoryWindow);
+	const { data, staticArr } = useSelector((state) => state.inventoryWindow);
+
+	const handleEdit = () => {
+		dispatch({ type: "inventoryWindow/setEditMode", payload: { index, editMode: staticArr[index] } });
+	};
 
 	const handleDelete = () => {
 		dispatch({ type: "inventoryWindow/deleteOrderLineInTable", payload: index });
@@ -24,6 +28,9 @@ const InventoryItemLine = ({ index }) => {
 				<TableCell>{data[index].max_inventory}</TableCell>
 				<TableCell>
 					<Box display="flex" justifyContent="flex-start" alignItems="center">
+						<Button onClick={handleEdit} variant="text" color="primary">
+							Edit
+						</Button>
 						<Button onClick={handleDelete} variant="text" color="error" style={{ marginLeft: 8 }}>
 							Delete
 						</Button>
@@ -34,8 +41,8 @@ const InventoryItemLine = ({ index }) => {
 	);
 };
 
-InventoryItemLine.propTypes = {
+InventoryItemStatic.propTypes = {
 	index: PropTypes.number.isRequired,
 };
 
-export default InventoryItemLine;
+export default InventoryItemStatic;
