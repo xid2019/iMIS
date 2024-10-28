@@ -11,3 +11,8 @@ class InventoryItem(models.Model):
     factory = models.TextField(null=True, blank=True)
     min_inventory = models.IntegerField(null=True, blank=True)
     max_inventory = models.IntegerField(null=True, blank=True)
+
+class InventoryRecord(models.Model):
+    inventory_item = models.ForeignKey(InventoryItem, on_delete=models.CASCADE, related_name="records")
+    quantity = models.IntegerField()
+    timestamp = models.DateTimeField(auto_now_add=True)
