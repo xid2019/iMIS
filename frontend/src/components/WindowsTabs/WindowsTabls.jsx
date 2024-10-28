@@ -3,6 +3,7 @@ import { Box, Tab, Tabs, AppBar } from "@mui/material";
 import POFilterWindow from "./POFilterWindow/POFilterWindow";
 import POEntryWindow from "./POEntryWindow/POEntryWindow";
 import InvoiceWindow from "./InvoiceWindow/InvoiceWindow";
+import InventoryWindow from "./InventoryWindow/InventoryWindow";
 
 function WindowsTabs() {
 	const [selectedTab, setSelectedTab] = useState(0);
@@ -20,6 +21,7 @@ function WindowsTabs() {
 					<Tab label="PO Filter" />
 					<Tab label="PO Entry" />
 					<Tab label="Invoice" />
+					<Tab label="Inventory" />
 				</Tabs>
 			</AppBar>
 
@@ -28,6 +30,7 @@ function WindowsTabs() {
 				{selectedTab === 0 && <POFilterWindow />}
 				{selectedTab === 1 && <POEntryWindow />}
 				{selectedTab === 2 && <InvoiceWindow />}
+				{selectedTab === 3 && <InventoryWindow />}
 			</Box>
 		</Box>
 	);
