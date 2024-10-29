@@ -15,4 +15,5 @@ class InventoryItem(models.Model):
 class InventoryRecord(models.Model):
     inventory_item = models.ForeignKey(InventoryItem, on_delete=models.CASCADE, related_name="records")
     quantity = models.IntegerField()
-    timestamp = models.DateTimeField(auto_now_add=True)
+    description = models.TextField(null=True, blank=True)
+    time = models.DateField()

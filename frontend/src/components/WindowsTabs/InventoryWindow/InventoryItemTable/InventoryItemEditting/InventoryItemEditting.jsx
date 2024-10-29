@@ -51,6 +51,7 @@ const InventoryItemEditting = ({ index }) => {
 			<TableCell>
 				<TextField value={data[index].max_inventory || ""} name="max_inventory" type="number" variant="outlined" onChange={handleChange} />
 			</TableCell>
+			<TableCell>{data[index].quantity}</TableCell>
 			<TableCell>
 				<Button onClick={() => handleSave(data[index])} variant="text">
 					Save

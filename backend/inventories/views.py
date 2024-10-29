@@ -47,11 +47,21 @@ def update_inventory_item(request, inventory_item_id):
 
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(['DELETE'])
+def delete_inventory_item(request, inventory_item_id):
+    try:
+        inventory_item = InventoryItem.objects.get(id=inventory_item_id)
+        inventory_item.delete()
+        return Response({"message": "Inventory item deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
+
+    except InventoryItem.DoesNotExist:
+        return Response({"error": "Inventory item not found"}, status=status.HTTP_404_NOT_FOUND)
+    
 @api_view(['GET'])
 def get_inventory_records(request, inventory_item_id):
     try:
         inventory_item = InventoryItem.objects.get(id=inventory_item_id)
-        records = InventoryRecord.objects.filter(inventory_item=inventory_item)
+        records = InventoryRecord.objects.filter(inventory_item=inventory_item).order_by('-time') 
         serializer = InventoryRecordSerializer(records, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
@@ -63,7 +73,7 @@ def create_inventory_record(request, inventory_item_id):
     try:
         inventory_item = InventoryItem.objects.get(id=inventory_item_id)
         data = request.data.copy()
-        data['inventory_item'] = inventory_item.id
+        data['inventory_item'] = inventory_item_id
         serializer = InventoryRecordSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
@@ -72,19 +82,6 @@ def create_inventory_record(request, inventory_item_id):
     
     except InventoryItem.DoesNotExist:
         return Response({"error": "Inventory item not found"}, status=status.HTTP_404_NOT_FOUND)
-    
-@api_view(['PUT'])
-def update_inventory_record(request, record_id):
-    try:
-        record = InventoryRecord.objects.get(id=record_id)
-        serializer = InventoryRecordSerializer(record, data=request.data, partial=True)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
-    except InventoryRecord.DoesNotExist:
-        return Response({"error": "Inventory record not found"}, status=status.HTTP_404_NOT_FOUND)
     
 @api_view(['DELETE'])
 def delete_inventory_record(request, record_id):

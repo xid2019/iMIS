@@ -12,8 +12,16 @@ export const fetchInventoryItems = createAsyncThunk(
 export const deleteInventoryItem = createAsyncThunk(
   'inventoryWindow/deleteInventoryItem',
   async (inventory_item_id) => {
-    await axios.delete(`http://localhost:8000/inventory_items/delete/${inventory_item_id}/`);
+    await axios.delete(`http://localhost:8000/inventories/inventory_items/delete/${inventory_item_id}/`);
     return inventory_item_id; 
+  }
+);
+
+export const fetchInventoryRecords = createAsyncThunk(
+  'inventoryWindow/fetchInventoryRecords',
+  async (inventory_item_id) => {
+    const response = await axios.get(`http://localhost:8000/inventories/inventory_records/${inventory_item_id}/`);
+    return response.data; 
   }
 );
 
@@ -30,6 +38,25 @@ export const createInventoryItem = createAsyncThunk(
   async (data) => {
     await axios.post("http://localhost:8000/inventories/inventory_items/create/", data);
     return data; 
+  }
+);
+
+export const addInventoryRecord = createAsyncThunk(
+  'inventoryWindow/addInventoryRecord',
+  async ({inventoryItemId, newRecord}) => {
+    const response = await axios.post(
+      `http://localhost:8000/inventories/inventory_records/create/${inventoryItemId}/`,
+      newRecord
+    );
+    return { inventoryItemId, newRecord: response.data }; // Send back both the item ID and the new record data
+  }
+);
+
+export const deleteInventoryRecord = createAsyncThunk(
+  'inventoryWindow/deleteInventoryRecord',
+  async (recordId) => {
+    await axios.delete(`http://localhost:8000/inventories/inventory_records/delete/${recordId}/`);
+    return recordId;
   }
 );
 

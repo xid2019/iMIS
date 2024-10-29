@@ -14,7 +14,7 @@ const InventoryItemTable = () => {
 
 	return (
 		<Box sx={{ padding: 2 }}>
-			<TableContainer component={Paper} sx={{ maxHeight: "500px", minWidth: "1000px", maxWidth: "100%", overflowX: "auto" }}>
+			<TableContainer component={Paper} sx={{ maxHeight: "800px", minWidth: "1000px", maxWidth: "100%", overflowX: "auto" }}>
 				<Table stickyHeader>
 					<TableHead>
 						<TableRow>
