@@ -60,6 +60,22 @@ export const deleteInventoryRecord = createAsyncThunk(
   }
 );
 
+export const applyFilters = createAsyncThunk(
+  'inventoryWindow/fetchAndApplyFilters',
+  async ({ partNumberFilter, minInventoryActive, maxInventoryActive }, { dispatch, getState }) => {
+    await dispatch(fetchInventoryItems());
+    const { data } = getState().inventoryWindow;
+    const filteredData = data.filter((row) => {
+      const meetsPartNumber = !partNumberFilter || row.part_number.toLowerCase().includes(partNumberFilter.toLowerCase());
+      const meetsMinInventory = !minInventoryActive || row.quantity < row.min_inventory;
+      const meetsMaxInventory = !maxInventoryActive || row.quantity > row.max_inventory;
+
+      return meetsPartNumber && meetsMinInventory && meetsMaxInventory;
+    });
+    return filteredData;
+  }
+);
+
 const InventoryWindowSlice = createSlice({
   name: 'inventoryWindow',
   initialState: {
@@ -100,6 +116,10 @@ const InventoryWindowSlice = createSlice({
       })
       .addCase(deleteInventoryItem.fulfilled, (state, action) => {
         state.data = state.data.filter((item) => item.orderline_id !== action.payload);
+      })
+      .addCase(applyFilters.fulfilled, (state, action) => {
+        state.data = action.payload;
+        state.staticArr = action.payload.map(() => true);
       });
   },
 });

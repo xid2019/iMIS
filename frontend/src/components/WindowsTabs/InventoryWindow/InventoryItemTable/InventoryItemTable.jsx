@@ -1,13 +1,33 @@
-import { TableContainer, Paper, Table, TableBody, Grid, Typography, Divider, TableCell, TableHead, TableRow, Box } from "@mui/material";
+import {
+	TableContainer,
+	Checkbox,
+	Paper,
+	Table,
+	TableBody,
+	Grid,
+	TextField,
+	Typography,
+	Divider,
+	TableCell,
+	TableHead,
+	FormControlLabel,
+	TableRow,
+	Box,
+	Button,
+} from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import InventoryItemStatic from "./InventoryItemStatic/InventoryItemStatic";
-import { useEffect } from "react";
-import { fetchInventoryItems } from "../../../../redux/inventoryWindowSlice";
+import { useEffect, useState } from "react";
+import { fetchInventoryItems, applyFilters } from "../../../../redux/inventoryWindowSlice";
 import InventoryItemEditting from "./InventoryItemEditting/InventoryItemEditting";
 
 const InventoryItemTable = () => {
 	const { data, staticArr } = useSelector((state) => state.inventoryWindow);
 	const dispatch = useDispatch();
+	// State for filters
+	const [partNumberFilter, setPartNumberFilter] = useState("");
+	const [minInventoryActive, setMinInventoryActive] = useState(false);
+	const [maxInventoryActive, setMaxInventoryActive] = useState(false);
 
 	useEffect(() => {
 		dispatch(fetchInventoryItems());
@@ -19,11 +39,44 @@ const InventoryItemTable = () => {
 		return "transparent";
 	};
 
+	const handleApplyFilters = () => {
+		dispatch(
+			applyFilters({
+				partNumberFilter,
+				minInventoryActive,
+				maxInventoryActive,
+			})
+		);
+	};
+
 	return (
 		<Box sx={{ padding: 2 }}>
 			<Grid item xs={12}>
 				<Typography variant="h6">Inventory Table</Typography>
 				<Divider />
+			</Grid>
+			{/* Filter Inputs */}
+			<Grid container spacing={2} sx={{ marginBottom: 2 }}>
+				<Grid item xs={4}>
+					<TextField label="Part Number" value={partNumberFilter} onChange={(e) => setPartNumberFilter(e.target.value)} fullWidth />
+				</Grid>
+				<Grid item xs={3}>
+					<FormControlLabel
+						control={<Checkbox checked={minInventoryActive} onChange={(e) => setMinInventoryActive(e.target.checked)} />}
+						label="Quantity < Min Inventory"
+					/>
+				</Grid>
+				<Grid item xs={3}>
+					<FormControlLabel
+						control={<Checkbox checked={maxInventoryActive} onChange={(e) => setMaxInventoryActive(e.target.checked)} />}
+						label="Quantity > Max Inventory"
+					/>
+				</Grid>
+				<Grid item>
+					<Button variant="contained" color="primary" onClick={handleApplyFilters}>
+						Apply Filters
+					</Button>
+				</Grid>
 			</Grid>
 			<TableContainer component={Paper} sx={{ maxHeight: "800px", minWidth: "1000px", maxWidth: "100%", overflowX: "auto" }}>
 				<Table stickyHeader>
