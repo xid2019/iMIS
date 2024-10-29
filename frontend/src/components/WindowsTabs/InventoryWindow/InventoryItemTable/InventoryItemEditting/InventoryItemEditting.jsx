@@ -23,7 +23,6 @@ const InventoryItemEditting = ({ index }) => {
 
 	return (
 		<TableRow>
-			<TableCell>{data[index].id || ""}</TableCell>
 			<TableCell>
 				<TextField value={data[index].part_number || ""} name="part_number" variant="outlined" onChange={handleChange} />
 			</TableCell>

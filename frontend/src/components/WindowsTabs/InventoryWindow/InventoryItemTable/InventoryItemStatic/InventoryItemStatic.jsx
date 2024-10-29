@@ -23,10 +23,12 @@ const InventoryItemStatic = ({ index }) => {
 		dispatch(fetchInventoryItems());
 	};
 
+	const isLowInventory = data[index].quantity < data[index].min_inventory;
+	const isHighInventory = data[index].quantity > data[index].max_inventory;
+
 	return (
 		<>
-			<TableRow>
-				<TableCell>{data[index].id}</TableCell>
+			<TableRow style={{ backgroundColor: isLowInventory ? "#ffcccc" : isHighInventory ? "#ffffcc" : "inherit" }}>
 				<TableCell>{data[index].part_number}</TableCell>
 				<TableCell>{data[index].dwg_number}</TableCell>
 				<TableCell>{data[index].revision}</TableCell>

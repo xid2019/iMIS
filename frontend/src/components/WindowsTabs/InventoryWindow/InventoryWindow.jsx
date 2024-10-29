@@ -5,10 +5,8 @@ import { Paper } from "@mui/material";
 function InventoryWindow() {
 	return (
 		<Paper>
-			<InventoryItemInput />
 			<InventoryItemTable />
-			{/* <InventoryRecordTable />
-			<InventoryRecordInput /> */}
+			<InventoryItemInput />
 		</Paper>
 	);
 }

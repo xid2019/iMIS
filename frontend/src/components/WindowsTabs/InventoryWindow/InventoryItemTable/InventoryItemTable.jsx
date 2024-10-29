@@ -1,4 +1,4 @@
-import { TableContainer, Paper, Table, TableBody, TableCell, TableHead, TableRow, Box } from "@mui/material";
+import { TableContainer, Paper, Table, TableBody, Grid, Typography, Divider, TableCell, TableHead, TableRow, Box } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import InventoryItemStatic from "./InventoryItemStatic/InventoryItemStatic";
 import { useEffect } from "react";
@@ -8,17 +8,27 @@ import InventoryItemEditting from "./InventoryItemEditting/InventoryItemEditting
 const InventoryItemTable = () => {
 	const { data, staticArr } = useSelector((state) => state.inventoryWindow);
 	const dispatch = useDispatch();
+
 	useEffect(() => {
 		dispatch(fetchInventoryItems());
 	}, [dispatch]);
 
+	const getBackgroundColor = (quantity, minInventory, maxInventory) => {
+		if (quantity < minInventory) return "#ffcccc";
+		if (quantity > maxInventory) return "#ffffcc";
+		return "transparent";
+	};
+
 	return (
 		<Box sx={{ padding: 2 }}>
+			<Grid item xs={12}>
+				<Typography variant="h6">Inventory Table</Typography>
+				<Divider />
+			</Grid>
 			<TableContainer component={Paper} sx={{ maxHeight: "800px", minWidth: "1000px", maxWidth: "100%", overflowX: "auto" }}>
 				<Table stickyHeader>
 					<TableHead>
 						<TableRow>
-							<TableCell sx={{ whiteSpace: "nowrap" }}>ID</TableCell>
 							<TableCell sx={{ whiteSpace: "nowrap" }}>Part Number</TableCell>
 							<TableCell sx={{ whiteSpace: "nowrap" }}>DWG Number</TableCell>
 							<TableCell sx={{ whiteSpace: "nowrap" }}>Revision</TableCell>
@@ -33,9 +43,14 @@ const InventoryItemTable = () => {
 						</TableRow>
 					</TableHead>
 					<TableBody>
-						{data.map((row, index) =>
-							staticArr[index] ? <InventoryItemStatic key={index} index={index} /> : <InventoryItemEditting key={index} index={index} />
-						)}
+						{data.map((row, index) => {
+							const backgroundColor = getBackgroundColor(row.quantity, row.min_inventory, row.max_inventory);
+							return staticArr[index] ? (
+								<InventoryItemStatic key={index} index={index} backgroundColor={backgroundColor} />
+							) : (
+								<InventoryItemEditting key={index} index={index} backgroundColor={backgroundColor} />
+							);
+						})}
 					</TableBody>
 				</Table>
 			</TableContainer>
