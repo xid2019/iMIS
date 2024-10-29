@@ -109,7 +109,6 @@ for i, row in df.iterrows():
             'plant_id': row[25],
             'error': e
         })
-print(len(error_rows))
 
 # import suppliers data
 df = pd.read_excel(
@@ -154,7 +153,5 @@ for i, row in df.iterrows():
             'zip': row[11],
             'error': e
         })
-print(len(error_rows))
             
-
 print("Data imported successfully!")
