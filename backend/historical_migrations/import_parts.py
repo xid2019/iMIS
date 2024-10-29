@@ -34,7 +34,6 @@ dfs = pd.read_excel(
   header=None, 
   usecols="A, B, C, D, E, F, H, K, L, M, P",
 )
-
 error_rows = []
 for sheet_name, df in dfs.items():
     df.columns = range(df.shape[1])
@@ -73,7 +72,5 @@ for sheet_name, df in dfs.items():
                 'factory': row[10],
                 'error': e
             })
-print(len(error_rows))
             
-
 print("Data imported successfully!")
