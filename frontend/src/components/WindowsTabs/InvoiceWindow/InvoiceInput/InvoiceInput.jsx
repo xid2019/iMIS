@@ -17,6 +17,9 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 
+const roundToTwoDecimals = (num) => {
+	return Math.round(num * 100) / 100;
+};
 const InvoiceInput = () => {
 	const dispatch = useDispatch();
 	const { customerId } = useSelector((state) => state.invoiceWindow);
@@ -107,7 +110,7 @@ const InvoiceInput = () => {
 				orderLine.surcharge_rate = Number(formData.surchargeRate);
 				orderLine.discount = Number(formData.discount);
 				orderLine.total_price =
-					((orderLine.price * (1 - orderLine.discount / 100)).toFixed(2) * (1 + orderLine.surcharge_rate / 100)).toFixed(2) *
+					roundToTwoDecimals(orderLine.price * (1 - orderLine.discount / 100) * (1 + orderLine.surcharge_rate / 100)) *
 					(orderLine.quantity + orderLine.balance);
 				orderLine.include_surcharge = true;
 				dispatch({ type: "invoiceWindow/addOrderLineInTable", payload: orderLine });
@@ -116,7 +119,8 @@ const InvoiceInput = () => {
 				const orderLineWithoutSurcharge = {
 					...orderLine,
 					discount: Number(formData.discount),
-					total_price: (orderLine.price * (1 - Number(formData.discount) / 100)).toFixed(2) * (orderLine.quantity + orderLine.balance),
+					total_price: roundToTwoDecimals(orderLine.price * (1 - Number(formData.discount) / 100)) * (orderLine.quantity + orderLine.balance),
+					surcharge_line: false,
 				};
 
 				// Second dispatch for the surcharge line
@@ -126,7 +130,7 @@ const InvoiceInput = () => {
 					surcharge_rate: Number(formData.surchargeRate),
 					discount: Number(formData.discount),
 					total_price:
-						(((orderLine.price * (1 - Number(formData.discount) / 100)).toFixed(2) * Number(formData.surchargeRate)) / 100).toFixed(2) *
+						roundToTwoDecimals((orderLine.price * (1 - Number(formData.discount) / 100) * Number(formData.surchargeRate)) / 100) *
 						(orderLine.quantity + orderLine.balance),
 					surcharge_line: true,
 				};

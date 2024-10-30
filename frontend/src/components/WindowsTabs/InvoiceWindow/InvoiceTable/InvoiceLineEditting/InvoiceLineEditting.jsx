@@ -2,6 +2,9 @@ import PropTypes from "prop-types";
 import { FormControl, Select, MenuItem, Button, TextField, TableCell, TableRow } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 
+const roundToTwoDecimals = (num) => {
+	return Math.round(num * 100) / 100;
+};
 const InvoiceLineEditting = ({ index }) => {
 	const dispatch = useDispatch();
 	const { orderLineData, orderLineStaticArr } = useSelector((state) => state.invoiceWindow);
@@ -12,47 +15,35 @@ const InvoiceLineEditting = ({ index }) => {
 			...orderLineData[index],
 		};
 		if (name === "price" || name === "quantity" || name === "weight" || name === "surcharge_rate" || name === "discount" || name === "balance") {
-			value = parseFloat(value);
+			value = parseFloat(value) || 0;
 		}
 
 		if (name === "price" || name === "quantity" || name === "surcharge_rate" || name === "discount" || name === "balance") {
 			let totalPrice;
+			let price = orderLineData[index].price || 0;
+			let quantity = orderLineData[index].quantity || 0;
+			let balance = orderLineData[index].balance || 0;
+			let discount = orderLineData[index].discount || 0;
+			let surchargeRate = orderLineData[index].surcharge_rate || 0;
 			if (name === "price") {
-				totalPrice =
-					value *
-					(orderLineData[index].quantity + orderLineData[index].balance) *
-					(1 - orderLineData[index].discount / 100) *
-					(1 + orderLineData[index].surcharge_rate / 100);
+				price = Number(value) || 0;
+			} else if (name === "quantity") {
+				quantity = value || 0;
+			} else if (name === "surcharge_rate") {
+				surchargeRate = value || 0;
+			} else if (name === "discount") {
+				discount = value || 0;
+			} else if (name === "balance") {
+				balance = value || 0;
 			}
-			if (name === "quantity") {
-				totalPrice =
-					(value + orderLineData[index].balance) *
-					orderLineData[index].price *
-					(1 - orderLineData[index].discount / 100) *
-					(1 + orderLineData[index].surcharge_rate / 100);
+			if (updatedOrderLine.include_surcharge === true) {
+				totalPrice = roundToTwoDecimals(price * (1 - discount / 100) * (1 + surchargeRate / 100)) * (quantity + balance);
+			} else if (updatedOrderLine.surcharge_line === false) {
+				totalPrice = roundToTwoDecimals(price * (1 - discount / 100)) * (quantity + balance);
+			} else {
+				totalPrice = roundToTwoDecimals((price * (1 - discount / 100) * surchargeRate) / 100) * (quantity + balance);
 			}
-			if (name === "surcharge_rate") {
-				totalPrice =
-					orderLineData[index].price *
-					(orderLineData[index].quantity + orderLineData[index].balance) *
-					(1 - orderLineData[index].discount / 100) *
-					(1 + value / 100);
-			}
-			if (name === "discount") {
-				totalPrice =
-					orderLineData[index].price *
-					(orderLineData[index].quantity + orderLineData[index].balance) *
-					(1 - value / 100) *
-					(1 + orderLineData[index].surcharge_rate / 100);
-			}
-			if (name === "balance") {
-				totalPrice =
-					orderLineData[index].price *
-					(orderLineData[index].quantity + value) *
-					(1 - orderLineData[index].discount / 100) *
-					(1 + orderLineData[index].surcharge_rate / 100);
-			}
-			totalPrice = totalPrice.toFixed(2);
+
 			updatedOrderLine = {
 				...updatedOrderLine,
 				[name]: value,

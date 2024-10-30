@@ -9,10 +9,13 @@ const OrderLineEditting = ({ index }) => {
 
 	const handleChange = (e) => {
 		const { name, value } = e.target;
+		console.log("aaaa", data[index]);
+		console.log(name);
 		const updatedOrderLine = {
 			...data[index],
 			[name]: value,
 		};
+
 		dispatch({ type: "poFilterWindow/updateOrderLine", payload: { index, updatedOrderLine } });
 	};
 
@@ -66,7 +69,7 @@ const OrderLineEditting = ({ index }) => {
 				</FormControl>
 			</TableCell>
 			<TableCell>
-				<TextField value={data[index].unit_price || ""} name="dwg_number" type="number" variant="outlined" onChange={handleChange} />
+				<TextField value={data[index].price || ""} name="price" type="number" variant="outlined" onChange={handleChange} />
 			</TableCell>
 			<TableCell>
 				<TextField value={data[index].material || ""} name="material" variant="outlined" onChange={handleChange} />
