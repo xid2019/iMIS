@@ -11,7 +11,7 @@ def create_invoice(request):
     order_lines = request.data["orderLineData"]
     orderline_ids = []
     for line in order_lines:
-        if 'surcharge_line' not in line:
+        if 'surcharge_line' not in line or line['surcharge_line'] == False:
             orderline_ids.append(line["orderline_id"])
 
     try:
