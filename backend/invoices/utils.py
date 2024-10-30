@@ -3,7 +3,7 @@ import openpyxl
 import os
 from openpyxl.styles import Border, Side, Alignment
 from datetime import datetime
-
+from decimal import Decimal, ROUND_HALF_UP
 
 def delete_old_files(directory):
     # Delete all .xlsx files in the given directory that start with 'PO_'.
@@ -12,6 +12,9 @@ def delete_old_files(directory):
         os.remove(file_path)
         print(f"Deleted: {file_path}")
 
+def round_two_decimals(num):
+    num = Decimal(str(num))
+    return float(num.quantize(Decimal('0.00'), rounding=ROUND_HALF_UP))
 
 def create_invoice_excel(data):
     source_path = "./static/Invoice Template.xlsx"
@@ -60,11 +63,9 @@ def create_invoice_excel(data):
     for order_line in order_lines:
         # Insert a new row at the current start_row position
         sheet.insert_rows(start_row)
-
         # Add borders
         for cell in sheet[start_row]:
             cell.border = border_style
-
         # Merge cells
         sheet.merge_cells(
             start_row=start_row, start_column=2, end_row=start_row, end_column=3
@@ -75,7 +76,6 @@ def create_invoice_excel(data):
         sheet.merge_cells(
             start_row=start_row, start_column=7, end_row=start_row, end_column=8
         )
-
         # Center the content
         for cell in sheet[start_row]:
             cell.alignment = alignment_center
@@ -83,7 +83,6 @@ def create_invoice_excel(data):
         # fill in the titles
         sheet[f"D12"] = order_line["ship_via"]
         sheet[f"I12"] = order_line["pay_terms"]
-        
         # Populate the row with the order_line data
         balance = 0
         if order_line["balance"]:
@@ -96,24 +95,22 @@ def create_invoice_excel(data):
         discount_rate = 0
         if "discount" in order_line and order_line['discount']:
             discount_rate = float(order_line["discount"])
-
         basic_unit_price = 0
         if order_line["price"]:
             basic_unit_price = float(order_line["price"])
             if discount_rate:
                 basic_unit_price *= (1-discount_rate*0.01)
-        basic_unit_price = round(basic_unit_price, 2)
+        basic_unit_price = round_two_decimals(basic_unit_price)
         sheet[f"M{start_row}"] = basic_unit_price
-
         unit_surcharge = basic_unit_price * 0.01 * surcharge_rate
-        unit_surcharge = round(unit_surcharge, 2)
+        unit_surcharge = round_two_decimals(unit_surcharge)
 
         unit_price = 0
         description = order_line["description"]
         if "include_surcharge" in order_line:
             unit_price = basic_unit_price + unit_surcharge
         else:
-            if 'surcharge_line' in order_line:
+            if 'surcharge_line' in order_line and order_line['surcharge_line'] == True:
                 unit_price = unit_surcharge
                 description = 'Surcharge ' + order_line['surcharge']
             else:
