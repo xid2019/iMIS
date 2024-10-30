@@ -9,8 +9,6 @@ const OrderLineEditting = ({ index }) => {
 
 	const handleChange = (e) => {
 		const { name, value } = e.target;
-		console.log("aaaa", data[index]);
-		console.log(name);
 		const updatedOrderLine = {
 			...data[index],
 			[name]: value,
