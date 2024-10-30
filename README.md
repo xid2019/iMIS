@@ -66,6 +66,7 @@
     - Navigate to the `historical_migrations` folder.
     - Run: `python import_parts.py`
     - Run: `python import_companies.py`
+    - Run: `python import_po.py`
 
 11. **Install Helm (Optional)**
 
