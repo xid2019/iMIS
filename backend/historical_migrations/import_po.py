@@ -23,47 +23,49 @@ dfs = pd.read_excel(
   sheet_name=None,
   skiprows=2, 
   header=None, 
-  usecols="A, B, C, D, E, F, H, K, L, M, P",
+  usecols="A, B, C, D, E, F, G, H, I, J, K, L, M, N",
 )
 
 # import order data
-error_rows = []
-for sheet_name, df in dfs.items():
-    df.columns = range(df.shape[1])
-    print(f"Processing sheet: {sheet_name}")
-    for i, row in df.iterrows():
-        try:
-            # Create and save the Part instance
-            part = Part(
-                customer_id=row[0] if not pd.isna(row[0]) else None,
-                part_number=row[1] if not pd.isna(row[1]) else None,
-                dwg_number=row[2] if not pd.isna(row[2]) else None,
-                revision=row[3] if not pd.isna(row[3]) else None,
-                description=row[4] if not pd.isna(row[4]) else None,
-                price=row[5] if not pd.isna(row[5]) else None,
-                cost=row[6] if not pd.isna(row[6]) else None,
-                material=row[7] if not pd.isna(row[7]) else None,
-                weight=row[8] if not pd.isna(row[8]) else None,
-                order_quantity=row[9] if not pd.isna(row[9]) else None,
-                factory=row[10] if not pd.isna(row[10]) else None
-            )
-            part.save()
-        except Exception as e:
-            # Print the error message and continue with the next row
-            error_rows.append({
-                'row_num': i,
-                'customer_id': row[0], 
-                'part_number': row[1], 
-                'dwg_number': row[2],
-                'revision': row[3],
-                'description': row[4],
-                'price':row[5],
-                'cost':row[6],
-                'material':row[7],
-                'weight':row[8],
-                'order_quantity':row[9],
-                'factory': row[10],
-                'error': e
-            })
+def helper():
+    po_to_id = {}
+    error_rows = []
+    for sheet_name, df in dfs.items():
+        df.columns = range(df.shape[1])
+        print(f"Processing sheet: {sheet_name}")
+        for i, row in df.iterrows():
+            try:
+                # Create and save the Order instance
+                customer_po=row[1] if not pd.isna(row[1]) else None
+                if customer_po not in po_to_id: 
+                    order = Order(
+                        customer_id=row[0] if not pd.isna(row[0]) else None,
+                        customer_po=row[1] if not pd.isna(row[1]) else None,
+                        order_date=row[5] if not pd.isna(row[2]) else None,
+                        buyer=row[10] if not pd.isna(row[3]) else None
+                    )
+                    order.save()
+                    po_to_id[customer_po] = order.id
+
+            except Exception as e:
+                # Print the error message and continue with the next row
+                error_rows.append({
+                    'row_num': i,
+                    'customer_id': row[0], 
+                    'customer_po': row[1], 
+                    'order_date': row[5],
+                    'buyer': row[10],
+                    'error': e
+                })
+                print({
+                    'row_num': i,
+                    'customer_id': row[0], 
+                    'customer_po': row[1], 
+                    'order_date': row[5],
+                    'buyer': row[10],
+                    'error': e
+                })
+                return
+helper()
             
 print("Data imported successfully!")
