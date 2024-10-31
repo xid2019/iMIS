@@ -68,7 +68,15 @@
     - Run: `python import_companies.py`
     - Run: `python import_po.py`
 
-11. **Install Helm (Optional)**
+11. **Backup Database**
+
+    - 1. Create backup
+    - Run: `pg_dump -U your_username -d your_database > /path/to/save/database_backup.sql`
+    - 2. Restore database
+    - Create an empty database first if needed
+    - Run: `psql -U your_username -d new_database_name -f /path/to/save/database_backup.sql`
+
+12. **Install Helm (Optional)**
 
     - Run: `brew install helm`
     - Run: `helm version`
