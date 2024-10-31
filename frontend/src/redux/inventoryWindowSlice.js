@@ -108,7 +108,7 @@ const InventoryWindowSlice = createSlice({
         state.error = action.error.message;
       })
       .addCase(updateInventoryItem.fulfilled, (state, action) => {
-        const index = state.data.findIndex((item) => item.orderline_id === action.payload.orderline_id);
+        const index = state.data.findIndex((item) => item.id === action.payload.id);
         if (index !== -1) {
           state.data[index] = action.payload;
           state.staticArr[index] = true;
