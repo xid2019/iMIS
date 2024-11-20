@@ -1,13 +1,20 @@
 import { Table, TableBody, TableCell, TableHead, TableRow, Box, Button, TextField } from "@mui/material";
 import PropTypes from "prop-types";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { fetchInventoryRecords, addInventoryRecord, deleteInventoryRecord, fetchInventoryItems } from "../../../../../redux/inventoryWindowSlice";
+import { fetchInventoryRecords, addInventoryRecord, deleteInventoryRecord, applyFilters } from "../../../../../redux/inventoryWindowSlice";
 
 const InventoryRecordsTable = ({ inventoryItemId }) => {
 	const dispatch = useDispatch();
 	const [records, setRecords] = useState([]);
-	const [newRecord, setNewRecord] = useState({ quantity: "", description: "", time: new Date().toISOString().split("T")[0] }); // State for the new record
+	const [newRecord, setNewRecord] = useState({
+		quantity: "",
+		description: "",
+		time: new Date().toISOString().split("T")[0],
+	}); // State for the new record
+
+	// Select filters from the Redux state
+	const currentFilters = useSelector((state) => state.inventoryWindow.filters);
 
 	useEffect(() => {
 		const loadInventoryRecords = async () => {
@@ -26,10 +33,17 @@ const InventoryRecordsTable = ({ inventoryItemId }) => {
 	// Handle submission of new inventory record
 	const handleAddRecord = async () => {
 		if (newRecord.quantity && newRecord.time) {
+			// Add the new record
 			const addedRecord = await dispatch(addInventoryRecord({ inventoryItemId, newRecord }));
-			dispatch(fetchInventoryItems());
+			dispatch(applyFilters(currentFilters));
+
+			// Update local state for records and reset newRecord input
 			setRecords((prevRecords) => [...prevRecords, addedRecord.payload.newRecord]);
-			setNewRecord({ quantity: "", description: "", time: new Date().toISOString().split("T")[0] });
+			setNewRecord({
+				quantity: "",
+				description: "",
+				time: new Date().toISOString().split("T")[0],
+			});
 		} else {
 			alert("Please fill in both the quantity and time.");
 		}
@@ -38,13 +52,13 @@ const InventoryRecordsTable = ({ inventoryItemId }) => {
 	const handleDeleteRecord = async (recordId) => {
 		await dispatch(deleteInventoryRecord(recordId));
 		setRecords((prevRecords) => prevRecords.filter((record) => record.id !== recordId));
-		dispatch(fetchInventoryItems());
+		dispatch(applyFilters(currentFilters)); // Reapply filters after deletion
 	};
 
 	return (
 		<Box margin={1} border={1} borderColor="grey.400" borderRadius="4px" padding={2}>
 			{/* Input fields for adding new record */}
-			<Box display="flex" justifyContent="flex-start" marginBottom={2}>
+			<Box display="flex" justifyContent="flex-start" marginBottom={2} gap={2}>
 				<TextField
 					name="quantity"
 					label="Quantity"
@@ -95,7 +109,7 @@ const InventoryRecordsTable = ({ inventoryItemId }) => {
 							))
 						) : (
 							<TableRow>
-								<TableCell colSpan={3} align="center">
+								<TableCell colSpan={4} align="center">
 									No records found
 								</TableCell>
 							</TableRow>

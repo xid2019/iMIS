@@ -72,7 +72,8 @@ export const applyFilters = createAsyncThunk(
 
       return meetsPartNumber && meetsMinInventory && meetsMaxInventory;
     });
-    return filteredData;
+
+    return { filteredData, filters: { partNumberFilter, minInventoryActive, maxInventoryActive } };
   }
 );
 
@@ -80,6 +81,7 @@ const InventoryWindowSlice = createSlice({
   name: 'inventoryWindow',
   initialState: {
     data: [],
+    filters: {},
     staticArr: [],
     error: null,
   },
@@ -118,9 +120,11 @@ const InventoryWindowSlice = createSlice({
         state.data = state.data.filter((item) => item.orderline_id !== action.payload);
       })
       .addCase(applyFilters.fulfilled, (state, action) => {
-        state.data = action.payload;
-        state.staticArr = action.payload.map(() => true);
-      });
+        const { filteredData, filters } = action.payload;
+        state.data = filteredData;
+        state.staticArr = filteredData.map(() => true);
+        state.filters = filters;
+      })
   },
 });
 
